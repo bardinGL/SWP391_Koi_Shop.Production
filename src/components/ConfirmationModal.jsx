@@ -5,6 +5,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
 
   return (
+    <div> 
     <div className="modal-overlay">
       <div className="modal-content">
         <p>{message}</p>
@@ -13,6 +14,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
           <button onClick={onClose} className="btn btn-secondary">Hủy</button>
         </div>
       </div>
+    </div>
     </div>
   );
 };
