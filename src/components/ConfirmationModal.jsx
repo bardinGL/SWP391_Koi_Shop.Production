@@ -1,7 +1,6 @@
-// import React from 'react'
-import "./ConfirmationModal.css";
-import PropTypes from "prop-types";
-// abcd  
+import React from 'react';
+import './ConfirmationModal.css';
+
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
 
@@ -10,12 +9,8 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, message }) => {
       <div className="modal-content">
         <p>{message}</p>
         <div className="modal-buttons">
-          <button onClick={onConfirm} className="btn btn-danger">
-            Xác nhận
-          </button>
-          <button onClick={onClose} className="btn btn-secondary">
-            Hủy
-          </button>
+          <button onClick={onConfirm} className="btn btn-danger">Xác nhận</button>
+          <button onClick={onClose} className="btn btn-secondary">Hủy</button>
         </div>
       </div>
     </div>

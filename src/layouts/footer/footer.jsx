@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 // import React from "react";
 import logo from "../../../public/assets/icon.png";
 import logo1 from "../../../public/assets/image 9.png";
