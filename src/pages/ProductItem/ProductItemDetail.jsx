@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Header } from "../../layouts/header/header";
@@ -11,8 +9,8 @@ import Reviews from "../../components/ReviewSection";
 import { getUserInfo } from "../../services/UserService";
 import FishSpinner from "../../components/FishSpinner";
 import { getCertificateByProductItem } from "../../services/CertificateService";
-import "./ProductItemDetail.css";
-import ImageMagnifier from "../../components/ImageMagnifier";
+import './ProductItemDetail.css';
+
 const ProductItemDetail = () => {
   const { id } = useParams();
   const [productItem, setProductItem] = useState(null);
@@ -108,12 +106,10 @@ const ProductItemDetail = () => {
   const CertificateModal = ({ certificates, onClose }) => {
     return (
       <div className="certificate-modal" onClick={onClose}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-content" onClick={e => e.stopPropagation()}>
           <div className="modal-header">
             <h2>Chứng chỉ sản phẩm</h2>
-            <button className="close-button" onClick={onClose}>
-              &times;
-            </button>
+            <button className="close-button" onClick={onClose}>&times;</button>
           </div>
           {certificates.length > 0 ? (
             <ul className="certificates-list">
@@ -122,8 +118,7 @@ const ProductItemDetail = () => {
                   <strong>Tên chứng chỉ:</strong> {cert.certificateName} <br />
                   <strong>Nhà cung cấp:</strong> {cert.provider} <br />
                   <strong>Ngày phát hành:</strong>{" "}
-                  {new Date(cert.createdTime).toLocaleDateString("vi-VN")}{" "}
-                  <br />
+                  {new Date(cert.createdTime).toLocaleDateString("vi-VN")} <br />
                   <div>
                     <img
                       src={cert.imageUrl}
@@ -146,20 +141,22 @@ const ProductItemDetail = () => {
     <>
       <Header />
       <div
-        className="animated product-detail-container"
+        className="animated"
         style={{
           padding: "50px",
           display: "flex",
-          gap: "40px",
-          maxWidth: "1200px",
-          margin: "0 auto",
+          gap: "20px",
+          marginLeft: 300,
         }}
       >
-        <div className="product-image-section" style={{ flex: "1" }}>
-          <ImageMagnifier src={productItem.imageUrl} alt={productItem.name} />
+        <div style={{ width: "50%" }}>
+          <img
+            src={productItem.imageUrl}
+            alt={productItem.name}
+            style={{ width: "40%", borderRadius: "8px" }}
+          />
         </div>
-
-        <div className="product-info-section" style={{ flex: "1" }}>
+        <div style={{ width: "50%" }}>
           <h1>Tên: {productItem.name}</h1>
           <p
             style={{
@@ -183,20 +180,16 @@ const ProductItemDetail = () => {
               {certificates.length > 0 ? (
                 <>
                   Chứng chỉ:{" "}
-                  <button
+                  <button 
                     className="view-certificate-btn"
                     onClick={() => setShowCertificateModal(true)}
                   >
-                    Xem chi tiết{" "}
-                    {certificates.length > 0 ? `(${certificates.length})` : ""}
+                    Xem chi tiết {certificates.length > 0 ? `(${certificates.length})` : ''}
                   </button>
                 </>
               ) : (
                 <>
-                  Chứng chỉ:{" "}
-                  <span className="no-certificate">
-                    Không có chứng chỉ nào được liên kết với sản phẩm này
-                  </span>
+                  Chứng chỉ: <span className="no-certificate">Không có chứng chỉ nào được liên kết với sản phẩm này</span>
                 </>
               )}
             </li>
@@ -239,9 +232,9 @@ const ProductItemDetail = () => {
       <Footer />
 
       {showCertificateModal && (
-        <CertificateModal
-          certificates={certificates}
-          onClose={() => setShowCertificateModal(false)}
+        <CertificateModal 
+          certificates={certificates} 
+          onClose={() => setShowCertificateModal(false)} 
         />
       )}
     </>
