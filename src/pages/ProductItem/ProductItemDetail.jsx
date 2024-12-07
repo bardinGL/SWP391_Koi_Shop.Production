@@ -44,11 +44,9 @@ const ProductItemDetail = () => {
           setProductItem(response.data);
           fetchCertificates(id);
         } else {
-          toast.error("Sản phẩm này đã hết hàng");
-          navigate(-1);
+          navigate("/");
         }
       } catch (error) {
-        console.error("Error fetching product:", error);
         navigate("/");
       }
     };
@@ -207,7 +205,7 @@ const ProductItemDetail = () => {
             <button
               style={{
                 padding: "10px",
-                backgroundColor: "#C70025",
+                backgroundColor: "green",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
