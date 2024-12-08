@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Home } from "../pages/Home/Home";
@@ -37,7 +38,7 @@ import AdminBatch from "../pages/Batch/AdminBatch.jsx";
 import Batches from "../pages/Batches/Batches.jsx";
 import BatchDetail from "../pages/Batches/BatchDetail.jsx";
 import { AdminLayout } from "../layouts/index.jsx";
-
+// import EmailVerification from "../pages/EmailVerification/EmailVerification.jsx";
 const AppRoutes = () => {
   return (
     <>
@@ -53,7 +54,6 @@ const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/:id/detail" element={<UserDetail />} />
         <Route path="/:id/payments" element={<UserPayment />} />
-
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<Admin />} />
           <Route path="/admin-product" element={<AdminProduct />} />
