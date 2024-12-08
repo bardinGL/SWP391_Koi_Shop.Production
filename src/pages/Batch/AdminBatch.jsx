@@ -148,12 +148,8 @@ const AdminBatch = () => {
   if (isLoading) return <FishSpinner />;
 
   return (
-    <div
-      style={{
-        width: "100%",
-      }}
-    >
-      {/* <AdminHeader /> */}
+    <>
+      <AdminHeader />
 
       <div className="container">
         {isUploading && <FishSpinner />}
@@ -308,7 +304,7 @@ const AdminBatch = () => {
           message={`Bạn có chắc chắn muốn xóa lô hàng "${batchToDelete?.name}" không?`}
         />
       </div>
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 import React from "react";
 import { Header } from "../../layouts/header/header";
 import { Footer } from "../../layouts/footer/footer";
@@ -49,7 +47,7 @@ export const Home = () => {
     document.body.appendChild(script);
 
     script.onload = () => {
-      const tudong_chatbox = new TuDongChat("0gZTvtFBAwLSMw1Du_cQl");
+      const tudong_chatbox = new TuDongChat('0gZTvtFBAwLSMw1Du_cQl');
       tudong_chatbox.initial();
     };
 
@@ -67,8 +65,7 @@ export const Home = () => {
       const productName = productResponse.data.name;
 
       navigate(
-        `/koi/${productName.toLowerCase().replace(/\s+/g, "")}/${
-          productItem.id
+        `/koi/${productName.toLowerCase().replace(/\s+/g, "")}/${productItem.id
         }`,
         {
           state: { response: prodItemResponse.data, productName },
@@ -92,7 +89,7 @@ export const Home = () => {
       if (response.data && response.data.cartId) {
         const userResponse = await getUserInfo();
         const userData = userResponse.data;
-
+        
         if (quickBuy) {
           if (!userData.address || !userData.phone) {
             navigate(`/${userData.id}/detail?fromCart=true`);
@@ -117,15 +114,41 @@ export const Home = () => {
   return (
     <>
       <Header />
-      <div className="homepage" style={{ backgroundColor: "#f1f1f1" }}>
+      <div className="homepage">
         <main className="user-select-none animated-fadeIn">
-          {/* <div className="homepage-banner">
+          <div className="homepage-banner">
             <img src="/assets/final.png" alt="Banner" />
-          </div> */}
+          </div>
+          <h2 className="homepage-intro-title">
+            Tin tức cá koi - Tin tức Koi Shop
+          </h2>
+          <section className="homepage-intro-section">
+            <div className="homepage-intro-info">
+              <div>
+                <p>
+                  Koi Shop không chỉ là nơi cung cấp các giống cá Koi hàng đầu
+                  thế giới, mà chúng tôi còn cung cấp thông tin hữu ích và các
+                  bài viết chuyên sâu cho người nuôi cá.
+                </p>
+                <br />
+                <p>
+                  Cửa hàng Cá Koi của chúng tôi tự hào là nơi cung cấp những
+                  giống cá Koi chất lượng cao, được nhập khẩu trực tiếp từ các
+                  trại giống hàng đầu Nhật Bản. Với nhiều năm kinh nghiệm trong
+                  việc nuôi dưỡng và chăm sóc cá Koi, chúng tôi cam kết mang đến
+                  cho khách hàng những chú cá Koi khỏe mạnh, đẹp mắt và đa dạng
+                  về màu sắc, kích thước. Ngoài ra, cửa hàng còn cung cấp các
+                  dịch vụ chuyên nghiệp như tư vấn chăm sóc, hồ nuôi, và dịch vụ
+                  ký gửi. Đến với chúng tôi, bạn không chỉ sở hữu những chú cá
+                  Koi tuyệt đẹp mà còn trải nghiệm sự tận tâm và chuyên nghiệp.
+                </p>
+              </div>
+            </div>
+            <img className="homepage-intro-image" src={fish} alt="Fish" />
+          </section>
+
           <section className="best-sellers">
-            <h2 className="homepage-best-sellers-title">
-              KOI SHOWCASE - UY TÍN, CHẤT LƯỢNG
-            </h2>
+            <h2 className="homepage-best-sellers-title">Bán Chạy</h2>
             <div className="product-list">
               {productItems.map((item) => (
                 <div key={item.id} className="product-item-card">
@@ -158,53 +181,6 @@ export const Home = () => {
               ))}
             </div>
           </section>
-          <h2 className="homepage-intro-title">GIỚI THIỆU KOI SHOWCASE</h2>
-          <section className="homepage-intro-section">
-            <div className="homepage-intro-info">
-              <div>
-                <p>
-                  {" "}
-                  KOI Showcase không chỉ là nơi trưng bày những chú cá Koi đẳng
-                  cấp nhất, mà còn là không gian giao lưu, chia sẻ kiến thức và
-                  niềm đam mê về loài cá Koi. Chúng tôi mong muốn tạo nên một
-                  cộng đồng gắn kết những người yêu thích cá Koi, cùng nhau phát
-                  triển và nâng tầm thú chơi cá cảnh.{" "}
-                </p>{" "}
-                <br />{" "}
-                <p>
-                  {" "}
-                  Tại KOI Showcase, bạn sẽ được chiêm ngưỡng những chú cá Koi
-                  xuất sắc, được tuyển chọn kỹ lưỡng từ các trại giống uy tín
-                  của Nhật Bản. Với kinh nghiệm và sự tận tâm, chúng tôi cam kết
-                  mang đến cho khách tham quan không chỉ là vẻ đẹp tuyệt vời của
-                  cá Koi mà còn là những giá trị văn hóa và phong thủy độc đáo.
-                  Đến với KOI Showcase, bạn sẽ được trải nghiệm một không gian
-                  sống động, đẳng cấp và đầy cảm hứng.{" "}
-                </p>
-                <br />
-                <p>
-                  {" "}
-                  KOI Showcase là nơi hội tụ những chú cá Koi đẹp nhất, chất
-                  lượng nhất, được chăm sóc và trưng bày với sự chuyên nghiệp
-                  hàng đầu. Chúng tôi tự hào giới thiệu các giống cá Koi quý
-                  hiếm, mang đậm nét đặc trưng của nghệ thuật nuôi cá Nhật Bản,
-                  dành cho những ai đam mê và trân quý loài cá này.
-                </p>{" "}
-                <br />{" "}
-                <p>
-                  {" "}
-                  Bên cạnh việc chiêm ngưỡng các chú cá Koi tuyệt đẹp, khách
-                  hàng đến với KOI Showcase còn có cơ hội tìm hiểu sâu hơn về kỹ
-                  thuật nuôi và chăm sóc cá Koi từ những chuyên gia dày dặn kinh
-                  nghiệm. Với sứ mệnh lan tỏa niềm đam mê cá Koi, chúng tôi
-                  không ngừng nâng cao chất lượng dịch vụ, mang đến trải nghiệm
-                  độc đáo và đáng nhớ cho mọi khách tham quan. KOI Showcase -
-                  nơi tôn vinh vẻ đẹp và giá trị của nghệ thuật cá cảnh.
-                </p>
-              </div>
-            </div>
-            <img className="homepage-intro-image" src={fish} alt="Fish" />
-          </section>
 
           <section className="homepage-news-section">
             <h2 className="homepage-news-title">
@@ -212,9 +188,7 @@ export const Home = () => {
             </h2>
             <div className="homepage-news-list">
               {isLoading ? (
-                <>
-                  <FishSpinner />
-                </>
+                <><FishSpinner /></>
               ) : blogs.length > 0 ? (
                 blogs.map((blog) => (
                   <div className="homepage-news-card" key={blog.id}>
@@ -224,26 +198,24 @@ export const Home = () => {
                         alt={blog.title}
                         className="news-card-image"
                       />
-                      {/* <div className="news-card-overlay">
+                      <div className="news-card-overlay">
                         <span className="news-card-category">
                           Tin Tức Cá Koi
                         </span>
-                      </div> */}
+                      </div>
                     </div>
                     <h5 className="news-card-title">{blog.title}</h5>
                     <p className="news-card-text">
                       {blog.description.substring(0, 200)}...
                     </p>
                     <div className="news-card-footer">
-                      {/* <span className="news-card-date">
+                      <span className="news-card-date">
                         {new Date().toLocaleDateString()}
-                      </span> */}
+                      </span>
                       <button
                         className="news-card-button"
                         onClick={() => handleReadMore(blog.id)}
-                      >
-                        Đọc thêm
-                      </button>
+                      >Đọc thêm</button>
                     </div>
                   </div>
                 ))

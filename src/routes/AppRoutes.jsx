@@ -1,4 +1,3 @@
-// eslint-disable-next-line no-unused-vars
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Home } from "../pages/Home/Home";
@@ -37,8 +36,7 @@ import AdminPromotion from "../pages/Promotion/AdminPromotion.jsx";
 import AdminBatch from "../pages/Batch/AdminBatch.jsx";
 import Batches from "../pages/Batches/Batches.jsx";
 import BatchDetail from "../pages/Batches/BatchDetail.jsx";
-import { AdminLayout } from "../layouts/index.jsx";
-// import EmailVerification from "../pages/EmailVerification/EmailVerification.jsx";
+
 const AppRoutes = () => {
   return (
     <>
@@ -54,17 +52,16 @@ const AppRoutes = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/:id/detail" element={<UserDetail />} />
         <Route path="/:id/payments" element={<UserPayment />} />
-        <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin-product" element={<AdminProduct />} />
-          <Route path="/admin-blog" element={<AdminBlog />} />
-          <Route path="/admin-certificate" element={<AdminCertificate />} />
-          <Route path="/admin-consignment" element={<AdminConsignment />} />
-          <Route path="/admin-order" element={<AdminOrder />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/admin-promotion" element={<AdminPromotion />} />
-          <Route path="/admin-batch" element={<AdminBatch />} />
-        </Route>
+
+        <Route path="/admin" element={<Admin />} />
+        <Route path="/admin-product" element={<AdminProduct />} />
+        <Route path="/admin-blog" element={<AdminBlog />} />
+        <Route path="/admin-certificate" element={<AdminCertificate />} />
+        <Route path="/admin-consignment" element={<AdminConsignment />} />
+        <Route path="/admin-order" element={<AdminOrder />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/admin-promotion" element={<AdminPromotion />} />
+        <Route path="/admin-batch" element={<AdminBatch />} />
 
         <Route path="/product" element={<Product />} />
 
@@ -92,6 +89,7 @@ const AppRoutes = () => {
         <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/productItem-comparison" element={<ProductComparison />} />
+
 
         <Route path="*" element={<NotFoundRoute />} />
       </Routes>

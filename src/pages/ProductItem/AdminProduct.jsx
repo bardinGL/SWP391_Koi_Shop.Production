@@ -4,12 +4,7 @@ import { CSVLink } from "react-csv";
 import ModalAddProductItem from "../../components/ModalAddProductItem";
 import Papa from "papaparse";
 import { toast } from "react-toastify";
-import {
-  fetchAllProdItem,
-  updateProdItemType,
-  deleteProdItem,
-  updateProdItem,
-} from "../../services/ProductItemService";
+import { fetchAllProdItem, updateProdItemType, deleteProdItem, updateProdItem } from "../../services/ProductItemService";
 import { getProductById } from "../../services/ProductService";
 import FishSpinner from "../../components/FishSpinner";
 import ModalUpdateProductItem from "../../components/ModalUpdateProductItem";
@@ -102,7 +97,7 @@ const AdminProduct = () => {
     setPageIndex(1);
   };
 
-  const getProductExport = () => {};
+  const getProductExport = () => { };
 
   const handleImportCSV = (event) => {
     const file = event.target.files[0];
@@ -155,10 +150,10 @@ const AdminProduct = () => {
 
   const filterProductsByStatus = (status) => {
     console.log(listProductItems);
-    return Array.isArray(listProductItems)
-      ? listProductItems.filter(
-          (item) =>
-            item.type === status && item.name.toLowerCase().includes(searchTerm)
+    return Array.isArray(listProductItems) 
+      ? listProductItems.filter(item => 
+          item.type === status &&
+          item.name.toLowerCase().includes(searchTerm)
         )
       : [];
   };
@@ -180,8 +175,8 @@ const AdminProduct = () => {
     try {
       const response = await updateProdItem(selectedProduct.id, updatedData);
       if (response && response.statusCode === 200) {
-        setListProductItems((prevItems) =>
-          prevItems.map((item) =>
+        setListProductItems(prevItems =>
+          prevItems.map(item =>
             item.id === selectedProduct.id ? { ...item, ...updatedData } : item
           )
         );
@@ -200,12 +195,12 @@ const AdminProduct = () => {
 
   const handleDeleteProduct = async () => {
     if (!itemToDelete) return;
-
+    
     try {
       const response = await deleteProdItem(itemToDelete.id);
       if (response.statusCode === 200) {
-        setListProductItems((prevItems) =>
-          prevItems.filter((item) => item.id !== itemToDelete.id)
+        setListProductItems(prevItems => 
+          prevItems.filter(item => item.id !== itemToDelete.id)
         );
         toast.success("Xóa sản phẩm thành công!");
       }
@@ -224,8 +219,8 @@ const AdminProduct = () => {
   };
 
   return (
-    <div>
-      {/* <AdminHeader /> */}
+    <>
+      <AdminHeader />
 
       <div className="container">
         {isUploading && <FishSpinner />}
@@ -280,25 +275,19 @@ const AdminProduct = () => {
 
         <div className="order-tabs">
           <button
-            className={`order-tab-button ${
-              activeTab === "Pending Approval" ? "active" : ""
-            }`}
+            className={`order-tab-button ${activeTab === "Pending Approval" ? "active" : ""}`}
             onClick={() => setActiveTab("Pending Approval")}
           >
             Chờ duyệt
           </button>
           <button
-            className={`order-tab-button ${
-              activeTab === "Approved" ? "active" : ""
-            }`}
+            className={`order-tab-button ${activeTab === "Approved" ? "active" : ""}`}
             onClick={() => setActiveTab("Approved")}
           >
             Đã duyệt
           </button>
           <button
-            className={`order-tab-button ${
-              activeTab === "Rejected" ? "active" : ""
-            }`}
+            className={`order-tab-button ${activeTab === "Rejected" ? "active" : ""}`}
             onClick={() => setActiveTab("Rejected")}
           >
             Đã từ chối
@@ -349,8 +338,7 @@ const AdminProduct = () => {
                   <td>{item.ph}</td>
                   <td>{item.quantity}</td>
                   <td style={{ color: getTypeColor(item.type) }}>
-                    {item.type === "Pending Approval" &&
-                    userDetails?.roleId === "1" ? (
+                    {item.type === "Pending Approval" && userDetails?.roleId === "1" ? (
                       editingTypeId === item.id ? (
                         <select
                           value={selectedType || item.type}
@@ -365,13 +353,10 @@ const AdminProduct = () => {
                           <option value="Rejected">Reject</option>
                         </select>
                       ) : (
-                        <span
-                          onClick={() => {
-                            setSelectedType(item.type);
-                            setEditingTypeId(item.id);
-                          }}
-                          style={{ cursor: "pointer" }}
-                        >
+                        <span onClick={() => {
+                          setSelectedType(item.type);
+                          setEditingTypeId(item.id);
+                        }} style={{ cursor: "pointer" }}>
                           {item.type}
                         </span>
                       )
@@ -434,39 +419,40 @@ const AdminProduct = () => {
       </div>
 
       {/* {activeTab === "Approved" && ( */}
-      <div className="pagination-controls text-center user-select-none">
-        <button
-          className="btn btn-secondary"
-          disabled={pageIndex === 1}
-          onClick={() => handlePageChange(pageIndex - 1)}
-        >
-          Trước
-        </button>
-        <span className="px-3">
-          Trang {pageIndex} / {totalPages}
-        </span>
-        <button
-          className="btn btn-secondary"
-          disabled={pageIndex === totalPages}
-          onClick={() => handlePageChange(pageIndex + 1)}
-        >
-          Sau
-        </button>
+        <div className="pagination-controls text-center user-select-none">
+          <button
+            className="btn btn-secondary"
+            disabled={pageIndex === 1}
+            onClick={() => handlePageChange(pageIndex - 1)}
+          >
+            Trước
+          </button>
+          <span className="px-3">
+            Trang {pageIndex} / {totalPages}
+          </span>
+          <button
+            className="btn btn-secondary"
+            disabled={pageIndex === totalPages}
+            onClick={() => handlePageChange(pageIndex + 1)}
+          >
+            Sau
+          </button>
 
-        <select
-          value={pageSize}
-          onChange={handlePageSizeChange}
-          className="ml-3"
-        >
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={15}>15</option>
-          <option value={20}>20</option>
-          <option value={25}>25</option>
-          <option value={30}>30</option>
-          <option value={50}>50</option>
-        </select>
-      </div>
+          <select
+            value={pageSize}
+            onChange={handlePageSizeChange}
+            className="ml-3"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={15}>15</option>
+            <option value={20}>20</option>
+            <option value={25}>25</option>
+            <option value={30}>30</option>
+            <option value={50}>50</option>
+
+          </select>
+        </div>
       {/* )} */}
 
       <ModalAddProductItem
@@ -490,7 +476,7 @@ const AdminProduct = () => {
         onConfirm={handleDeleteProduct}
         message="Bạn có chắc chắn muốn xóa sản phẩm này không?"
       />
-    </div>
+    </>
   );
 };
 

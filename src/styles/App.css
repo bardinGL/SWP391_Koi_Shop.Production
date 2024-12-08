@@ -2,8 +2,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&display=swap");
 
 :root {
-  --primary-blue: #c70025;
-  --primary-blue-hover: #b30021;
+  --primary-red: #c70025;
+  --primary-red-hover: #b30021;
   --primary-blue: #1c6197;
   --primary-blue-hover: #164e79;
   --primary-grey: #f1f1f1;
@@ -37,6 +37,9 @@
   --spacing-xxlarge: 50px;
 
   --margin-center: 0 auto;
+
+  --primary-background-light: url("/public/assets/backgroundUpscale.png")
+    no-repeat center center fixed;
 }
 
 *,
@@ -103,7 +106,7 @@ img {
 }
 
 .back-arrow:hover {
-  background-color: var(--primary-blue);
+  background-color: var(--primary-red);
   transform: translateX(-3px);
 }
 
