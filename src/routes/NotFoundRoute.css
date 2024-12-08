@@ -52,17 +52,17 @@
 
 .koi-title {
   font-family: cursive !important;
-  color: var(--primary-red);
+  color: var(--primary-blue);
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .koi-number {
-  color: var(--primary-red);
+  color: var(--primary-blue);
 }
 
 .koi-water-text {
   font-family: "Pacifico", cursive;
-  color: var(--primary-red);
+  color: var(--primary-blue);
   transform: scale(1.25);
 }
 

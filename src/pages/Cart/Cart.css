@@ -155,7 +155,7 @@
 
 .shop-now-btn {
   width: 80%;
-  background-color: var(--primary-red);
+  background-color: var(--primary-blue);
   color: white;
   border: none;
   padding: 10px 25px;
@@ -166,7 +166,7 @@
 }
 
 .shop-now-btn:hover {
-  background-color: var(--primary-red-hover);
+  background-color: var(--primary-blue-hover);
 }
 
 .quantity-display {
@@ -254,5 +254,5 @@
   height: 80px;
   object-fit: cover;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

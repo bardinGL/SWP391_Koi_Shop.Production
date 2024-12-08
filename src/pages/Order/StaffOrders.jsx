@@ -372,14 +372,14 @@ const StaffOrders = () => {
   if (error)
     return (
       <>
-        <AdminHeader />
+        {/* <AdminHeader /> */}
         <div className="staff-orders error-message">{error}</div>
       </>
     );
 
   return (
     <>
-      <AdminHeader />
+      {/* <AdminHeader /> */}
 
       <div className="container">
         <div className="my-3 add-new d-sm-flex">

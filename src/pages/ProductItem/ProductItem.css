@@ -33,6 +33,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  cursor: pointer;
 }
 
 .koi-item-card:hover {
@@ -77,7 +78,7 @@
 }
 
 .koi-item-price {
-  color: #C70025;
+  color: var(--primary-blue);
   font-size: 20px;
   font-weight: bold;
   margin-bottom: 15px;
@@ -94,7 +95,8 @@
   gap: 10px;
 }
 
-.koi-view-btn, .koi-compare-btn {
+.koi-view-btn,
+.koi-compare-btn {
   flex: 1;
   padding: 10px;
   border: none;
@@ -105,7 +107,7 @@
 }
 
 .koi-view-btn {
-  background-color: #C70025;
+  background-color: #c70025;
   color: white;
 }
 
@@ -114,7 +116,8 @@
   color: white;
 }
 
-.koi-view-btn:hover, .koi-compare-btn:hover {
+.koi-view-btn:hover,
+.koi-compare-btn:hover {
   opacity: 0.9;
 }
 
@@ -126,7 +129,7 @@
 .koi-back-home-btn {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #C70025;
+  background-color: #c70025;
   color: white;
   border: none;
   border-radius: 5px;
@@ -160,7 +163,7 @@
 
 .koi-empty-state-icon {
   font-size: 80px;
-  color: #C70025;
+  color: #c70025;
   margin-bottom: 24px;
   animation: koi-bounce 2s infinite;
 }
@@ -182,7 +185,7 @@
 }
 
 .koi-empty-state-button {
-  background-color: #C70025;
+  background-color: #c70025;
   color: white;
   padding: 12px 32px;
   border: none;
@@ -206,7 +209,8 @@
 }
 
 @keyframes koi-bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -259,4 +263,4 @@
   font-weight: 500;
   font-size: 14px;
   z-index: 1;
-} 
+}

@@ -6,7 +6,10 @@ import {
   cancelOrder,
 } from "../../services/OrderService";
 import { fetchAllStaff, getUserById } from "../../services/UserService";
-import { getNameOfProdItem, getProdItemById } from "../../services/ProductItemService";
+import {
+  getNameOfProdItem,
+  getProdItemById,
+} from "../../services/ProductItemService";
 import { fetchBatchById } from "../../services/BatchService";
 import StaffDropdown from "../../components/StaffDropdown";
 import ConfirmationModal from "../../components/ConfirmationModal";
@@ -43,9 +46,9 @@ const AdminOrder = () => {
         ordersData.map(async (order) => {
           const userResponse = await getUserById(order.userId);
           const processedBatchIds = new Set();
-          
+
           const batchGroups = {};
-          order.items.forEach(item => {
+          order.items.forEach((item) => {
             if (item.batchId) {
               if (!batchGroups[item.batchId]) {
                 batchGroups[item.batchId] = [];
@@ -58,44 +61,51 @@ const AdminOrder = () => {
             ...Object.entries(batchGroups).map(async ([batchId, items]) => {
               const batchResponse = await fetchBatchById(batchId);
               if (batchResponse?.data) {
-                setBatchDetails(prev => ({
+                setBatchDetails((prev) => ({
                   ...prev,
-                  [batchId]: batchResponse.data
+                  [batchId]: batchResponse.data,
                 }));
 
-                const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+                const totalQuantity = items.reduce(
+                  (sum, item) => sum + item.quantity,
+                  0
+                );
 
                 return {
-                  type: 'batch',
+                  type: "batch",
                   name: batchResponse.data.name,
                   batchId: batchId,
                   quantity: totalQuantity,
-                  price: batchResponse.data.price
+                  price: batchResponse.data.price,
                 };
               }
               return null;
             }),
 
-            ...await Promise.all(
+            ...(await Promise.all(
               order.items
-                .filter(item => !item.batchId)
+                .filter((item) => !item.batchId)
                 .map(async (item) => {
-                  const productResponse = await getProdItemById(item.productItemId);
+                  const productResponse = await getProdItemById(
+                    item.productItemId
+                  );
                   return {
-                    type: 'single',
+                    type: "single",
                     name: productResponse?.data?.name,
                     imageUrl: productResponse?.data?.imageUrl,
                     quantity: item.quantity,
                     price: productResponse?.data?.price,
                     sex: productResponse?.data?.sex,
                     age: productResponse?.data?.age,
-                    size: productResponse?.data?.size
+                    size: productResponse?.data?.size,
                   };
                 })
-            )
+            )),
           ]);
 
-          const filteredProductDetails = productDetails.filter(item => item !== null);
+          const filteredProductDetails = productDetails.filter(
+            (item) => item !== null
+          );
 
           return {
             ...order,
@@ -105,19 +115,19 @@ const AdminOrder = () => {
             assignedStaffName:
               staffData.find((s) => s.id === order.staffId)?.name ||
               "Chưa phân công",
-            productDetails: filteredProductDetails
+            productDetails: filteredProductDetails,
           };
         })
       );
 
-      const sortedOrders = detailedOrders.sort((a, b) => 
-        new Date(b.createdTime) - new Date(a.createdTime)
+      const sortedOrders = detailedOrders.sort(
+        (a, b) => new Date(b.createdTime) - new Date(a.createdTime)
       );
 
       setOrders(sortedOrders);
       setStaffMembers(staffData);
     } catch (error) {
-      console.error('Error in fetchData:', error);
+      console.error("Error in fetchData:", error);
     } finally {
       setLoading(false);
     }
@@ -128,14 +138,15 @@ const AdminOrder = () => {
   }, []);
 
   useEffect(() => {
-    console.log('Current batchDetails:', batchDetails);
+    console.log("Current batchDetails:", batchDetails);
   }, [batchDetails]);
 
   const filterOrdersByStatus = (status) => {
     return orders
-      .filter((order) => 
-        order.status.toLowerCase() === status.toLowerCase() && 
-        order.consignmentId === null
+      .filter(
+        (order) =>
+          order.status.toLowerCase() === status.toLowerCase() &&
+          order.consignmentId === null
       )
       .filter(
         (order) =>
@@ -257,10 +268,10 @@ const AdminOrder = () => {
           {/* Danh sách sản phẩm */}
           <div className="ao-products-section">
             <div className="ao-section-title">Chi tiết sản phẩm</div>
-            
+
             {order.productDetails.map((item, index) => (
               <div key={index} className="ao-product-item">
-                {item.type === 'batch' ? (
+                {item.type === "batch" ? (
                   <>
                     <div className="ao-product-header">
                       <div className="ao-product-type">Lô hàng</div>
@@ -271,53 +282,67 @@ const AdminOrder = () => {
                       <div className="ao-product-price">
                         {item.price?.toLocaleString("vi-VN")} VND
                       </div>
-                      <button 
-                        className={`ao-expand-button ${expandedBatches.includes(item.batchId) ? 'expanded' : ''}`}
+                      <button
+                        className={`ao-expand-button ${
+                          expandedBatches.includes(item.batchId)
+                            ? "expanded"
+                            : ""
+                        }`}
                         onClick={() => toggleBatchExpand(item.batchId)}
                       >
                         <i className="fas fa-chevron-down"></i>
                       </button>
                     </div>
-                    
-                    {expandedBatches.includes(item.batchId) && batchDetails[item.batchId]?.items && (
-                      <div className="ao-batch-items">
-                        {batchDetails[item.batchId].items.map((batchItem, idx) => (
-                          <div key={`${item.batchId}-${idx}`} className="ao-batch-subitem">
-                            <img 
-                              src={batchItem.imageUrl || '/default-product.png'} 
-                              alt={batchItem.name}
-                              className="ao-item-image"
-                            />
-                            <div className="ao-item-details">
-                              <div className="ao-item-name">{batchItem.name}</div>
-                              <div className="ao-item-specs">
-                                <span>Giới tính: {batchItem.sex}</span>
-                                <span>Tuổi: {batchItem.age}</span>
-                                <span>Size: {batchItem.size}</span>
+
+                    {expandedBatches.includes(item.batchId) &&
+                      batchDetails[item.batchId]?.items && (
+                        <div className="ao-batch-items">
+                          {batchDetails[item.batchId].items.map(
+                            (batchItem, idx) => (
+                              <div
+                                key={`${item.batchId}-${idx}`}
+                                className="ao-batch-subitem"
+                              >
+                                <img
+                                  src={
+                                    batchItem.imageUrl || "/default-product.png"
+                                  }
+                                  alt={batchItem.name}
+                                  className="ao-item-image"
+                                />
+                                <div className="ao-item-details">
+                                  <div className="ao-item-name">
+                                    {batchItem.name}
+                                  </div>
+                                  <div className="ao-item-specs">
+                                    <span>Giới tính: {batchItem.sex}</span>
+                                    <span>Tuổi: {batchItem.age}</span>
+                                    <span>Size: {batchItem.size}</span>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                            )
+                          )}
+                        </div>
+                      )}
                   </>
                 ) : (
                   <div className="ao-single-item">
                     <div className="ao-single-header">
                       <div className="ao-single-badge">Sản phẩm đơn lẻ</div>
                     </div>
-                    
+
                     <div className="ao-single-content">
-                      <img 
-                        src={item.imageUrl || '/default-product.png'} 
+                      <img
+                        src={item.imageUrl || "/default-product.png"}
                         alt={item.name}
                         className="ao-item-image"
                         onError={(e) => {
-                          e.target.src = '/default-product.png';
+                          e.target.src = "/default-product.png";
                           e.target.onerror = null;
                         }}
                       />
-                      
+
                       <div className="ao-item-info">
                         <div className="ao-item-name">{item.name}</div>
                         <div className="ao-item-specs">
@@ -335,9 +360,11 @@ const AdminOrder = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="ao-item-purchase">
-                        <span className="ao-purchase-quantity">Số lượng: {item.quantity}</span>
+                        <span className="ao-purchase-quantity">
+                          Số lượng: {item.quantity}
+                        </span>
                         <span className="ao-purchase-price">
                           {item.price?.toLocaleString("vi-VN")} VND
                         </span>
@@ -370,9 +397,9 @@ const AdminOrder = () => {
   };
 
   const toggleBatchExpand = (batchId) => {
-    setExpandedBatches(prev => 
-      prev.includes(batchId) 
-        ? prev.filter(id => id !== batchId)
+    setExpandedBatches((prev) =>
+      prev.includes(batchId)
+        ? prev.filter((id) => id !== batchId)
         : [...prev, batchId]
     );
   };
@@ -380,8 +407,12 @@ const AdminOrder = () => {
   if (loading) return <FishSpinner />;
 
   return (
-    <>
-      <AdminHeader />
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
+      {/* <AdminHeader /> */}
       <div className="container">
         <div className="my-3">
           <b>Danh sách đơn đặt hàng:</b>
@@ -460,16 +491,16 @@ const AdminOrder = () => {
                     </td>
                     <td>{order.orderId}</td>
                     <td>{order.userName}</td>
-                    <td>{new Date(order.createdTime).toLocaleDateString(
-                      "vi-VN", {
-                              year: 'numeric',
-                              month: 'numeric',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                              second: '2-digit'
-                            }
-                    )}</td>
+                    <td>
+                      {new Date(order.createdTime).toLocaleDateString("vi-VN", {
+                        year: "numeric",
+                        month: "numeric",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        second: "2-digit",
+                      })}
+                    </td>
                     <td>
                       <span
                         className={`admin-order-status-badge ${getStatusBadgeClass(
@@ -530,7 +561,7 @@ const AdminOrder = () => {
         onConfirm={confirmCancelOrder}
         message={`Bạn có chắc chắn muốn hủy đơn hàng #${orderToCancel?.orderId}?`}
       />
-    </>
+    </div>
   );
 };
 

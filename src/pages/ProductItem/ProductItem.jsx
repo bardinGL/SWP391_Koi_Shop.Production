@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Header } from "../../layouts/header/header";
 import { Footer } from "../../layouts/footer/footer";
 import { toast } from "react-toastify";
-import './ProductItem.css';
+import "./ProductItem.css";
 
 const ProductItem = () => {
   const location = useLocation();
@@ -11,7 +11,7 @@ const ProductItem = () => {
 
   const navigate = useNavigate();
 
-  const approvedItems = Array.isArray(productItems) 
+  const approvedItems = Array.isArray(productItems)
     ? productItems.filter((item) => item.type === "Approved")
     : [];
 
@@ -54,17 +54,19 @@ const ProductItem = () => {
           {approvedItems && approvedItems.length > 0 && (
             <h1 className="koi-product-heading">Danh sách {productName}</h1>
           )}
-          
-          {(!approvedItems || approvedItems.length === 0) ? (
+
+          {!approvedItems || approvedItems.length === 0 ? (
             <div className="koi-empty-state-container">
               <div className="koi-empty-state-icon">🎏</div>
-              <h2 className="koi-empty-state-heading">Không tìm thấy sản phẩm nào</h2>
+              <h2 className="koi-empty-state-heading">
+                Không tìm thấy sản phẩm nào
+              </h2>
               <p className="koi-empty-state-message">
-                Hiện tại không có sản phẩm nào trong danh mục này. 
-                Vui lòng quay lại sau hoặc khám phá các sản phẩm khác.
+                Hiện tại không có sản phẩm nào trong danh mục này. Vui lòng quay
+                lại sau hoặc khám phá các sản phẩm khác.
               </p>
-              <button 
-                onClick={() => navigate('/')}
+              <button
+                onClick={() => navigate("/")}
                 className="koi-empty-state-button"
               >
                 Quay về trang chủ
@@ -73,9 +75,12 @@ const ProductItem = () => {
           ) : (
             <div className="koi-items-grid">
               {approvedItems.map((item) => (
-                <div 
-                  key={item.id} 
-                  className={`koi-item-card ${item.quantity === 0 ? 'sold-out' : ''}`}
+                <div
+                  key={item.id}
+                  className={`koi-item-card ${
+                    item.quantity === 0 ? "sold-out" : ""
+                  }`}
+                  onClick={() => handleViewDetails(item.id)}
                 >
                   <div className="koi-item-image-wrapper">
                     {item.quantity === 0 && (
@@ -90,13 +95,13 @@ const ProductItem = () => {
                   <div className="koi-item-content">
                     <h3 className="koi-item-name">{item.name}</h3>
                     <p className="koi-item-price">
-                      {item.price.toLocaleString('vi-VN')} VND
+                      {item.price.toLocaleString("vi-VN")} VND
                     </p>
                     <div className="koi-item-specs">
                       <p>Tuổi: {item.age} tuổi</p>
                       <p>Kích thước: {item.size}</p>
                     </div>
-                    <div className="koi-item-actions">
+                    {/* <div className="koi-item-actions">
                       <button
                         onClick={() => handleViewDetails(item.id)}
                         className="koi-view-btn"
@@ -109,7 +114,7 @@ const ProductItem = () => {
                       >
                         So sánh
                       </button>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               ))}

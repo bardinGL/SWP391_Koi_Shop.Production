@@ -89,13 +89,16 @@
   display: flex;
   align-items: center;
   margin-right: auto;
+  color: #ffffff !important;
+  font-weight: bold !important;
+  margin-bottom: 12px !important;
 }
 
 .nav-link {
   display: flex;
   gap: 20px;
   text-decoration: none;
-  color: #000;
+  color: #ffffff !important;
   font-size: 1.2rem;
 }
 
@@ -117,6 +120,12 @@
   border: none;
   font-size: 1rem;
   cursor: pointer;
+}
+
+.admin-header-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--primary-blue);
 }
 
 .admin-header-container .dropdown-menu {

@@ -2,9 +2,9 @@
 import logo from "../../../public/assets/icon.png";
 import logo1 from "../../../public/assets/image 9.png";
 import arrow from "../../../public/icons/Group 10.png";
-import check from "../../../public/icons/Group 208.png";
-import gift from "../../../public/icons/Group 207.png";
-import cart from "../../../public/icons/Shopping Cart.png";
+// import check from "../../../public/icons/Group 208.png";
+// import gift from "../../../public/icons/Group 207.png";
+// import cart from "../../../public/icons/Shopping Cart.png";
 import { Col, Container, Row } from "react-bootstrap";
 import React, { useState, useRef } from "react";
 import { toast } from "react-toastify";
@@ -51,12 +51,12 @@ export const Footer = () => {
       <Row
         className="py-2 text-white"
         style={{
-          background: "#C70025",
+          background: "#1c6197",
           fontSize: 25,
           justifyContent: "space-evenly",
         }}
       >
-        <Col className="d-flex align-items-center gap-2 text-center justify-content-center">
+        {/* <Col className="d-flex align-items-center gap-2 text-center justify-content-center">
           <img className="mt-1" src={cart} style={{ width: 30, height: 30 }} />
           Mua Koi linh hoạt
         </Col>
@@ -67,29 +67,45 @@ export const Footer = () => {
         <Col className="d-flex align-items-center gap-2 text-center justify-content-center">
           <img className="mt-1" src={check} style={{ width: 30, height: 30 }} />
           Uy tín, chất lượng
-        </Col>
+        </Col> */}
       </Row>
       <Row className="p-3">
         <Col>
-          <p className="fw-semibold" style={{ fontSize: 22, color: "#C70025" }}>
-            THÔNG TIN LIÊN HỆ CHÚNG TÔI
+          <p className="fw-semibold" style={{ fontSize: 22, color: "#1c6197" }}>
+            LIÊN HỆ
           </p>
           <img
             src={logo}
             alt="Koi Shop Logo"
             style={{ width: 80, height: 80 }}
           />
-          <img src={logo1} style={{ width: 210, height: 60 }} />
+          <div style={{ fontSize: "24px", color: "#000000" }}>KOI SHOWCASE</div>
           <p className="mt-3 fw-semibold">
-            Địa chỉ: Tây Hồ, Hà Nội
             <br />
-            Điện thoại: 091.5588.336
+            Điện thoại: 0123456789
             <br />
             Email: koishopvn@gmail.com
           </p>
         </Col>
         <Col>
-          <p className="fw-semibold" style={{ fontSize: 22, color: "#C70025" }}>
+          <p className="fw-semibold" style={{ fontSize: 22, color: "#1c6197" }}>
+            Về KOI SHOWCASE
+          </p>
+          <p className="fw-semibold">
+            <br />
+            KOI
+            <br />
+            Sản phẩm
+            <br />
+            Dịch vụ
+            <br />
+            Tin tức
+            <br />
+            Liên hệ
+          </p>
+        </Col>
+        <Col>
+          <p className="fw-semibold" style={{ fontSize: 22, color: "#1c6197" }}>
             KINH NGHIỆM - HƯỚNG DẪN
           </p>
           <ul
@@ -102,7 +118,7 @@ export const Footer = () => {
           </ul>
         </Col>
         <Col>
-          <p className="fw-semibold" style={{ fontSize: 22, color: "#C70025" }}>
+          <p className="fw-semibold" style={{ fontSize: 22, color: "#1c6197" }}>
             HỖ TRỢ TƯ VẤN
           </p>
           <div className="d-flex flex-row gap-2">

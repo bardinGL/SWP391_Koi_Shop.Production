@@ -54,6 +54,7 @@ const Consignment = () => {
               <li>
                 Phí dịch vụ ký gửi được áp dụng ở mức 25.000 VNĐ mỗi ngày.
               </li>
+              <li>Với ký gửi để bán, phí hoa hồng sẽ là 10%</li>
             </ol>
           </div>
           <div className="consignment-form-link">

@@ -6,6 +6,10 @@ import "./ConsignmentForm.css";
 import FishSpinner from "./FishSpinner";
 
 const folder = import.meta.env.VITE_FOLDER_CONSIGNMENT;
+const ConsignmentType = {
+  CARE: "Ký gửi để chăm sóc",
+  SELL: "Ký gửi để bán",
+};
 
 const ConsignmentForm = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -24,15 +28,16 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [consignmentType, setConsignmentType] = useState(ConsignmentType.CARE);
 
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     }
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [isOpen]);
 
@@ -97,7 +102,9 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
         }
       }
     } catch (err) {
-      toast.error("Tạo đơn ký gửi không thành công do thông tin bạn cung cấp có vấn đề!");
+      toast.error(
+        "Tạo đơn ký gửi không thành công do thông tin bạn cung cấp có vấn đề!"
+      );
     } finally {
       setIsLoading(false);
     }
@@ -258,6 +265,57 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
             )}
           </>
         );
+      case 5:
+        return (
+          <>
+            <h3>Loại ký gửi:</h3>
+            <div className="radio-group flex-col mb-4">
+              <label>
+                <input
+                  type="radio"
+                  name="consignmentType"
+                  value={consignmentType === ConsignmentType.CARE}
+                  checked={consignmentType === ConsignmentType.CARE}
+                  onChange={(event) => {
+                    handleChange(event);
+                    setConsignmentType(ConsignmentType.CARE);
+                  }}
+                  required
+                />
+                {ConsignmentType.CARE}
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="consignmentType"
+                  value={consignmentType === ConsignmentType.SELL}
+                  checked={consignmentType === ConsignmentType.SELL}
+                  onChange={(event) => {
+                    handleChange(event);
+                    setConsignmentType(ConsignmentType.SELL);
+                  }}
+                  required
+                />
+                {ConsignmentType.SELL}
+              </label>
+            </div>
+            {consignmentType === ConsignmentType.SELL && (
+              <div>
+                <div className="form-group">
+                  <label htmlFor="price">Giá mong muốn bán</label>
+                  <input
+                    type="number"
+                    id="price"
+                    name="price"
+                    value={formData.price || 0}
+                    onChange={handleChange}
+                    required
+                  />
+                </div>
+              </div>
+            )}
+          </>
+        );
       default:
         return null;
     }
@@ -281,7 +339,7 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
         <div className="consignment-form-container">
           <h1>Create Consignment Item</h1>
           <div className="progress-indicator">
-            {[1, 2, 3, 4].map((step) => (
+            {[1, 2, 3, 4, 5].map((step) => (
               <div
                 key={step}
                 className={`step ${currentStep >= step ? "active" : ""}`}
@@ -300,12 +358,12 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
                   Previous
                 </button>
               )}
-              {currentStep < 4 && (
+              {currentStep < 5 && (
                 <button type="button" onClick={nextStep} className="btn-next">
                   Next
                 </button>
               )}
-              {currentStep === 4 && (
+              {currentStep === 5 && (
                 <button
                   type="submit"
                   className="btn-submit"

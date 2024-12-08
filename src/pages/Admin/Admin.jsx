@@ -116,8 +116,12 @@ const Admin = () => {
   if (isLoading) return <FishSpinner />;
 
   return (
-    <>
-      <AdminHeader />
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
+      {/* <AdminHeader /> */}
 
       <div className="container">
         <div className="my-3 add-new d-sm-flex">
@@ -234,7 +238,7 @@ const Admin = () => {
           handleDeleteStaffFromModal={handleDeleteStaffFromModal}
         />
       </div>
-    </>
+    </div>
   );
 };
 

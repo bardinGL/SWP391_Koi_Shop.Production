@@ -33,15 +33,15 @@ const Info = () => {
       <div className="info-container">
         <main className="info-content animated user-select-none">
           <h1 className="info-title">Về Công Ty Chúng Tôi</h1>
-          <section className="info-section">
+          {/* <section className="info-section">
             <h2 className="text-center">Sứ Mệnh Của Chúng Tôi</h2>
             <br />
             <h2 className="fst-italic fw-bold" style={{ color: "#319795" }}>
               "CÁ KOI CỦA BẠN - TIỀN CỦA CHÚNG TÔI"
             </h2>
-          </section>
+          </section> */}
 
-          <section className="info-section">
+          {/* <section className="info-section">
             <h2 className="text-center">Đội Ngũ Của Chúng Tôi</h2>
             <br />
             <div className="team-grid">
@@ -55,9 +55,50 @@ const Info = () => {
                 </div>
               ))}
             </div>
-          </section>
+          </section> */}
 
           <section className="info-section">
+            <h2 className="text-center">GIỚI THIỆU KOI SHOWCASE</h2>
+            <br />
+            <div>
+              Cá Koi đã không còn xa lạ với những nhiều người. Đặc biệt là những
+              người chơi, nuôi cá cảnh. Giống cá này đã được nuôi tại nhiều nước
+              trên thế giới và khá phổ biến, được yêu thích tại Việt Nam.
+            </div>
+            <br />
+            <div>
+              Ngoài ra, KOI SHOWCASE sẽ cung cãp đến bạn đọc rẫt nhiều thông tin
+              hữu ích vè các loại cá koi. Cùng với đó là những kinh nghiệm,chia
+              sẻ có thể bạn chưa biết đến từ những chuyên gia và người chơi lâu
+              năm. Nẽu bạn là người mới tìm hiểu về cá koi thì đừng bỏ qua bãt
+              kì chi tiết nào nhé. Với nguồn giống bố mẹ là cá chát lượng cao từ
+              các trang trại nổi tiếng Nhật Bàn như Omosako, Danichi, Isa,
+              Sakai...
+              <br />
+              KOI SHOWCASE - TRANG TRẠI KOI CHUÃN NHẬT CHO NGƯỜI SÀNH Với những
+              người chọn “chơi" cá Koi thì đây không chỉ đơn giản là một sở
+              thích bình thường mà nó còn là lời gửi gắm những mong cằu trong
+              cuộc sống. Vậy điều gì đã khiến nhiều người lựa chọn thú vui nuôi
+              cá Koi đắt đỏ này? Giá trị tinh thần : Cá Koi Nhật Bản mang ý
+              nghĩa phong thủy của người Á Đông, là loại cá biểu trưng cho sự
+              giàu sang, may mắn, trường thọ và mọi đièu tốt lành trong cuộc
+              sống. Theo người Trung Quốc, cá Koi còn gắn liền với điển tích "CÁ
+              CHÉP HÓA RỒNG" Giá trị thầm mỹ : Cá Koi được mệnh danh là quốc ngư
+              Nhật Bản với 3 sắc đen đỏ vàng trên thân biểu trưng cho sự hài hòa
+              âm dương. Giá trị kinh tê : Làm giàu từ cá Koi, thu nhập hàng tỷ
+              đồng/năm và câu chuyện thành công từ tay trắng thành đại gia của
+              triệu phú Phan Văn Sơn Tuy nhiên, với những giá trị mà cá Koi mang
+              lại thì chúng được bán với mức giá không hè rẻ. Để lựa chọn được
+              một địa chỉ uy tính mua Cá Koi không phải là điều dễ dàng. Nếu
+              đang có nhu cău mua Cá Koi, hãy đến với KOI SHOWCASE, chuyên cung
+              cấp cá Koi chuẩn Nhật Bản 100% Đảm bảo cá chất lượng, được nhập
+              khẩu trực tiếp từ trại cá nổi tiếng tại xứ Phù Tang Cá được chăm
+              sóc, nuôi dưỡng khỏe mạnh , màu săc đẹp, phông bệnh tốt, chỉ việc
+              đem cá vê nuôi.
+            </div>
+          </section>
+
+          {/* <section className="info-section">
             <h2 className="text-center">
               Giới Thiệu Về Trang Web Của Chúng Tôi
             </h2>
@@ -85,7 +126,7 @@ const Info = () => {
                 </p>
               </div>
             </div>
-          </section>
+          </section> */}
         </main>
       </div>
       <Footer />

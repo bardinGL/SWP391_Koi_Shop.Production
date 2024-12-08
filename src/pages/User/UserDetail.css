@@ -31,14 +31,14 @@
   justify-content: space-between;
   /* align-items: center; */
   margin-bottom: var(--spacing-xlarge);
-  border-bottom: 2px solid var(--primary-red);
+  border-bottom: 2px solid var(--primary-blue);
   align-items: flex-end !important;
 }
 
 .user-detail-title {
   font-size: var(--font-size-section);
   font-weight: var(--font-weight-title);
-  color: var(--primary-red);
+  color: var(--primary-blue);
   text-transform: uppercase;
   letter-spacing: 2px;
 }
@@ -52,7 +52,7 @@
 
 .user-detail-info input {
   outline: auto;
-  outline-color: var(--primary-red);
+  outline-color: var(--primary-blue);
 }
 
 .user-info-item {
@@ -165,7 +165,7 @@
 }
 
 .edit-form button[type="button"]:hover {
-  background-color: var(--primary-red-hover);
+  background-color: var(--primary-blue-hover);
 }
 
 .order-table {
@@ -260,7 +260,7 @@
 }
 
 .edit-info-btn:hover {
-  background-color: var(--primary-red-hover);
+  background-color: var(--primary-blue-hover);
 }
 
 .btn-view-payments {
@@ -308,7 +308,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  margin: 0 auto; 
+  margin: 0 auto;
 }
 
 .order-table td {

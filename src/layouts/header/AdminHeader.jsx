@@ -61,8 +61,18 @@ const AdminHeader = () => {
   return (
     <>
       <div className="admin-header-container">
-        <Navbar expand="lg" className="bg-body-tertiary">
-          <Container>
+        <Navbar
+          expand="lg"
+          style={{
+            backgroundColor: "#1c6197 !important",
+          }}
+        >
+          <Container
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             <NavLink
               className={({ isActive }) =>
                 `navbar-brand ${isActive ? "fw-bold" : ""}`
@@ -93,8 +103,14 @@ const AdminHeader = () => {
 
             <Navbar.Collapse id="basic-navbar-nav">
               {((user && user.auth) || window.location.pathname === "/") && (
-                <>
-                  <Nav className="me-auto">
+                <div>
+                  <Nav
+                    className="me-auto"
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
                     {userDetails && userDetails.roleId === "1" && (
                       <NavLink
                         className="nav-link"
@@ -166,7 +182,19 @@ const AdminHeader = () => {
                       </NavLink>
                     )}
                   </Nav>
-                  <Nav>
+                  <hr
+                    style={{
+                      width: "100%",
+                      height: "1px",
+                      backgroundColor: "#e9ecef",
+                    }}
+                  />
+                  <Nav
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
                     {user && user.email && (
                       <span className="nav-link">
                         <i className="fa-regular fa-user"></i> :{" "}
@@ -193,7 +221,7 @@ const AdminHeader = () => {
                       </NavDropdown>
                     </div>
                   </Nav>
-                </>
+                </div>
               )}
             </Navbar.Collapse>
           </Container>

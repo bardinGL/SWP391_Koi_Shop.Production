@@ -7,7 +7,7 @@ import {
   fetchAllCertificate,
   deleteCertificate,
   updateCertificate,
-  updateCertificateImage
+  updateCertificateImage,
 } from "../../services/CertificateService";
 import ModalCertificateCreate from "../../components/ModalCertificateCreate";
 import ModalCertificateUpdate from "../../components/ModalCertificateUpdate";
@@ -33,9 +33,9 @@ const AdminCertificate = () => {
     try {
       const response = await fetchAllCertificate();
       if (response?.data) {
-        const formattedCertificates = response.data.map(cert => ({
+        const formattedCertificates = response.data.map((cert) => ({
           ...cert,
-          productCertificates: cert.productCertificates || []
+          productCertificates: cert.productCertificates || [],
         }));
         setCertificates(formattedCertificates);
       }
@@ -62,12 +62,15 @@ const AdminCertificate = () => {
   const handleSubmitCertificateUpdate = async (updatedData) => {
     try {
       setIsUploading(true);
-      
+
       // Handle image update if there's a new image
       if (updatedData.image) {
         const formData = new FormData();
-        formData.append('image', updatedData.image);
-        await updateCertificateImage(selectedCertificate.certificateId, formData);
+        formData.append("image", updatedData.image);
+        await updateCertificateImage(
+          selectedCertificate.certificateId,
+          formData
+        );
       }
 
       // Handle other data update
@@ -76,13 +79,13 @@ const AdminCertificate = () => {
       };
 
       const response = await updateCertificate(
-        selectedCertificate.certificateId, 
+        selectedCertificate.certificateId,
         certificateData
       );
 
       if (response?.data) {
-        setCertificates(prevCerts =>
-          prevCerts.map(cert =>
+        setCertificates((prevCerts) =>
+          prevCerts.map((cert) =>
             cert.certificateId === selectedCertificate.certificateId
               ? { ...cert, ...response.data }
               : cert
@@ -101,23 +104,24 @@ const AdminCertificate = () => {
 
   const handleUpdateCertificateList = (newCertificate) => {
     setCertificates((prevCertificates) =>
-      Array.isArray(prevCertificates) 
-        ? [newCertificate, ...prevCertificates] 
+      Array.isArray(prevCertificates)
+        ? [newCertificate, ...prevCertificates]
         : [newCertificate]
     );
     setIsUploading(false);
   };
 
   const handleDeleteCertificate = async (id) => {
-    if (!window.confirm("Bạn có chắc chắn muốn xóa chứng chỉ này không?")) return;
-    
+    if (!window.confirm("Bạn có chắc chắn muốn xóa chứng chỉ này không?"))
+      return;
+
     try {
       setIsUploading(true);
       const response = await deleteCertificate(id);
-      
+
       if (response?.data) {
-        setCertificates(prevCerts => 
-          prevCerts.filter(cert => cert.certificateId !== id)
+        setCertificates((prevCerts) =>
+          prevCerts.filter((cert) => cert.certificateId !== id)
         );
         toast.success("Xóa chứng chỉ thành công!");
       }
@@ -132,8 +136,12 @@ const AdminCertificate = () => {
   if (isLoading) return <FishSpinner />;
 
   return (
-    <>
-      <AdminHeader />
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
+      {/* <AdminHeader /> */}
 
       <div className="container">
         {isUploading && <FishSpinner />}
@@ -207,7 +215,7 @@ const AdminCertificate = () => {
                         const certificateForModal = {
                           certificateId: cert.certificateId,
                           certificateName: cert.certificateName,
-                          productCertificates: cert.productCertificates || []
+                          productCertificates: cert.productCertificates || [],
                         };
                         setSelectedCertificate(certificateForModal);
                         setShowProductModal(true);
@@ -219,7 +227,9 @@ const AdminCertificate = () => {
                     <button
                       title="Xoá chứng chỉ"
                       className="btn btn-danger ms-2"
-                      onClick={() => handleDeleteCertificate(cert.certificateId)}
+                      onClick={() =>
+                        handleDeleteCertificate(cert.certificateId)
+                      }
                       disabled={isUploading}
                     >
                       <i className="fa-solid fa-trash"></i>
@@ -274,7 +284,7 @@ const AdminCertificate = () => {
           setIsUploading={setIsUploading}
         />
       </div>
-    </>
+    </div>
   );
 };
 

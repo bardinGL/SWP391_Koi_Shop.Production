@@ -102,8 +102,12 @@ const AdminBlog = () => {
   if (isLoading) return <FishSpinner />;
 
   return (
-    <>
-      <AdminHeader />
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
+      {/* <AdminHeader /> */}
 
       <div className="container">
         {isUploading && <FishSpinner />}
@@ -214,7 +218,7 @@ const AdminBlog = () => {
           setIsUploading={setIsUploading}
         />
       </div>
-    </>
+    </div>
   );
 };
 

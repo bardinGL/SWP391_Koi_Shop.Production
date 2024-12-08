@@ -1,5 +1,6 @@
 .consignment-page-container {
   position: relative;
+  background-color: #f1f1f1 !important;
 }
 
 .consignment-page-container::before {

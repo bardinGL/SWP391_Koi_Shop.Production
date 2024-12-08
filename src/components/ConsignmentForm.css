@@ -243,3 +243,12 @@
 .btn-submit:disabled:hover {
   opacity: 1;
 }
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}

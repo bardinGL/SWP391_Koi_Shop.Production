@@ -1,6 +1,6 @@
 .news-container {
   position: relative;
-  /* background-color: #f1f1f1; */
+  background-color: #f1f1f1;
   padding-bottom: 4rem;
 }
 
@@ -134,7 +134,7 @@
 }
 
 .read-more-first {
-  background-color: var(--primary-red);
+  background-color: var(--primary-blue);
   padding: 10px 20px;
   cursor: pointer;
   text-transform: uppercase;
@@ -148,7 +148,7 @@
 }
 
 .read-more {
-  background-color: var(--primary-red);
+  background-color: var(--primary-blue);
   padding: 10px 20px;
   cursor: pointer;
   text-transform: uppercase;

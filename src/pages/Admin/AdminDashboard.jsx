@@ -365,7 +365,7 @@ const AdminDashboard = () => {
 
   return (
     <>
-      <AdminHeader />
+      {/* <AdminHeader /> */}
       <div className="admin-dashboard-container">
         <div className="admin-dashboard user-select-none">
           <div className="dashboard-tabs">

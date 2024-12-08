@@ -26,20 +26,21 @@
 
 .register-form {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   width: 1000px;
-  padding: var(--spacing-xlarge);
+  padding: 80px var(--spacing-xlarge);
   background: var(--primary-white);
   box-shadow: var(--box-shadow-default);
   border-radius: var(--radius-form);
   position: relative;
-  height: 450px;
+  gap: 40px;
 }
 
 .register-title {
   flex: 1;
-  text-align: left;
+  text-align: center;
   padding-right: var(--spacing-xlarge);
 }
 
@@ -83,7 +84,7 @@
 .register-button {
   width: 150px;
   padding: 10px 20px;
-  background-color: var(--primary-red);
+  background-color: var(--primary-blue);
   color: var(--primary-white);
   border: none;
   border-radius: var(--radius-default);
@@ -93,7 +94,7 @@
 }
 
 .register-button:hover {
-  background-color: var(--primary-red-hover);
+  background-color: var(--primary-blue-hover);
 }
 
 .register-button:disabled {
@@ -106,6 +107,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: var(--spacing-medium);
+  flex-direction: row !important;
 }
 
 .link-section {

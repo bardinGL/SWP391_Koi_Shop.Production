@@ -4,17 +4,17 @@ import ModalPromotionCreate from "../../components/ModalPromotionCreate";
 import ModalPromotionUpdate from "../../components/ModalPromotionUpdate";
 import { toast } from "react-toastify";
 import {
-    fetchAllPromotion,
-    deletePromotion,
-    updatePromotion,
-  } from "../../services/PromotionService";
+  fetchAllPromotion,
+  deletePromotion,
+  updatePromotion,
+} from "../../services/PromotionService";
 import FishSpinner from "../../components/FishSpinner";
 // import "./AdminBlog.css";
 
 // Thêm hàm helper để format giá trị
 const formatAmount = (amount, type) => {
   if (type === "Direct") {
-    return `${amount.toLocaleString('vi-VN')} VNĐ`;
+    return `${amount.toLocaleString("vi-VN")} VNĐ`;
   } else if (type === "Percentage") {
     return `${amount}%`;
   }
@@ -46,7 +46,6 @@ const AdminPromotion = () => {
       setIsLoading(false);
     }
   };
-
 
   const handleUpdateBlogList = (newBlog) => {
     setBlogs((prevBlogs) =>
@@ -95,8 +94,12 @@ const AdminPromotion = () => {
   if (isLoading) return <FishSpinner />;
 
   return (
-    <>
-      <AdminHeader />
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
+      {/* <AdminHeader /> */}
 
       <div className="container">
         {isUploading && <FishSpinner />}
@@ -189,7 +192,7 @@ const AdminPromotion = () => {
           setIsUploading={setIsUploading}
         />
       </div>
-    </>
+    </div>
   );
 };
 

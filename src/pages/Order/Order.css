@@ -83,7 +83,7 @@
 }
 
 .item-price {
-  color: var(--primary-red);
+  color: var(--primary-blue);
   font-weight: bold;
   font-size: var(--font-size-p);
   min-width: 120px;
@@ -139,7 +139,7 @@
 }
 
 .payment-method input:checked ~ .order-payment-content {
-  border-color: var(--primary-red);
+  border-color: var(--primary-blue);
   background-color: #fff5f5;
 }
 
@@ -227,7 +227,7 @@
   margin-top: 20px;
   padding-top: 20px;
   border-top: 2px solid var(--primary-grey);
-  color: var(--primary-red);
+  color: var(--primary-blue);
   font-size: var(--font-size-default);
   font-weight: bold;
 }

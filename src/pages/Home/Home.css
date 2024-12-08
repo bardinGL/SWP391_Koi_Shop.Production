@@ -4,10 +4,10 @@
 }
 
 .homepage-intro-title {
-  background-color: var(--primary-black);
+  background-color: var(--primary-blue);
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-title);
-  color: var(--primary-red);
+  color: var(--primary-black);
   text-transform: uppercase;
   text-align: center;
   margin-bottom: 0;
@@ -18,7 +18,8 @@
 .homepage-intro-section {
   display: flex;
   align-items: center;
-  background-color: var(--primary-black);
+  /* background-color: var(--primary-black); */
+  background-color: var(--primary-blue);
   color: var(--primary-white);
 }
 
@@ -94,7 +95,7 @@
 .homepage-best-sellers-title {
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-title);
-  color: var(--primary-red);
+  color: var(--primary-blue);
   text-transform: uppercase;
   text-align: center;
   margin-bottom: 40px;
@@ -112,24 +113,22 @@
 .product-item-card {
   border-radius: var(--radius-default);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
   display: flex;
   flex-direction: column;
   width: calc(25% - 50px);
   height: auto;
-  border: 5px double var(--primary-red) !important;
   margin-top: 50px;
+  position: relative;
 }
 
-.product-item-card:hover {
+/* .product-item-card:hover {
   transform: translateY(-50px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.5s ease, box-shadow 0.5s ease;
-}
+} */
 
-.product-item-card:not(:hover) {
-  transition: transform 0.2s ease 0.5s, box-shadow 0.3s ease 0.1s;
-}
+/* .product-item-card:not(:hover) { */
+/* transition: transform 0.2s ease 0.5s, box-shadow 0.3s ease 0.1s; */
+/* } */
 
 .image-container {
   width: 100%;
@@ -167,7 +166,7 @@
 
 .best-seller-price {
   margin: 5px 0;
-  color: var(--primary-red);
+  color: var(--primary-blue);
   font-weight: bold;
   font-size: 1.1rem;
 }
@@ -190,9 +189,9 @@
 }
 
 .buy-button {
-  background-color: var(--primary-red);
+  background-color: var(--primary-blue);
   color: var(--primary-white);
-  border: 2px solid var(--primary-red);
+  border: 2px solid var(--primary-blue);
 }
 
 .view-more-button {
@@ -203,14 +202,14 @@
 
 .buy-button:hover {
   background-color: var(--primary-white);
-  color: var(--primary-red);
-  border: 2px solid var(--primary-red);
+  color: var(--primary-blue);
+  border: 2px solid var(--primary-blue);
 }
 
 .view-more-button:hover {
   background-color: var(--primary-white);
-  color: var(--primary-red);
-  border: 2px solid var(--primary-red);
+  color: var(--primary-blue);
+  border: 2px solid var(--primary-blue);
 }
 
 @media (max-width: 1200px) {
@@ -241,7 +240,7 @@
 .homepage-news-title {
   font-size: var(--font-size-title);
   font-weight: var(--font-weight-title);
-  color: var(--primary-red);
+  color: var(--primary-blue);
   text-transform: uppercase;
   text-align: center;
   margin-bottom: 40px;
@@ -249,7 +248,9 @@
 }
 
 .homepage-news-list {
-  display: grid;
+  display: flex;
+  width: 80%;
+  flex-direction: column;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   margin: 0 auto;
 }
@@ -263,8 +264,9 @@
 }
 
 .homepage-news-card:hover {
-  transform: translateY(-5px);
+  /* transform: translateY(-5px); */
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
 .news-card-image-container {
@@ -280,15 +282,15 @@
   transition: transform 0.3s ease;
 }
 
-.homepage-news-card:hover .news-card-image {
+/* .homepage-news-card:hover .news-card-image {
   transform: scale(1.1);
-}
+} */
 
 .news-card-overlay {
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: var(--primary-red);
+  background-color: var(--primary-blue);
   color: white;
   padding: 5px 10px;
   border-radius: 5px;
@@ -318,10 +320,10 @@
 
 .news-card-footer {
   display: flex;
-  justify-content: space-between;
+  justify-content: end;
   align-items: center;
   margin-top: 15px;
-  background-color: var(--primary-red);
+  /* background-color: var(--primary-blue); */
   padding: 10px 15px;
   border-radius: 0 0 10px 10px;
 }
@@ -332,8 +334,8 @@
 }
 
 .news-card-button {
-  background-color: var(--primary-white);
-  color: var(--primary-red);
+  background-color: var(--primary-blue);
+  color: var(--primary-white);
   border: none;
   padding: 8px 15px;
   border-radius: 5px;
@@ -344,7 +346,7 @@
 
 .news-card-button:hover {
   background-color: var(--primary-grey);
-  color: var(--primary-red);
+  color: var(--primary-blue);
 }
 
 .loading-spinner,
@@ -360,7 +362,7 @@
   justify-content: center;
   align-items: center;
   height: 100px;
-  background-color: var(--primary-red);
+  background-color: var(--primary-blue);
   margin: 0;
   padding: 0;
   width: 100%;
@@ -369,7 +371,7 @@
 
 button {
   padding: 10px 20px;
-  background-color: var(--primary-red);
+  background-color: var(--primary-blue);
   color: white;
   border: none;
   border-radius: 6px;

@@ -75,16 +75,20 @@ export const Header = () => {
 
   useEffect(() => {
     const checkCompareList = () => {
-      const compareList = JSON.parse(localStorage.getItem('compareList') || '[]');
+      const compareList = JSON.parse(
+        localStorage.getItem("compareList") || "[]"
+      );
       const newCount = compareList.length;
-      const lastCount = parseInt(localStorage.getItem('lastCompareCount') || '0');
-      
+      const lastCount = parseInt(
+        localStorage.getItem("lastCompareCount") || "0"
+      );
+
       if (newCount >= 2 && lastCount < 2) {
         setShouldAnimate(true);
         setTimeout(() => setShouldAnimate(false), 300);
       }
-      
-      localStorage.setItem('lastCompareCount', newCount.toString());
+
+      localStorage.setItem("lastCompareCount", newCount.toString());
       setCompareListCount(newCount);
       setShowCompareButton(newCount >= 2);
     };
@@ -154,7 +158,7 @@ export const Header = () => {
 
   const handleLogout = () => {
     logout();
-    localStorage.removeItem('compareList');
+    localStorage.removeItem("compareList");
     navigate("/");
     toast.success("Logout Success");
   };
@@ -190,12 +194,17 @@ export const Header = () => {
         <div className="nav-content">
           <div className="nav-logo" onClick={() => navigate("/")}>
             <img src={logo} className="logo-image" alt="#" />
-            <img src={logo1} className="logo1-image" alt="#" />
+            {/* <img src={logo1} className="logo1-image" alt="#" /> */}
+            <div style={{ fontSize: "24px", color: "#FFFFFF" }}>
+              KOI SHOWCASE
+            </div>
           </div>
           <div className="nav-search-grid">
             {showCompareButton && (
               <button
-                className={`comparison-btn ${shouldAnimate ? 'animate-popup' : ''}`}
+                className={`comparison-btn ${
+                  shouldAnimate ? "animate-popup" : ""
+                }`}
                 onClick={handleComparisonClick}
                 title="So sánh sản phẩm"
               >
@@ -205,7 +214,7 @@ export const Header = () => {
             <form onSubmit={handleSearch} className="nav-search-bar">
               <input
                 type="text"
-                placeholder='Tìm kiếm "chú cá" phù hợp với bạn...'
+                placeholder="Nhập từ khóa muốn tìm kiếm..."
                 value={searchKeyword}
                 onChange={handleSearchChange}
                 ref={searchInputRef}
@@ -226,7 +235,7 @@ export const Header = () => {
                 <div className="nav-info user-select-none">
                   <span>
                     <i className="fa-regular fa-user"></i> :{" "}
-                    <span className="fw-bold">{user.email}</span>
+                    <span clbue="fw-bold">{user.email}</span>
                   </span>
                   <div ref={dropdownRef}>
                     <button
@@ -277,6 +286,16 @@ export const Header = () => {
                 </button>
 
                 <button
+                  className="d-flex flex-row border border-0 rounded align-items-center justify-content-center bg-white text-black"
+                  style={{ width: 150, height: 50 }}
+                  onClick={() => {
+                    navigate("/register");
+                  }}
+                >
+                  Đăng Ký
+                </button>
+
+                <button
                   className="d-flex flex-row border border-0 rounded align-items-center justify-content-center bg-black text-white"
                   style={{ width: 50, height: 50 }}
                   onClick={handleClickCart}
@@ -290,24 +309,24 @@ export const Header = () => {
 
         <div className="dropdown-wrapper">
           <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            <button
+            {/* <button
               className="dropdown-btn user-select-none"
               value={"product"}
               onClick={handleChoose}
             >
               <img className="icon user-select-none" src={list} />
               DANH MỤC KOI
-            </button>
+            </button> */}
 
-            <div className="dropdown-menu">
+            {/* <div className="dropdown-menu">
               {showDropdown && (
                 <div className="row dropdown-row row-cols-4">
                   <div className="dropdown-grid">
                     <li
                       className="dropdown-item special-item"
-                      onClick={() => navigate('/batches')}
+                      onClick={() => navigate("/batches")}
                     >
-                      Lô Cá 
+                      Lô Cá
                     </li>
                   </div>
 
@@ -323,7 +342,7 @@ export const Header = () => {
                   ))}
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
 
           <button
@@ -337,6 +356,24 @@ export const Header = () => {
           >
             TRANG CHỦ
           </button>
+
+          <button
+            className="d-flex flex-row justify-content-center"
+            value={"product"}
+            style={{
+              background:
+                location.pathname === "/product" ? "#C70025" : "#281713",
+              width: 250,
+            }}
+            onClick={handleChoose}
+          >
+            DANH SÁCH CÁ KOI
+          </button>
+
+          {/* <button className="" value={"product"} onClick={handleChoose}>
+            <img className="icon user-select-none" src={list} />
+            DANH MỤC KOI
+          </button> */}
           <button
             className="d-flex flex-row justify-content-center"
             value={"info"}

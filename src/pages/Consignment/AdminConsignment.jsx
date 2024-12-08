@@ -178,7 +178,7 @@ const AdminConsignment = () => {
 
   return (
     <>
-      <AdminHeader />
+      {/* <AdminHeader /> */}
       <div className="container">
         <div className="my-3">
           <b>Danh sách ký gửi:</b>
