@@ -10,7 +10,6 @@ import GoogleLoginButton from "../../components/GoogleLogin";
 
 const Login = () => {
   const navigate = useNavigate();
-
   const { loginContext } = useContext(UserContext);
 
   const [email, setEmail] = useState("");
@@ -27,23 +26,35 @@ const Login = () => {
     setIsLoading(true);
     try {
       let res = await signin(email.trim(), password.trim());
+      
+      // Kiểm tra dữ liệu trả về từ API
+      console.log("Response:", res);
+
       if (res && res.data.token) {
         const { roleId } = res.data.user;
 
+        // Kiểm tra giá trị của roleId
+        console.log("Role ID:", roleId);
+
+        // Cập nhật trạng thái đăng nhập
         loginContext(email, res.data.token);
+
+        // Điều hướng dựa trên roleId
         if (roleId === "0") {
           navigate("/");
-        } else if (roleId === "1") {
+        } else if (roleId === "User") {
           navigate("/admin-dashboard");
-        } else if (roleId === "2") {
+        } else if (roleId === "User") {
           navigate("/admin-product");
         }
+
         toast.success("Login successful!");
       } else {
         throw new Error("Login failed!");
       }
     } catch (error) {
       toast.error("Login failed!");
+      console.error("Login error:", error);  // Log lỗi để kiểm tra
     } finally {
       setIsLoading(false);
     }
