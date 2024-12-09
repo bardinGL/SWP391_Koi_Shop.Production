@@ -1,12 +1,17 @@
 import axios from "./Customize-Axios";
 
-const createConsignment = (data) => {
+const createConsignment = (data, salePrice) => {
   const token = localStorage.getItem("token");
   if (!token) {
     throw new Error("No token found! Please log in again.");
   }
 
-  return axios.post("Consignment/create", data, {
+  let url = `controller/create-consignmentitem`;
+  if (salePrice !== undefined) {
+    url += `?salePrice=${salePrice}`;
+  }
+
+  return axios.post(url, data, {
     headers: {
       Authorization: `${token}`,
     },
@@ -37,7 +42,7 @@ const fetchAllConsignments = () => {
     throw new Error("No token found! Please log in again.");
   }
 
-  return axios.get("Consignment/all-consignments", {
+  return axios.get("controller/get-all-consignments", {
     headers: {
       Authorization: `${token}`,
       "Content-Type": "application/json",
@@ -64,7 +69,7 @@ const getConsignmentsForUser = () => {
     throw new Error("No token found! Please log in again.");
   }
 
-  return axios.get(`/Consignment/user-consignments`, {
+  return axios.get(`controller/get-user-consignment-items`, {
     headers: {
       Authorization: `${token}`,
     },

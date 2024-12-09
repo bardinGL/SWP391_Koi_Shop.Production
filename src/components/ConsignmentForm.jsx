@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { createConsignment } from "../services/ConsignmentService";
+import { fetchAllProducts } from "../services/ProductService";
 import { toast } from "react-toastify";
 import { uploadImageCloudinary } from "../services/CloudinaryService"; // Import the image upload service
 import "./ConsignmentForm.css";
@@ -14,13 +15,20 @@ const ConsignmentType = {
 const ConsignmentForm = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     name: "",
-    category: "",
+    categoryId: "",
     origin: "",
     sex: "",
     age: 0,
     size: "",
     species: "",
     imageUrl: null,
+    ph: "",
+    foodAmount: "",
+    waterTemp: "",
+    mineralContent: "",
+    createModel: "",
+    personality: "",
+    salePrice: undefined,
   });
 
   const [imageFile, setImageFile] = useState(null);
@@ -29,6 +37,18 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
 
   const [currentStep, setCurrentStep] = useState(1);
   const [consignmentType, setConsignmentType] = useState(ConsignmentType.CARE);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const res = await fetchAllProducts();
+      if (res.statusCode === 200) {
+        setCategories(res.data);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     if (isOpen) {
@@ -82,7 +102,10 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
       const uploadedImageUrl = await uploadImage();
       if (uploadedImageUrl) {
         const newConsignmentData = { ...formData, imageUrl: uploadedImageUrl };
-        const response = await createConsignment(newConsignmentData);
+        const response = await createConsignment(
+          newConsignmentData,
+          formData.salePrice
+        );
 
         if (response.statusCode === 201) {
           setFormData({
@@ -122,7 +145,7 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
   const isFormValid = () => {
     const requiredFieldsFilled =
       formData.name &&
-      formData.category &&
+      formData.categoryId &&
       formData.origin &&
       formData.sex &&
       formData.size &&
@@ -151,14 +174,19 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
             </div>
             <div className="form-group">
               <label htmlFor="category">Category</label>
-              <input
-                type="text"
-                id="category"
-                name="category"
-                value={formData.category || ""}
+              <select
+                className="form-control"
+                value={formData.categoryId}
                 onChange={handleChange}
-                required
-              />
+                name="categoryId"
+              >
+                <option value="">Chọn danh mục cá KOI</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
             </div>
           </>
         );
@@ -203,6 +231,41 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
                 </label>
               </div>
             </div>
+            <div className="form-group">
+              <label htmlFor="origin">PH</label>
+              <input
+                type="text"
+                id="ph"
+                name="ph"
+                value={formData.ph || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="origin">Food Amount</label>
+              <input
+                type="text"
+                id="foodAmount"
+                name="foodAmount"
+                value={formData.foodAmount || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="origin">Water Temp</label>
+              <input
+                type="text"
+                id="waterTemp"
+                name="waterTemp"
+                value={formData.waterTemp || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </>
         );
       case 3:
@@ -237,6 +300,42 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
                 id="species"
                 name="species"
                 value={formData.species || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="mineralContent">Mineral Content</label>
+              <input
+                type="text"
+                id="mineralContent"
+                name="mineralContent"
+                value={formData.mineralContent || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="createModel">Create Model</label>
+              <input
+                type="text"
+                id="createModel"
+                name="createModel"
+                value={formData.createModel || ""}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="personality">Personality</label>
+              <input
+                type="text"
+                id="personality"
+                name="personality"
+                value={formData.personality || ""}
                 onChange={handleChange}
                 required
               />
@@ -305,9 +404,9 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
                   <label htmlFor="price">Giá mong muốn bán</label>
                   <input
                     type="number"
-                    id="price"
-                    name="price"
-                    value={formData.price || 0}
+                    id="salePrice"
+                    name="salePrice"
+                    value={formData.salePrice || 0}
                     onChange={handleChange}
                     required
                   />
