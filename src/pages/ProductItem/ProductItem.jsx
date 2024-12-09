@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Header } from "../../layouts/header/header";

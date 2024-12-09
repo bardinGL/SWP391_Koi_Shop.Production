@@ -1,5 +1,3 @@
-/* eslint-disable no-undef */
-/* eslint-disable no-unused-vars */
 import React from "react";
 import { Header } from "../../layouts/header/header";
 import { Footer } from "../../layouts/footer/footer";

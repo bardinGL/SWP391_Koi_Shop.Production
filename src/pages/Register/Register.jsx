@@ -43,9 +43,7 @@ const Register = () => {
     // Phone validation: Must start with 0 and have 10 or 11 digits
     const phoneRegex = /^0\d{9,10}$/;
     if (!phoneRegex.test(formData.phone)) {
-      toast.error(
-        "Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số."
-      );
+      toast.error("Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số.");
       return;
     }
 
@@ -109,11 +107,9 @@ const Register = () => {
         toast.error("Email không hợp lệ!");
         return;
       }
-
+  
       if (currentInputs.includes("phone") && !phoneRegex.test(formData.phone)) {
-        toast.error(
-          "Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số."
-        );
+        toast.error("Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số.");
         return;
       }
 
