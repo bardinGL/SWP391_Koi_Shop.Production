@@ -1,13 +1,12 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { signin, signup } from "../../services/UserService";
-import { UserContext } from "../../contexts/UserContext";
+import { signup } from "../../services/UserService";
+
 import "./Register.css";
 import "../../styles/animation.css";
 
 const Register = () => {
-  const { loginContext } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [step, setStep] = useState(1);
@@ -43,7 +42,9 @@ const Register = () => {
     // Phone validation: Must start with 0 and have 10 or 11 digits
     const phoneRegex = /^0\d{9,10}$/;
     if (!phoneRegex.test(formData.phone)) {
-      toast.error("Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số.");
+      toast.error(
+        "Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số."
+      );
       return;
     }
 
@@ -80,12 +81,8 @@ const Register = () => {
       address: trimmedFormData.address,
     });
     if (res && res.data && res.statusCode === 201) {
-      let res = await signin(trimmedFormData.Email, trimmedFormData.password);
-      if (res && res.data.token) {
-        loginContext(trimmedFormData.Email, res.data.token);
-        navigate("/");
-        toast.success("Signin successful!");
-      }
+      navigate("/");
+      toast.success("Registration successful! Please login to continue.");
     } else toast.error(res.data);
   };
 
@@ -107,9 +104,11 @@ const Register = () => {
         toast.error("Email không hợp lệ!");
         return;
       }
-  
+
       if (currentInputs.includes("phone") && !phoneRegex.test(formData.phone)) {
-        toast.error("Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số.");
+        toast.error(
+          "Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số."
+        );
         return;
       }
 
