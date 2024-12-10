@@ -9,6 +9,7 @@ import {
   updateProdItemType,
   deleteProdItem,
   updateProdItem,
+  createProdItem
 } from "../../services/ProductItemService";
 import { getProductById } from "../../services/ProductService";
 import FishSpinner from "../../components/FishSpinner";
@@ -135,11 +136,20 @@ const AdminProduct = () => {
     setShowModalAddProduct(false);
   };
 
-  const handleSubmitProduct = (newProduct) => {
-    setFetchAgain((prev) => !prev);
-    setIsUploading(false);
-    handleCloseAddNew();
+  const handleSubmitProduct = async (newProduct) => {
+    try {
+      setIsUploading(true); 
+      const createdProduct = await createProdItem(newProduct);
+      setListProductItems((prevItems) => [...prevItems, createdProduct]);
+      toast.success("Sản phẩm mới đã được thêm!");
+    } catch (error) {
+      toast.error("Thêm sản phẩm thất bại!");
+    } finally {
+      setIsUploading(false);
+      handleCloseAddNew();
+    }
   };
+  
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
