@@ -88,7 +88,7 @@ const Register = () => {
       let res = await signup(requestData);
       console.log("API Response:", res);
 
-      if (res && res.data && res.statusCode === 200) {
+      if (res.statusCode === 200) {
         navigate("/");
         toast.success("Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.");
       } else {
