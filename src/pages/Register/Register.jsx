@@ -43,7 +43,9 @@ const Register = () => {
     // Phone validation: Must start with 0 and have 10 or 11 digits
     const phoneRegex = /^0\d{9,10}$/;
     if (!phoneRegex.test(formData.phone)) {
-      toast.error("Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số.");
+      toast.error(
+        "Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số."
+      );
       return;
     }
 
@@ -72,21 +74,31 @@ const Register = () => {
       return;
     }
 
-    let res = await signup({
-      name: trimmedFormData.firstName + trimmedFormData.lastName,
-      password: trimmedFormData.password,
-      email: trimmedFormData.Email,
-      phone: trimmedFormData.phone,
-      address: trimmedFormData.address,
-    });
-    if (res && res.data && res.statusCode === 201) {
-      let res = await signin(trimmedFormData.Email, trimmedFormData.password);
-      if (res && res.data.token) {
-        loginContext(trimmedFormData.Email, res.data.token);
+    try {
+      const requestData = {
+        name: trimmedFormData.firstName + " " + trimmedFormData.lastName,
+        password: trimmedFormData.password,
+        email: trimmedFormData.Email,
+        phone: trimmedFormData.phone,
+        address: trimmedFormData.address,
+        roleId: 0,
+      };
+
+      console.log("Request data:", requestData);
+      let res = await signup(requestData);
+      console.log("API Response:", res);
+
+      if (res.statusCode === 200) {
         navigate("/");
-        toast.success("Signin successful!");
+        toast.success("Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.");
+      } else {
+        toast.error(res.data);
       }
-    } else toast.error(res.data);
+    } catch (error) {
+      console.error("Registration error:", error);
+      console.error("Error response:", error.response);
+      toast.error(error.response?.data || "Registration failed!");
+    }
   };
 
   const handleKeyPress = (e, currentInputs) => {
@@ -107,9 +119,11 @@ const Register = () => {
         toast.error("Email không hợp lệ!");
         return;
       }
-  
+
       if (currentInputs.includes("phone") && !phoneRegex.test(formData.phone)) {
-        toast.error("Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số.");
+        toast.error(
+          "Số điện thoại không hợp lệ! Số điện thoại phải bắt đầu bằng 0 và có 10 hoặc 11 chữ số."
+        );
         return;
       }
 
