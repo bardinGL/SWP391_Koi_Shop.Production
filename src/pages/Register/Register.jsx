@@ -1,12 +1,13 @@
-import { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { signup } from "../../services/UserService";
-
+import { signin, signup } from "../../services/UserService";
+import { UserContext } from "../../contexts/UserContext";
 import "./Register.css";
 import "../../styles/animation.css";
 
 const Register = () => {
+  const { loginContext } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [step, setStep] = useState(1);
@@ -73,17 +74,31 @@ const Register = () => {
       return;
     }
 
-    let res = await signup({
-      name: trimmedFormData.firstName + trimmedFormData.lastName,
-      password: trimmedFormData.password,
-      email: trimmedFormData.Email,
-      phone: trimmedFormData.phone,
-      address: trimmedFormData.address,
-    });
-    if (res && res.data && res.statusCode === 201) {
-      navigate("/");
-      toast.success("Registration successful! Please login to continue.");
-    } else toast.error(res.data);
+    try {
+      const requestData = {
+        name: trimmedFormData.firstName + " " + trimmedFormData.lastName,
+        password: trimmedFormData.password,
+        email: trimmedFormData.Email,
+        phone: trimmedFormData.phone,
+        address: trimmedFormData.address,
+        roleId: 0,
+      };
+
+      console.log("Request data:", requestData);
+      let res = await signup(requestData);
+      console.log("API Response:", res);
+
+      if (res && res.data && res.statusCode === 200) {
+        navigate("/");
+        toast.success("Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.");
+      } else {
+        toast.error(res.data);
+      }
+    } catch (error) {
+      console.error("Registration error:", error);
+      console.error("Error response:", error.response);
+      toast.error(error.response?.data || "Registration failed!");
+    }
   };
 
   const handleKeyPress = (e, currentInputs) => {
