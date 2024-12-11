@@ -116,14 +116,13 @@ img {
 
 /* Banner Styles */
 .banner-container {
+  margin-top: 20px; /* Adds spacing between header and banner */
   text-align: center;
-  margin-bottom: var(--spacing-medium); /* Adds spacing between the banner and app content */
 }
 
 .banner-image {
   width: 100%;
-  height: auto;
-  max-height: 400px; /* Adjust the banner height as needed */
-  object-fit: cover; /* Ensures the image resizes correctly without distortion */
-  box-shadow: var(--box-shadow-default); /* Adds a subtle shadow for aesthetics */
+  height: auto; /* Ensures the height adjusts automatically */
+  max-height: unset; /* Removes any height limit to display the full image */
+  object-fit: contain; /* Ensures the full image fits within the container */
 }

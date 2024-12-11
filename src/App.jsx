@@ -5,18 +5,18 @@ import "./styles/App.css";
 function App() {
   return (
     <>
-      {/* Add the banner image */}
-      <div className="banner-container">
-        <img
-          src="/assets/banner.png"
-          alt="Banner"
-          className="banner-image"
-        />
-      </div>
-
-      {/* Main App Content */}
+      {/* Header Section */}
       <div className="app-container">
         <AppRoutes />
+
+        {/* Banner Section */}
+        <div className="banner-container">
+          <img
+            src="/assets/banner.png"
+            alt="Banner"
+            className="banner-image"
+          />
+        </div>
       </div>
 
       {/* Toast Notifications */}
