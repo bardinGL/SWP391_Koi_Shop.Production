@@ -40,7 +40,7 @@ const Login = () => {
         loginContext(email, res.data.token);
 
         // Điều hướng dựa trên roleId
-        if (email === "staff@gmail.com" || "manager@gmail.com") {
+        if (email === "staff@gmail.com" || email === "manager@gmail.com") {
           navigate("/admin-dashboard");
         } else  
           navigate("/");
