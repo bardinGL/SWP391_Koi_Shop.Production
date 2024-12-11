@@ -111,3 +111,19 @@ img {
   color: var(--primary-white) !important;
   transform: scale(1.1);
 }
+
+/* --- New Styles for Banner --- */
+
+/* Banner Styles */
+.banner-container {
+  text-align: center;
+  margin-bottom: var(--spacing-medium); /* Adds spacing between the banner and app content */
+}
+
+.banner-image {
+  width: 100%;
+  height: auto;
+  max-height: 400px; /* Adjust the banner height as needed */
+  object-fit: cover; /* Ensures the image resizes correctly without distortion */
+  box-shadow: var(--box-shadow-default); /* Adds a subtle shadow for aesthetics */
+}
