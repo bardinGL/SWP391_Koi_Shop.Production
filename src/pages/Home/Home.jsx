@@ -117,9 +117,9 @@ export const Home = () => {
       <Header />
       <div className="homepage" style={{ backgroundColor: "#f1f1f1" }}>
         <main className="user-select-none animated-fadeIn">
-          {/* <div className="homepage-banner">
-            <img src="/assets/final.png" alt="Banner" />
-          </div> */}
+          <div className="homepage-banner">
+            <img src="/assets/banner.jpg" alt="Banner" />
+          </div>
           <section className="best-sellers">
             <h2 className="homepage-best-sellers-title">
               KOI SHOWCASE - UY TÍN, CHẤT LƯỢNG
