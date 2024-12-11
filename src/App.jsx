@@ -1,5 +1,5 @@
 import { Bounce, ToastContainer } from "react-toastify";
-import Header from "./components/Header"; // Assume you have a Header component
+//import Header from "./components/Header"; // Assume you have a Header component
 import AppRoutes from "./routes/AppRoutes";
 import "./styles/App.css";
 
