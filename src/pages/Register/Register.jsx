@@ -380,6 +380,7 @@ const Register = () => {
                     )}
                   </div>
                   <i
+                    style={{ marginTop: "15px" }}
                     className={
                       isShowPassword
                         ? "fa-solid fa-eye-slash"
