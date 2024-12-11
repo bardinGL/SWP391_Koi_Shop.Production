@@ -34,27 +34,25 @@ const Login = () => {
         const { roleId } = res.data.user;
 
         // Kiểm tra giá trị của roleId
-        console.log("Role ID:", roleId);
+        console.log("Role ID:", email);
 
         // Cập nhật trạng thái đăng nhập
         loginContext(email, res.data.token);
 
         // Điều hướng dựa trên roleId
-        if (roleId === "0") {
-          navigate("/");
-        } else if (roleId === "User") {
+        if (roleId === "manager") {
           navigate("/admin-dashboard");
-        } else if (roleId === "User") {
+        } else if (roleId === "staff")
           navigate("/admin-product");
-        }
+        } 
+        else
+          navigate ("/")
 
         toast.success("Login successful!");
-      } else {
-        throw new Error("Login failed!");
-      }
-    } catch (error) {
+      } 
+     catch (error) {
       toast.error("Login failed!");
-      console.error("Login error:", error);  // Log lỗi để kiểm tra
+      console.error("Login error:", error);  
     } finally {
       setIsLoading(false);
     }

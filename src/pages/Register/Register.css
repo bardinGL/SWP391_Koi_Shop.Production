@@ -1,73 +1,69 @@
 .register-container {
-  position: relative;
-}
-
-.register-container::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--primary-background-light);
-  background-size: cover;
-  filter: blur(5px);
-  z-index: -1;
-  opacity: 0.7;
-}
-
-.register-content {
-  height: 100vh;
-  width: 100vw;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.register-content {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
 }
 
 .register-form {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  width: 1000px;
-  padding: 80px var(--spacing-xlarge);
-  background: var(--primary-white);
-  box-shadow: var(--box-shadow-default);
-  border-radius: var(--radius-form);
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 35px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
   position: relative;
-  gap: 40px;
+  z-index: 2;
 }
 
 .register-title {
-  flex: 1;
   text-align: center;
-  padding-right: var(--spacing-xlarge);
+  margin-bottom: 30px;
 }
 
 .register-title h2 {
-  font-size: 36px;
-  margin-bottom: var(--spacing-medium);
+  font-size: 2.2em;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.register-title p {
+  color: #7f8c8d;
+  font-size: 1em;
+  margin-bottom: 20px;
 }
 
 .register-input {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  margin-right: 25px;
+  max-width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3;
 }
 
 .register-input div {
-  width: 100%;
-  margin-bottom: var(--spacing-medium);
+  margin-bottom: 28px;
+  position: relative;
 }
 
 .register-container label {
   display: block;
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: var(--spacing-small);
-  text-align: left;
+  margin-bottom: 8px;
+  color: #34495e;
+  font-weight: 500;
+  font-size: 0.95em;
+  transition: color 0.3s ease;
 }
 
 .register-container input[type="tel"],
@@ -75,71 +71,184 @@
 .register-container input[type="password"] {
   width: 100%;
   padding: 12px 15px;
-  border: 1px solid #ccc;
+  border: 1.5px solid #e0e0e0;
   border-radius: 8px;
-  font-size: 16px;
-  height: 45px;
+  font-size: 1em;
+  transition: all 0.3s ease;
+  background: white;
 }
 
-.register-button {
-  width: 150px;
-  padding: 10px 20px;
-  background-color: var(--primary-blue);
-  color: var(--primary-white);
-  border: none;
-  border-radius: var(--radius-default);
-  font-size: 16px;
+.register-container input:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+  outline: none;
+}
+
+.register-container input.error {
+  border-color: #e74c3c;
+  background-color: #fff8f8;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.85em;
+  margin-top: 5px;
+  position: absolute;
+  left: 0;
+  bottom: -22px;
+  transition: all 0.3s ease;
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-input-container i {
+  position: absolute;
+  right: 15px;
+  top: 41px;
+  transform: translateY(-50%);
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  color: #95a5a6;
+  transition: color 0.3s ease;
+  font-size: 1.2em;
+  z-index: 4;
 }
 
-.register-button:hover {
-  background-color: var(--primary-blue-hover);
-}
-
-.register-button:disabled {
-  background-color: #ccc;
-  cursor: not-allowed;
-  color: #666;
+.password-input-container i:hover {
+  color: #34495e;
 }
 
 .link-button-wrapper {
   display: flex;
   justify-content: space-between;
-  margin-top: var(--spacing-medium);
-  flex-direction: row !important;
+  gap: 15px;
+  margin-top: 35px;
 }
 
-.link-section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.link-section span {
-  margin-right: var(--spacing-small);
-}
-
-.link-section p {
-  margin: 3px 0;
-  font-size: 14px;
-}
-
-.password-input-container {
-  position: relative;
-  width: 100%;
-}
-
-.password-input-container input {
-  width: 100%;
-  padding-right: 40px;
-}
-
-.password-input-container i {
-  position: absolute;
-  right: 10px;
-  top: 72%;
-  transform: translateY(-50%);
+.register-button {
+  flex: 1;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95em;
+  font-weight: 600;
   cursor: pointer;
-  opacity: 0.5;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.register-button:first-child {
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  border: 1.5px solid #e0e0e0;
+}
+
+.register-button:last-child {
+  background-color: #3498db;
+  color: white;
+}
+
+.register-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.register-button:first-child:hover {
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.register-button:last-child:hover {
+  background-color: #2980b9;
+}
+
+.register-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.back-arrow {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  font-size: 1.3em;
+  color: #2c3e50;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.back-arrow:hover {
+  transform: translateX(-5px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Animation classes */
+.animated {
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .register-form {
+    padding: 25px 20px;
+  }
+
+  .register-title h2 {
+    font-size: 1.8em;
+  }
+
+  .register-title p {
+    font-size: 0.9em;
+  }
+
+  .link-button-wrapper {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .register-button {
+    width: 100%;
+    padding: 12px 20px;
+  }
+
+  .back-arrow {
+    top: 15px;
+    left: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 15px;
+  }
+
+  .register-form {
+    padding: 20px 15px;
+  }
+
+  .register-title h2 {
+    font-size: 1.6em;
+  }
 }

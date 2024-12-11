@@ -1,14 +1,13 @@
 import axios from "axios";
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL, // Dynamically set base URL
 });
 
+// Response interceptor for handling API responses
 instance.interceptors.response.use(
-  function (response) {
-    return response.data ? response.data : { statusCode: response.status };
-  },
-  function (error) {
+  (response) => (response.data ? response.data : { statusCode: response.status }),
+  (error) => {
     let res = {};
     if (error.response) {
       res.data = error.response.data;
