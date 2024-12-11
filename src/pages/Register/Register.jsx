@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { signin, signup } from "../../services/UserService";
-import { UserContext } from "../../contexts/UserContext";
+import { signup } from "../../services/UserService";
+// import { UserContext } from "../../contexts/UserContext";
 import "./Register.css";
 import "../../styles/animation.css";
 
 const Register = () => {
-  const { loginContext } = useContext(UserContext);
+  // const { loginContext } = useContext(UserContext);
   const navigate = useNavigate();
 
   const [step, setStep] = useState(1);
@@ -21,13 +22,73 @@ const Register = () => {
     confirmPassword: "",
   });
   const [isShowPassword, setIsShowPassword] = useState(true);
+  const [errors, setErrors] = useState({
+    lastName: "",
+    firstName: "",
+    Email: "",
+    phone: "",
+    address: "",
+    password: "",
+    confirmPassword: "",
+  });
 
   const handleNext = () => setStep(step + 1);
   const handlePrev = () => setStep(step - 1);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^0\d{9,10}$/;
+  const validateField = (name, value) => {
+    let error = "";
+    switch (name) {
+      case "Email":
+        if (!emailRegex.test(value)) {
+          error = "Email không hợp lệ";
+        }
+        break;
+      case "phone":
+        if (!phoneRegex.test(value)) {
+          error = "Số điện thoại phải bắt đầu bằng 0 và có 10-11 số";
+        }
+        break;
+      case "password":
+        if (value.length < 6) {
+          error = "Mật khẩu phải có ít nhất 6 ký tự";
+        }
+        break;
+      case "confirmPassword":
+        if (value !== formData.password) {
+          error = "Mật khẩu không khớp";
+        }
+        break;
+      default:
+        if (!value.trim()) {
+          error = "Trường này không được để trống";
+        }
+    }
+    return error;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setErrors((prev) => ({
+      ...prev,
+      [name]: validateField(name, value),
+    }));
+
+    // Special case for confirmPassword
+    if (name === "password" && formData.confirmPassword) {
+      setErrors((prev) => ({
+        ...prev,
+        confirmPassword: validateField(
+          "confirmPassword",
+          formData.confirmPassword
+        ),
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -168,7 +229,14 @@ const Register = () => {
                     placeholder="Vui lòng nhập họ"
                     value={formData.lastName}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={errors.lastName ? "error" : ""}
                   />
+                  <div style={{ marginTop: "20px" }}>
+                    {errors.lastName && (
+                      <span className="error-message">{errors.lastName}</span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label>Tên</label>
@@ -178,7 +246,14 @@ const Register = () => {
                     placeholder="Vui lòng nhập tên"
                     value={formData.firstName}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={errors.firstName ? "error" : ""}
                   />
+                  <div style={{ marginTop: "20px" }}>
+                    {errors.firstName && (
+                      <span className="error-message">{errors.firstName}</span>
+                    )}
+                  </div>
                 </div>
                 <div className="link-button-wrapper">
                   <button
@@ -215,7 +290,14 @@ const Register = () => {
                     placeholder="Vui lòng nhập email"
                     value={formData.Email}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={errors.Email ? "error" : ""}
                   />
+                  <div style={{ marginTop: "20px" }}>
+                    {errors.Email && (
+                      <span className="error-message">{errors.Email}</span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label>Số điện thoại</label>
@@ -225,7 +307,14 @@ const Register = () => {
                     placeholder="Vui lòng nhập số điện thoại"
                     value={formData.phone}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={errors.phone ? "error" : ""}
                   />
+                  <div style={{ marginTop: "20px" }}>
+                    {errors.phone && (
+                      <span className="error-message">{errors.phone}</span>
+                    )}
+                  </div>
                 </div>
                 <div>
                   <label>Địa chỉ</label>
@@ -235,7 +324,14 @@ const Register = () => {
                     placeholder="Vui lòng nhập địa chỉ"
                     value={formData.address}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={errors.address ? "error" : ""}
                   />
+                  <div style={{ marginTop: "20px" }}>
+                    {errors.address && (
+                      <span className="error-message">{errors.address}</span>
+                    )}
+                  </div>
                 </div>
                 <div className="link-button-wrapper">
                   <button
@@ -275,7 +371,14 @@ const Register = () => {
                     placeholder="Vui lòng nhập mật khẩu"
                     value={formData.password}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={errors.password ? "error" : ""}
                   />
+                  <div style={{ marginTop: "20px" }}>
+                    {errors.password && (
+                      <span className="error-message">{errors.password}</span>
+                    )}
+                  </div>
                   <i
                     className={
                       isShowPassword
@@ -293,7 +396,16 @@ const Register = () => {
                     placeholder="Vui lòng nhập lại mật khẩu"
                     value={formData.confirmPassword}
                     onChange={handleChange}
+                    onBlur={handleBlur}
+                    className={errors.confirmPassword ? "error" : ""}
                   />
+                  <div style={{ marginTop: "20px" }}>
+                    {errors.confirmPassword && (
+                      <span className="error-message">
+                        {errors.confirmPassword}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 <div className="link-button-wrapper">
                   <button
