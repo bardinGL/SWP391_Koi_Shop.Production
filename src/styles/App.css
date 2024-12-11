@@ -115,14 +115,19 @@ img {
 /* --- New Styles for Banner --- */
 
 /* Banner Styles */
+/* Updated Banner Styles */
 .banner-container {
-  margin-top: 20px; /* Adds spacing between header and banner */
+  margin-top: 20px; /* Adds spacing between the header and the banner */
   text-align: center;
+  position: relative; /* Ensures proper placement */
+  overflow: hidden; /* Ensures the banner doesn't stretch or spill over */
 }
 
 .banner-image {
   width: 100%;
-  height: auto; /* Ensures the height adjusts automatically */
-  max-height: unset; /* Removes any height limit to display the full image */
-  object-fit: contain; /* Ensures the full image fits within the container */
+  height: auto;
+  max-height: 550px; /* Limits the maximum height of the banner */
+  object-fit: cover; /* Ensures the image fills the space without excessive stretching */
+  object-position: center; /* Centers the image within the container */
 }
+
