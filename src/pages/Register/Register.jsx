@@ -129,7 +129,7 @@ const Register = () => {
         navigate("/");
         toast.success("Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.");
       } else {
-        toast.error(res.data);
+        toast.error(res.data.messageError);
       }
     } catch (error) {
       if (error.response) {
