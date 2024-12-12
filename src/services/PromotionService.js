@@ -48,9 +48,9 @@ const updatePromotion = (id, data) => {
 };
 
 export {
-    fetchPromotionByCode,
-    fetchAllPromotion,
-    createPromotion,
-    deletePromotion,
-    updatePromotion
+  fetchPromotionByCode,
+  fetchAllPromotion,
+  createPromotion,
+  deletePromotion,
+  updatePromotion,
 };

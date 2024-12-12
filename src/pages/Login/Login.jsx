@@ -26,7 +26,7 @@ const Login = () => {
     setIsLoading(true);
     try {
       let res = await signin(email.trim(), password.trim());
-      
+
       // Kiểm tra dữ liệu trả về từ API
       console.log("Response:", res);
 
@@ -49,10 +49,10 @@ const Login = () => {
           navigate ("/")
 
         toast.success("Login successful!");
-      } 
-     catch (error) {
+      }
+    } catch (error) {
       toast.error("Login failed!");
-      console.error("Login error:", error);  
+      console.error("Login error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -101,6 +101,10 @@ const Login = () => {
                   onKeyDown={handlePressEnter}
                 />
                 <i
+                  style={{
+                    position: "absolute",
+                    marginTop: "14px",
+                  }}
                   className={
                     isShowPassword ? "fa-solid fa-eye-slash" : "fa-solid fa-eye"
                   }
