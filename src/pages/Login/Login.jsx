@@ -28,16 +28,35 @@ const Login = () => {
     setIsLoading(true);
     try {
       let res = await signin(email.trim(), password.trim());
+<<<<<<< Updated upstream
       console.log (res.data.token)
       const token = res.data.token
 
       if (res && res.data.token) {
         const { email } = res.data.user;
+=======
+
+      // Kiểm tra dữ liệu trả về từ API
+      console.log("Response:", res);
+      const token = res.data.token;
+
+
+      if (res && token) {
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const role = payload?.role;
+        console.log("Role :", role);
+
+        // Cập nhật trạng thái đăng nhập
+>>>>>>> Stashed changes
         loginContext(email, res.data.token);
         const payload = JSON.parse(atob(token.split(".")[1]));
         const role = payload?.role;
         console.log(role)
 
+<<<<<<< Updated upstream
+=======
+        // Điều hướng dựa trên roleId
+>>>>>>> Stashed changes
         if (role === "Staff" || role === "Manager") {
           navigate("/admin-dashboard");
         } else {
