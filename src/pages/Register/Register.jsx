@@ -6,6 +6,7 @@ import { signup } from "../../services/UserService";
 // import { UserContext } from "../../contexts/UserContext";
 import "./Register.css";
 import "../../styles/animation.css";
+import FishSpinner from "../../components/FishSpinner";
 
 const Register = () => {
   // const { loginContext } = useContext(UserContext);
@@ -31,6 +32,7 @@ const Register = () => {
     password: "",
     confirmPassword: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleNext = () => setStep(step + 1);
   const handlePrev = () => setStep(step - 1);
@@ -101,7 +103,7 @@ const Register = () => {
       return;
     }
 
-    // Phone validation: Must start with 0 and have 10 or 11 digits
+    // Phone validation
     const phoneRegex = /^0\d{9,10}$/;
     if (!phoneRegex.test(formData.phone)) {
       toast.error(
@@ -110,44 +112,18 @@ const Register = () => {
       return;
     }
 
-    const trimmedFormData = Object.keys(formData).reduce((acc, key) => {
-      acc[key] = ["password", "confirmPassword"].includes(key)
-        ? formData[key]
-        : formData[key].trim();
-      return acc;
-    }, {});
-
-    if (
-      !(
-        trimmedFormData.lastName &&
-        trimmedFormData.firstName &&
-        trimmedFormData.Email &&
-        trimmedFormData.address &&
-        trimmedFormData.password &&
-        trimmedFormData.confirmPassword
-      )
-    ) {
-      toast.error("All fields are required!");
-      return;
-    }
-    if (trimmedFormData.password !== trimmedFormData.confirmPassword) {
-      toast.error("Password not match!");
-      return;
-    }
-
+    setIsLoading(true);
     try {
       const requestData = {
-        name: trimmedFormData.firstName + " " + trimmedFormData.lastName,
-        password: trimmedFormData.password,
-        email: trimmedFormData.Email,
-        phone: trimmedFormData.phone,
-        address: trimmedFormData.address,
+        name: formData.firstName + " " + formData.lastName,
+        password: formData.password,
+        email: formData.Email,
+        phone: formData.phone,
+        address: formData.address,
         roleId: 0,
       };
 
-      console.log("Request data:", requestData);
       let res = await signup(requestData);
-      console.log("API Response:", res);
 
       if (res.statusCode === 200) {
         navigate("/");
@@ -156,9 +132,25 @@ const Register = () => {
         toast.error(res.data);
       }
     } catch (error) {
+      if (error.response) {
+        switch (error.response.status) {
+          case 400:
+            toast.error("Thông tin không hợp lệ!");
+            break;
+          case 409:
+            toast.error("Email đã được sử dụng!");
+            break;
+          default:
+            toast.error("Đăng ký thất bại! Vui lòng thử lại sau.");
+        }
+      } else if (error.request) {
+        toast.error("Không thể kết nối đến máy chủ!");
+      } else {
+        toast.error("Đã xảy ra lỗi! Vui lòng thử lại sau.");
+      }
       console.error("Registration error:", error);
-      console.error("Error response:", error.response);
-      toast.error(error.response?.data || "Registration failed!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -205,6 +197,7 @@ const Register = () => {
 
   return (
     <div className="register-container">
+      {isLoading && <FishSpinner />}
       <div className="back-arrow">
         <i className="fa-solid fa-arrow-left" onClick={() => navigate(-1)}></i>
       </div>
@@ -413,6 +406,7 @@ const Register = () => {
                     type="button"
                     onClick={handlePrev}
                     className="register-button"
+                    disabled={isLoading}
                   >
                     Quay lại
                   </button>
@@ -420,6 +414,7 @@ const Register = () => {
                     type="submit"
                     className="register-button"
                     disabled={
+                      isLoading ||
                       !(
                         formData.lastName &&
                         formData.firstName &&
@@ -430,7 +425,16 @@ const Register = () => {
                       )
                     }
                   >
-                    Tạo tài khoản
+                    {isLoading ? (
+                      <div className="button-loading">
+                        <i className="fas fa-spinner fa-spin"></i>
+                        <span style={{ marginLeft: "8px" }}>
+                          Đang đăng ký...
+                        </span>
+                      </div>
+                    ) : (
+                      "Tạo tài khoản"
+                    )}
                   </button>
                 </div>
               </form>

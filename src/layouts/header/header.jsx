@@ -309,16 +309,16 @@ export const Header = () => {
 
         <div className="dropdown-wrapper">
           <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            {/* <button
+            { <button
               className="dropdown-btn user-select-none"
               value={"product"}
               onClick={handleChoose}
             >
               <img className="icon user-select-none" src={list} />
               DANH MỤC KOI
-            </button> */}
+            </button> }
 
-            {/* <div className="dropdown-menu">
+            { <div className="dropdown-menu">
               {showDropdown && (
                 <div className="row dropdown-row row-cols-4">
                   <div className="dropdown-grid">
@@ -342,7 +342,7 @@ export const Header = () => {
                   ))}
                 </div>
               )}
-            </div> */}
+            </div> }
           </div>
 
           <button
