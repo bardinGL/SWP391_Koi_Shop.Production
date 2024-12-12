@@ -79,8 +79,10 @@ const Login = () => {
   };
 
   return (
+
     <GoogleOAuthProvider clientId="684900073655-mu5vsdorjg8j82vkcf9uiuu7conm57fh.apps.googleusercontent.com">
       {isLoading && <FishSpinner />}
+
       <div className="login-container">
         <div className="back-arrow">
           <i
