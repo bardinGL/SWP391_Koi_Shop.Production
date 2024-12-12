@@ -38,7 +38,7 @@ import AdminBatch from "../pages/Batch/AdminBatch.jsx";
 import Batches from "../pages/Batches/Batches.jsx";
 import BatchDetail from "../pages/Batches/BatchDetail.jsx";
 import { AdminLayout } from "../layouts/index.jsx";
-import ProtectedRoute from "./ProtectedRoute";
+// import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -55,19 +55,19 @@ const AppRoutes = () => {
         <Route path="/:id/payments" element={<UserPayment />} />
 
         {/* Protected Admin Routes with AdminLayout */}
-        <Route element={<ProtectedRoute allowedRoles={["Staff", "Manager"]} />}>
-          <Route element={<AdminLayout />}>
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/admin-product" element={<AdminProduct />} />
-            <Route path="/admin-blog" element={<AdminBlog />} />
-            <Route path="/admin-certificate" element={<AdminCertificate />} />
-            <Route path="/admin-consignment" element={<AdminConsignment />} />
-            <Route path="/admin-order" element={<AdminOrder />} />
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/admin-promotion" element={<AdminPromotion />} />
-            <Route path="/admin-batch" element={<AdminBatch />} />
-          </Route>
+        {/* <Route element={<ProtectedRoute allowedRoles={["Staff", "Manager"]} />}> */}
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin-product" element={<AdminProduct />} />
+          <Route path="/admin-blog" element={<AdminBlog />} />
+          <Route path="/admin-certificate" element={<AdminCertificate />} />
+          <Route path="/admin-consignment" element={<AdminConsignment />} />
+          <Route path="/admin-order" element={<AdminOrder />} />
+          <Route path="/admin-dashboard" element={<AdminDashboard />} />
+          <Route path="/admin-promotion" element={<AdminPromotion />} />
+          <Route path="/admin-batch" element={<AdminBatch />} />
         </Route>
+        {/* </Route> */}
 
         <Route path="/product" element={<Product />} />
         <Route path="/koi/:productName" element={<ProductItem />} />

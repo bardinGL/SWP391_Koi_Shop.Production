@@ -28,15 +28,14 @@ const Login = () => {
     setIsLoading(true);
     try {
       let res = await signin(email.trim(), password.trim());
-      console.log (res.data.token)
-      const token = res.data.token
+
+      const token = res.data.token;
 
       if (res && res.data.token) {
         const { email } = res.data.user;
         loginContext(email, res.data.token);
         const payload = JSON.parse(atob(token.split(".")[1]));
         const role = payload?.role;
-        console.log(role)
 
         if (role === "Staff" || role === "Manager") {
           navigate("/admin-dashboard");
@@ -84,7 +83,6 @@ const Login = () => {
   };
 
   return (
-
     <GoogleOAuthProvider clientId="684900073655-mu5vsdorjg8j82vkcf9uiuu7conm57fh.apps.googleusercontent.com">
       {isLoading && <FishSpinner />}
 
