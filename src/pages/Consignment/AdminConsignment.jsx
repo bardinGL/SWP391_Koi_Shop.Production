@@ -27,51 +27,46 @@ const AdminConsignment = () => {
     try {
       const response = await fetchAllConsignments();
 
-      if (response.statusCode === 404 || !response.data) {
+      if (!response.data || !Array.isArray(response.data)) {
         setConsignments([]);
         setUserNames({});
         setLoading(false);
         return;
       }
 
-      if (Array.isArray(response.data)) {
+      const sortedConsignments = response.data.sort((a, b) => {
+        const timeA = a.items[0]?.contractDate
+          ? new Date(a.items[0].contractDate).getTime()
+          : 0;
+        const timeB = b.items[0]?.contractDate
+          ? new Date(b.items[0].contractDate).getTime()
+          : 0;
+        return timeB - timeA;
+      });
 
-        const sortedConsignments = response.data.sort((a, b) => {
-          const timeA = new Date(a.createdTime).getTime();
-          const timeB = new Date(b.createdTime).getTime();
-          return timeB - timeA;  // Descending order
-        });
+      setConsignments(sortedConsignments);
 
-        setConsignments(sortedConsignments);
+      const uniqueUserIds = [...new Set(response.data.map((c) => c.userId))];
+      const userPromises = uniqueUserIds.map(async (userId) => {
+        try {
+          const userResponse = await getUserById(userId);
+          return { userId, name: userResponse.data.name };
+        } catch (error) {
+          console.error(`Error fetching user ${userId}:`, error);
+          return { userId, name: "Unknown User" };
+        }
+      });
 
-        // Fetch user names for all unique userIds
-        const uniqueUserIds = [...new Set(response.data.map((c) => c.userId))];
-        const userPromises = uniqueUserIds.map(async (userId) => {
-          try {
-            const userResponse = await getUserById(userId);
-            return { userId, name: userResponse.data.name };
-          } catch (error) {
-            console.error(`Error fetching user ${userId}:`, error);
-            return { userId, name: "Unknown User" };
-          }
-        });
+      const users = await Promise.all(userPromises);
+      const userNameMap = users.reduce((acc, user) => {
+        acc[user.userId] = user.name;
+        return acc;
+      }, {});
 
-        const users = await Promise.all(userPromises);
-        const userNameMap = users.reduce((acc, user) => {
-          acc[user.userId] = user.name;
-          return acc;
-        }, {});
-
-        setUserNames(userNameMap);
-      } else {
-        setConsignments([]);
-        setUserNames({});
-      }
+      setUserNames(userNameMap);
     } catch (error) {
       console.error("Error fetching consignments:", error);
       toast.error("Không thể tải danh sách ký gửi");
-      setConsignments([]);
-      setUserNames({});
     } finally {
       setLoading(false);
     }
@@ -85,7 +80,9 @@ const AdminConsignment = () => {
           prevConsignments.map((consignment) => ({
             ...consignment,
             items: consignment.items.map((item) =>
-              item.itemId === itemId ? { ...item, status: newStatus } : item
+              item.consignmentItemId === itemId
+                ? { ...item, consignmentItemStatus: newStatus }
+                : item
             ),
           }))
         );
@@ -109,20 +106,19 @@ const AdminConsignment = () => {
         items: consignment.items.filter((item) => {
           const searchTermLower = searchTerm.toLowerCase();
 
-          // Kiểm tra trạng thái
           let statusMatch = false;
           switch (status) {
             case "Pending":
-              statusMatch = item.status === "Pending";
+              statusMatch = item.consignmentItemStatus === "Pending";
               break;
             case "Approved":
-              statusMatch = item.status === "Approved";
+              statusMatch = item.consignmentItemStatus === "Approved";
               break;
             case "CheckedOut":
-              statusMatch = item.status === "CheckedOut";
+              statusMatch = item.consignmentItemStatus === "CheckedOut";
               break;
             case "Cancelled":
-              statusMatch = item.status === "Cancelled";
+              statusMatch = item.consignmentItemStatus === "Cancelled";
               break;
             default:
               statusMatch = false;
@@ -130,18 +126,15 @@ const AdminConsignment = () => {
 
           const searchMatch =
             searchTerm === "" ||
-            consignment.consignmentId.toLowerCase().includes(searchTermLower) ||
-            item.name.toLowerCase().includes(searchTermLower);
+            consignment.consignmentId
+              .toLowerCase()
+              .includes(searchTermLower);
 
           return statusMatch && searchMatch;
         }),
       }))
       .filter((consignment) => consignment.items.length > 0);
   };
-
-  useEffect(() => {
-    const filteredData = filterConsignmentsByStatus(activeTab);
-  }, [activeTab]);
 
   const handleCancelItem = (itemId) => {
     setItemToCancel(itemId);
@@ -153,13 +146,15 @@ const AdminConsignment = () => {
 
     try {
       const response = await updateConsignmentItemStatus(itemToCancel, "Cancelled");
-      
+
       if (response.data) {
         setConsignments((prevConsignments) =>
           prevConsignments.map((consignment) => ({
             ...consignment,
             items: consignment.items.map((item) =>
-              item.itemId === itemToCancel ? { ...item, status: "Cancelled" } : item
+              item.consignmentItemId === itemToCancel
+                ? { ...item, consignmentItemStatus: "Cancelled" }
+                : item
             ),
           }))
         );
@@ -185,7 +180,7 @@ const AdminConsignment = () => {
           <div className="col-12 col-sm-4 my-3">
             <input
               className="form-control search-input"
-              placeholder="Tìm kiếm theo mã ký gửi hoặc tên cá..."
+              placeholder="Tìm kiếm theo mã ký gửi..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -232,7 +227,7 @@ const AdminConsignment = () => {
             <thead>
               <tr>
                 <th>Mã ký gửi</th>
-                <th>Tên cá</th>
+                <th>Loại mặt hàng</th>
                 <th>Người ký gửi</th>
                 <th>Ngày ký gửi</th>
                 <th>Trạng thái</th>
@@ -243,31 +238,32 @@ const AdminConsignment = () => {
               {filterConsignmentsByStatus(activeTab).map((consignment) => (
                 <React.Fragment key={consignment.consignmentId}>
                   {consignment.items.map((item) => (
-                    <tr key={item.itemId}>
+                    <tr key={item.consignmentItemId}>
                       <td>{consignment.consignmentId}</td>
-                      <td>{item.name}</td>
+                      <td>{item.consignmentItemType || "Unknown"}</td>
                       <td>
                         {userNames[consignment.userId] || consignment.userId}
                       </td>
                       <td>
-                        {item.createDate
-                          ? new Date(item.createDate).toLocaleDateString(
-                              "vi-VN", {
-                                year: 'numeric',
-                                month: 'numeric',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                second: '2-digit'
+                        {item.contractDate
+                          ? new Date(item.contractDate).toLocaleDateString(
+                              "vi-VN",
+                              {
+                                year: "numeric",
+                                month: "numeric",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
                               }
                             )
                           : "Không có dữ liệu"}
                       </td>
                       <td>
                         <span
-                          className={`admin-consignment-status-badge ${item.status.toLowerCase()}`}
+                          className={`admin-consignment-status-badge ${item.consignmentItemStatus.toLowerCase()}`}
                         >
-                          {item.status}
+                          {item.consignmentItemStatus}
                         </span>
                       </td>
                       {activeTab === "Pending" && (
@@ -276,7 +272,7 @@ const AdminConsignment = () => {
                             title="Xác nhận ký gửi"
                             className="btn btn-success ms-2"
                             onClick={() =>
-                              handleStatusChange(item.itemId, "Approved")
+                              handleStatusChange(item.consignmentItemId, "Approved")
                             }
                           >
                             <i className="fa-solid fa-clipboard-check"></i>
@@ -284,7 +280,7 @@ const AdminConsignment = () => {
                           <button
                             title="Huỷ đơn ký gửi"
                             className="btn btn-danger ms-2"
-                            onClick={() => handleCancelItem(item.itemId)}
+                            onClick={() => handleCancelItem(item.consignmentItemId)}
                           >
                             <i className="fa-solid fa-ban"></i>
                           </button>
@@ -297,10 +293,10 @@ const AdminConsignment = () => {
               {filterConsignmentsByStatus(activeTab).length === 0 && (
                 <>
                   <tr>
-                    <td colSpan="7">Không tìm thấy ký gửi nào</td>
+                    <td colSpan="6">Không tìm thấy ký gửi nào</td>
                   </tr>
                   <tr>
-                    <td colSpan="7">
+                    <td colSpan="6">
                       <i
                         className="fa-regular fa-folder-open"
                         style={{ fontSize: "30px", opacity: 0.2 }}
