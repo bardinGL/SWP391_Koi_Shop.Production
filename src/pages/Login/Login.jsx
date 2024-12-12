@@ -31,7 +31,7 @@ const Login = () => {
       console.log("Response:", res);
 
       if (res && res.data.token) {
-        const { roleId } = res.data.user;
+        const { email } = res.data.user;
 
         // Kiểm tra giá trị của roleId
         console.log("Role ID:", email);
@@ -40,13 +40,11 @@ const Login = () => {
         loginContext(email, res.data.token);
 
         // Điều hướng dựa trên roleId
-        if (roleId === "manager") {
+        if (email === "staff@gmail.com" || email === "manager@gmail.com") {
           navigate("/admin-dashboard");
-        } else if (roleId === "staff")
-          navigate("/admin-product");
-        } 
-        else
-          navigate ("/")
+        } else {
+          navigate("/");
+        }
 
         toast.success("Login successful!");
       }
