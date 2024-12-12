@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { Home } from "../pages/Home/Home";
@@ -37,6 +38,7 @@ import AdminBatch from "../pages/Batch/AdminBatch.jsx";
 import Batches from "../pages/Batches/Batches.jsx";
 import BatchDetail from "../pages/Batches/BatchDetail.jsx";
 import { AdminLayout } from "../layouts/index.jsx";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
   return (
@@ -46,53 +48,44 @@ const AppRoutes = () => {
         <Route path="/info" element={<Info />} />
         <Route path="/news" element={<News />} />
         <Route path="/news/:id" element={<NewsDetail />} />
-
         <Route path="/contact" element={<Contact />} />
-
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/:id/detail" element={<UserDetail />} />
         <Route path="/:id/payments" element={<UserPayment />} />
 
-        <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<Admin />} />
-          <Route path="/admin-product" element={<AdminProduct />} />
-          <Route path="/admin-blog" element={<AdminBlog />} />
-          <Route path="/admin-certificate" element={<AdminCertificate />} />
-          <Route path="/admin-consignment" element={<AdminConsignment />} />
-          <Route path="/admin-order" element={<AdminOrder />} />
-          <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/admin-promotion" element={<AdminPromotion />} />
-          <Route path="/admin-batch" element={<AdminBatch />} />
+        {/* Protected Admin Routes with AdminLayout */}
+        <Route element={<ProtectedRoute allowedRoles={["Staff", "Manager"]} />}>
+          <Route element={<AdminLayout />}>
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/admin-product" element={<AdminProduct />} />
+            <Route path="/admin-blog" element={<AdminBlog />} />
+            <Route path="/admin-certificate" element={<AdminCertificate />} />
+            <Route path="/admin-consignment" element={<AdminConsignment />} />
+            <Route path="/admin-order" element={<AdminOrder />} />
+            <Route path="/admin-dashboard" element={<AdminDashboard />} />
+            <Route path="/admin-promotion" element={<AdminPromotion />} />
+            <Route path="/admin-batch" element={<AdminBatch />} />
+          </Route>
         </Route>
 
         <Route path="/product" element={<Product />} />
-
         <Route path="/koi/:productName" element={<ProductItem />} />
         <Route path="/koi/:productName/:id" element={<ProductItemDetail />} />
         <Route path="/product-item-search" element={<ProductItemSearch />} />
-
         <Route path="/batches" element={<Batches />} />
         <Route path="/batches/:id" element={<BatchDetail />} />
-
         <Route path="/cart" element={<Cart />} />
         <Route path="order" element={<Order />} />
-
         <Route path="/staff-orders" element={<StaffOrders />} />
-
         <Route path="/test" element={<Cloudinary />} />
-
         <Route path="payment-success" element={<Payment />} />
         <Route path="payment-failed" element={<PaymentFailed />} />
-
         <Route path="/consignment" element={<Consignment />} />
         <Route path="/user-consignment" element={<UserConsignment />} />
-
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-
         <Route path="/productItem-comparison" element={<ProductComparison />} />
-
         <Route path="*" element={<NotFoundRoute />} />
       </Routes>
     </>

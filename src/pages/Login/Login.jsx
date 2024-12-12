@@ -28,12 +28,17 @@ const Login = () => {
     setIsLoading(true);
     try {
       let res = await signin(email.trim(), password.trim());
+      console.log (res.data.token)
+      const token = res.data.token
 
       if (res && res.data.token) {
         const { email } = res.data.user;
         loginContext(email, res.data.token);
+        const payload = JSON.parse(atob(token.split(".")[1]));
+        const role = payload?.role;
+        console.log(role)
 
-        if (email === "staff@gmail.com" || email === "manager@gmail.com") {
+        if (role === "Staff" || role === "Manager") {
           navigate("/admin-dashboard");
         } else {
           navigate("/");
