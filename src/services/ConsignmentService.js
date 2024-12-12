@@ -25,7 +25,7 @@ const updateConsignmentItemStatus = (id, status) => {
   }
 
   return axios.put(
-    `Consignment/update-item-status/${id}`,
+    `controller/update-consignment-item/${id}`,
     { status },
     {
       headers: {

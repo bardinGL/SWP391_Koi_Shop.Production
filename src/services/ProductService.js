@@ -5,7 +5,7 @@ const fetchAllProducts = () => {
 };
 
 const getProductById = (id) => {
-  return axios.get(`Product/get-product/${id}`);
+  return axios.get(`ProductItem/get-product-item/${id}`);
 };
 
 const createProduct = () => {
