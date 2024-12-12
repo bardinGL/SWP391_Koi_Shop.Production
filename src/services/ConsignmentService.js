@@ -18,7 +18,7 @@ const createConsignment = (data, salePrice) => {
   });
 };
 
-const updateConsignmentItemStatus = (id, status) => {
+const updateConsignmentItemStatus = (id, status, type) => {
   const token = localStorage.getItem("token");
   if (!token) {
     throw new Error("No token found! Please log in again.");
@@ -26,7 +26,12 @@ const updateConsignmentItemStatus = (id, status) => {
 
   return axios.put(
     `controller/update-consignment-item/${id}`,
-    { status },
+    {
+      status, // Trạng thái consignmentItemStatus
+      productItemUpdates: {
+        type, // Trạng thái productItemStatus
+      },
+    },
     {
       headers: {
         Authorization: `${token}`,
