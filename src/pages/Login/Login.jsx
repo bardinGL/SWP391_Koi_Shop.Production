@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -7,6 +8,7 @@ import "./Login.css";
 import "../../styles/animation.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLoginButton from "../../components/GoogleLogin";
+import FishSpinner from "../../components/FishSpinner";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -19,7 +21,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (!(email && password)) {
-      toast.error("Email and Password are required!");
+      toast.error("Email và mật khẩu không được để trống!");
       return;
     }
 
@@ -27,29 +29,43 @@ const Login = () => {
     try {
       let res = await signin(email.trim(), password.trim());
 
-      // Kiểm tra dữ liệu trả về từ API
-      console.log("Response:", res);
-
       if (res && res.data.token) {
         const { email } = res.data.user;
-
-        // Kiểm tra giá trị của roleId
-        console.log("Role ID:", email);
-
-        // Cập nhật trạng thái đăng nhập
         loginContext(email, res.data.token);
 
-        // Điều hướng dựa trên roleId
         if (email === "staff@gmail.com" || email === "manager@gmail.com") {
           navigate("/admin-dashboard");
         } else {
           navigate("/");
         }
 
-        toast.success("Login successful!");
+        toast.success("Đăng nhập thành công!");
+      } else {
+        toast.error("Email hoặc mật khẩu không chính xác!");
       }
     } catch (error) {
-      toast.error("Login failed!");
+      if (error.response) {
+        // Server responded with error
+        switch (error.response.status) {
+          case 401:
+            toast.error("Email hoặc mật khẩu không chính xác!");
+            break;
+          case 403:
+            toast.error("Tài khoản của bạn đã bị khóa!");
+            break;
+          case 404:
+            toast.error("Tài khoản không tồn tại!");
+            break;
+          default:
+            toast.error("Đăng nhập thất bại! Vui lòng thử lại sau.");
+        }
+      } else if (error.request) {
+        // No response received
+        toast.error("Không thể kết nối đến máy chủ!");
+      } else {
+        // Other errors
+        toast.error("Đã xảy ra lỗi! Vui lòng thử lại sau.");
+      }
       console.error("Login error:", error);
     } finally {
       setIsLoading(false);
@@ -64,6 +80,7 @@ const Login = () => {
 
   return (
     <GoogleOAuthProvider clientId="684900073655-mu5vsdorjg8j82vkcf9uiuu7conm57fh.apps.googleusercontent.com">
+      {isLoading && <FishSpinner />}
       <div className="login-container">
         <div className="back-arrow">
           <i
@@ -124,11 +141,7 @@ const Login = () => {
                   disabled={!(email && password)}
                   onClick={() => handleLogin()}
                 >
-                  {isLoading ? (
-                    <i className="fas fa-spinner fa-spin"></i>
-                  ) : (
-                    "Đăng nhập"
-                  )}
+                  {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
                 </button>
               </div>
 
