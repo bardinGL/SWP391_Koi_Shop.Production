@@ -5,7 +5,7 @@ import { Navigate, Outlet } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext";
 
-const ProtectedRoute = ({ allowedEmails }) => {
+const ProtectedRoute = ({ allowedRoles }) => {
   const { user } = useContext(UserContext);
 
   // Check if user is logged in
@@ -13,13 +13,27 @@ const ProtectedRoute = ({ allowedEmails }) => {
     return <Navigate to="/login" replace />;
   }
 
-  // Check if user has required email
-  const hasAccess = allowedEmails.includes(user.email);
-  if (!hasAccess) {
-    return <Navigate to="/404" replace />;
+  // Get role from token
+  const token = user.token;
+  if (!token) {
+    return <Navigate to="/login" replace />;
   }
 
-  return <Outlet />;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    const role = payload?.role;
+
+    // Check if user has required role
+    const hasRequiredRole = allowedRoles.includes(role);
+    if (!hasRequiredRole) {
+      return <Navigate to="/404" replace />;
+    }
+
+    return <Outlet />;
+  } catch (error) {
+    console.error("Error decoding token:", error);
+    return <Navigate to="/login" replace />;
+  }
 };
 
 export default ProtectedRoute;

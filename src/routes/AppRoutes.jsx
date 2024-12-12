@@ -55,13 +55,7 @@ const AppRoutes = () => {
         <Route path="/:id/payments" element={<UserPayment />} />
 
         {/* Protected Admin Routes with AdminLayout */}
-        <Route
-          element={
-            <ProtectedRoute
-              allowedEmails={["staff@gmail.com", "manager@gmail.com"]}
-            />
-          }
-        >
+        <Route element={<ProtectedRoute allowedRoles={["Staff", "Manager"]} />}>
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={<Admin />} />
             <Route path="/admin-product" element={<AdminProduct />} />
