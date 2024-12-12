@@ -80,7 +80,6 @@ const ProductItem = () => {
                   className={`koi-item-card ${
                     item.quantity === 0 ? "sold-out" : ""
                   }`}
-                  onClick={() => handleViewDetails(item.id)}
                 >
                   <div className="koi-item-image-wrapper">
                     {item.quantity === 0 && (
@@ -101,7 +100,7 @@ const ProductItem = () => {
                       <p>Tuổi: {item.age} tuổi</p>
                       <p>Kích thước: {item.size}</p>
                     </div>
-                    {/* <div className="koi-item-actions">
+                    <div className="koi-item-actions">
                       <button
                         onClick={() => handleViewDetails(item.id)}
                         className="koi-view-btn"
@@ -114,7 +113,7 @@ const ProductItem = () => {
                       >
                         So sánh
                       </button>
-                    </div> */}
+                    </div>
                   </div>
                 </div>
               ))}
