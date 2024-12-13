@@ -1,6 +1,14 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react";
-import { getCart, updateCartItem, removeBatchFromCart } from "../../services/CartService";
-import { getProdItemById, getProdItemByBatch } from "../../services/ProductItemService";
+import {
+  getCart,
+  updateCartItem,
+  removeBatchFromCart,
+} from "../../services/CartService";
+import {
+  getProdItemById,
+  getProdItemByBatch,
+} from "../../services/ProductItemService";
 import { Header } from "../../layouts/header/header";
 import { Footer } from "../../layouts/footer/footer";
 import "./Cart.css";
@@ -29,15 +37,31 @@ const Cart = () => {
     setIsLoading(true);
     try {
       const response = await getCart();
+
+      // Check if response and response.data exist
+      if (!response?.data?.items) {
+        setCart([]);
+        setCartItems([]);
+        return;
+      }
+
       const { items } = response.data;
       setCart(response.data);
 
-      // Group items by batchId
+      // Check if items is an array and not empty
+      if (!Array.isArray(items) || items.length === 0) {
+        setCartItems([]);
+        return;
+      }
+
+      // Group items by batchId with null checks
       const groupedItems = items.reduce((acc, item) => {
+        if (!item) return acc;
+
         if (item.batchId) {
           if (!acc[item.batchId]) acc[item.batchId] = [];
           acc[item.batchId].push(item);
-        } else {
+        } else if (item.productItemId) {
           acc[item.productItemId] = [item];
         }
         return acc;
@@ -45,48 +69,71 @@ const Cart = () => {
 
       const updatedItems = await Promise.all(
         Object.entries(groupedItems).map(async ([key, group]) => {
-          if (group[0].batchId) {
-            // Nếu là batch
-            const batchResponse = await fetchBatchById(group[0].batchId);
-            const batchItemsResponse = await getProdItemByBatch(group[0].batchId);
-            
-            // Lấy thông tin chi tiết cho từng product item trong batch
-            const batchItemsWithDetails = batchItemsResponse.data.map(item => ({
-              productItemId: item.id,
-              name: item.name,
-              imageUrl: item.imageUrl,
-              sex: item.sex,
-              age: item.age,
-              size: item.size,
-              quantity: 1
-            }));
+          try {
+            if (group[0]?.batchId) {
+              // Batch handling
+              const [batchResponse, batchItemsResponse] = await Promise.all([
+                fetchBatchById(group[0].batchId),
+                getProdItemByBatch(group[0].batchId),
+              ]);
 
-            return {
-              batchId: group[0].batchId,
-              batchImage: batchResponse.data.imageUrl,
-              batchName: batchResponse.data.name,
-              batchPrice: batchResponse.data.price,
-              batchDescription: batchResponse.data.description,
-              batchItems: batchItemsWithDetails,
-            };
-          } else {
-            // Nếu là sản phẩm đơn lẻ
-            const productResponse = await getProdItemById(group[0].productItemId);
-            return {
-              ...group[0],
-              productName: productResponse.data.name,
-              imageUrl: productResponse.data.imageUrl,
-              price: productResponse.data.price,
-              isIndividual: true,
-            };
+              if (!batchResponse?.data || !batchItemsResponse?.data) {
+                return null;
+              }
+
+              // Map batch items with null checks
+              const batchItemsWithDetails = batchItemsResponse.data
+                .filter((item) => item) // Filter out null/undefined items
+                .map((item) => ({
+                  productItemId: item.id,
+                  name: item.name || "Unnamed Item",
+                  imageUrl: item.imageUrl || "",
+                  sex: item.sex || "",
+                  age: item.age || "",
+                  size: item.size || "",
+                  quantity: 1,
+                }));
+
+              return {
+                batchId: group[0].batchId,
+                batchImage: batchResponse.data.imageUrl || "",
+                batchName: batchResponse.data.name || "Unnamed Batch",
+                batchPrice: batchResponse.data.price || 0,
+                batchDescription: batchResponse.data.description || "",
+                batchItems: batchItemsWithDetails,
+              };
+            } else {
+              // Individual product handling
+              const productResponse = await getProdItemById(
+                group[0].productItemId
+              );
+
+              if (!productResponse?.data) {
+                return null;
+              }
+
+              return {
+                ...group[0],
+                productName: productResponse.data.name || "Unnamed Product",
+                imageUrl: productResponse.data.imageUrl || "",
+                price: productResponse.data.price || 0,
+                isIndividual: true,
+              };
+            }
+          } catch (itemError) {
+            console.error("Error processing item:", itemError);
+            return null;
           }
         })
       );
 
-      setCartItems(updatedItems);
+      // Filter out null items and set to state
+      const validItems = updatedItems.filter((item) => item !== null);
+      setCartItems(validItems);
     } catch (error) {
-      console.error('Error fetching cart items:', error);
+      console.error("Error fetching cart items:", error);
       toast.error("Có lỗi xảy ra khi tải giỏ hàng");
+      setCartItems([]);
     } finally {
       setIsLoading(false);
     }
@@ -212,9 +259,9 @@ const Cart = () => {
   };
 
   const toggleBatchExpand = (batchId) => {
-    setExpandedBatches(prev => 
-      prev.includes(batchId) 
-        ? prev.filter(id => id !== batchId)
+    setExpandedBatches((prev) =>
+      prev.includes(batchId)
+        ? prev.filter((id) => id !== batchId)
         : [...prev, batchId]
     );
   };
@@ -267,7 +314,7 @@ const Cart = () => {
                       if (item.batchId) {
                         return (
                           <React.Fragment key={item.batchId}>
-                            <tr 
+                            <tr
                               className="batch-row"
                               onClick={() => toggleBatchExpand(item.batchId)}
                             >
@@ -282,15 +329,28 @@ const Cart = () => {
                               <td style={{ fontWeight: "bold" }}>
                                 {item.batchName}
                               </td>
-                              <td className="price">{item.batchPrice.toLocaleString()} VND</td>
-                              <td>{item.batchItems.reduce((sum, i) => sum + i.quantity, 0)} sản phẩm</td>
-                              <td className="price">{item.batchPrice.toLocaleString()} VND</td>
+                              <td className="price">
+                                {item.batchPrice.toLocaleString()} VND
+                              </td>
+                              <td>
+                                {item.batchItems.reduce(
+                                  (sum, i) => sum + i.quantity,
+                                  0
+                                )}{" "}
+                                sản phẩm
+                              </td>
+                              <td className="price">
+                                {item.batchPrice.toLocaleString()} VND
+                              </td>
                               <td>
                                 <button
                                   className="remove-batch-btn"
                                   onClick={(e) => {
                                     e.stopPropagation(); // Ngăn sự kiện click lan ra tr cha
-                                    setItemToRemove({ batchId: item.batchId, name: item.batchName });
+                                    setItemToRemove({
+                                      batchId: item.batchId,
+                                      name: item.batchName,
+                                    });
                                     setIsConfirmModalOpen(true);
                                   }}
                                 >
@@ -303,21 +363,32 @@ const Cart = () => {
                                 <td colSpan="7">
                                   <div className="batch-items">
                                     {item.batchItems.map((batchItem, idx) => (
-                                      <div key={`${item.batchId}-${idx}`} className="batch-subitem">
+                                      <div
+                                        key={`${item.batchId}-${idx}`}
+                                        className="batch-subitem"
+                                      >
                                         <div className=""></div>
-                                        <img 
-                                          src={batchItem.imageUrl || '/default-product.png'} 
+                                        <img
+                                          src={
+                                            batchItem.imageUrl ||
+                                            "/default-product.png"
+                                          }
                                           alt={batchItem.name}
                                           className="cart-product-image"
                                           onError={(e) => {
                                             e.target.onerror = null;
-                                            e.target.src = "/default-product-image.png";
+                                            e.target.src =
+                                              "/default-product-image.png";
                                           }}
                                         />
                                         <div className="batch-item-details">
-                                          <div className="batch-item-name">{batchItem.name}</div>
+                                          <div className="batch-item-name">
+                                            {batchItem.name}
+                                          </div>
                                           <div className="batch-item-specs">
-                                            <span>Giới tính: {batchItem.sex}</span>
+                                            <span>
+                                              Giới tính: {batchItem.sex}
+                                            </span>
                                             <span>Tuổi: {batchItem.age}</span>
                                             <span>Size: {batchItem.size}</span>
                                           </div>
@@ -341,12 +412,14 @@ const Cart = () => {
                                 className="cart-product-image"
                               />
                             </td>
-                            <td style={{ fontWeight: "bold" }}>{item.productName}</td>
-                            <td className="price">{item.price.toLocaleString()} VND</td>
+                            <td style={{ fontWeight: "bold" }}>
+                              {item.productName}
+                            </td>
+                            <td className="price">
+                              {item.price.toLocaleString()} VND
+                            </td>
                             <td>
-                              <div className="quantity-display">
-                                1 sản phẩm
-                              </div>
+                              <div className="quantity-display">1 sản phẩm</div>
                             </td>
                             <td className="price">
                               {item.price.toLocaleString()} VND
@@ -355,7 +428,10 @@ const Cart = () => {
                               <button
                                 className="remove-batch-btn"
                                 onClick={() => {
-                                  setItemToRemove({ cartId: cart.cartId, item });
+                                  setItemToRemove({
+                                    cartId: cart.cartId,
+                                    item,
+                                  });
                                   setIsConfirmModalOpen(true);
                                 }}
                               >
