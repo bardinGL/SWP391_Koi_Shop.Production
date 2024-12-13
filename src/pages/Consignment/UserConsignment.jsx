@@ -324,14 +324,7 @@ const UserConsignment = () => {
                     </span>
                   </td>
                   <td>
-                    {consignment.consignmentItemStatus === "Pending" && (
-                      <button
-                        onClick={() => handlePayment(consignment, consignment.items[0])}
-                        disabled={isProcessing}
-                      >
-                        Thanh toán
-                      </button>
-                    )}
+                    
                     
                   </td>
                 </tr>

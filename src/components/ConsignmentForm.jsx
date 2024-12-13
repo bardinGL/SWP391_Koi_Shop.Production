@@ -30,6 +30,7 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
     personality: "",
     salePrice: undefined,
   });
+ 
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -317,17 +318,7 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="createModel">Create Model</label>
-              <input
-                type="text"
-                id="createModel"
-                name="createModel"
-                value={formData.createModel || ""}
-                onChange={handleChange}
-                required
-              />
-            </div>
+            
 
             <div className="form-group">
               <label htmlFor="personality">Personality</label>
