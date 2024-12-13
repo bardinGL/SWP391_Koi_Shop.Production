@@ -301,7 +301,10 @@ export const Header = () => {
                   style={{ width: 50, height: 50 }}
                   onClick={handleClickCart}
                 >
-                  <img src={cart} style={{ width: 20, height: 20 }} />
+                  <img
+                    src={cart}
+                    style={{ width: 20, height: 20, filter: "brightness(0)" }}
+                  />
                 </button>
               </>
             )}
