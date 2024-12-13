@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // import React from "react";
 import logo from "../../../public/assets/icon.png";
 import logo1 from "../../../public/assets/image 9.png";
@@ -9,7 +10,7 @@ import { Col, Container, Row } from "react-bootstrap";
 import React, { useState, useRef } from "react";
 import { toast } from "react-toastify";
 
-const zalo_invite_url = import.meta.env.VITE_ZALO_INVITATION;
+const zalo_invite_url = "https://zalo.me/g/urnbcr446";
 
 export const Footer = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
