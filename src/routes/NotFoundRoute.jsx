@@ -31,7 +31,7 @@ const NotFoundRoute = () => {
                   Oops! You seem lost in the pond.
                 </h3>
                 <p className="mb-4 koi-description text-center">
-                  The page you're looking for swam away with the koi fish.
+                  The page you&apos;re looking for swam away with the koi fish.
                 </p>
                 <NavLink
                   className="btn text-light koi-btn btn-lg rounded-pill px-5 fs-4 m-0"
