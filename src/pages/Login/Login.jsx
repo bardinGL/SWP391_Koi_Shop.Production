@@ -83,7 +83,7 @@ const Login = () => {
   };
 
   return (
-    <GoogleOAuthProvider clientId="684900073655-mu5vsdorjg8j82vkcf9uiuu7conm57fh.apps.googleusercontent.com">
+    <GoogleOAuthProvider clientId="293260593150-g6s9uvapori7glal9uj0htvhqgu0i3am.apps.googleusercontent.com">
       {isLoading && <FishSpinner />}
 
       <div className="login-container">
