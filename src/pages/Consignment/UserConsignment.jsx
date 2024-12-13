@@ -19,15 +19,12 @@ const UserConsignment = () => {
   const [statusTab, setStatusTab] = useState("Pending");
   const [loading, setLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
-  //   const [paymentMethod, setPaymentMethod] = useState("bank");
   const navigate = useNavigate();
   const location = useLocation();
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [itemToCancel, setItemToCancel] = useState(null);
   const [paymentMethods, setPaymentMethods] = useState({});
-
   const [completedOrders, setCompletedOrders] = useState([]);
-
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -75,7 +72,6 @@ const UserConsignment = () => {
       setCompletedOrders(ordersWithConsignmentId || []);
     } catch (error) {
       console.error("Error fetching completed orders:", error);
-      // toast.error("Không thể tải danh sách đơn hàng đã thanh toán.");
     }
   };
 
@@ -83,16 +79,13 @@ const UserConsignment = () => {
     try {
       const response = await callBackPayment();
       if (response.data) {
-        // Lấy orderId từ response nếu có
         const orderId = response.data.orderId;
 
-        // Cập nhật trạng thái item thành CheckedOut
         if (orderId) {
           await updateConsignmentItemStatus(orderId, "CheckedOut");
-          // Refresh danh sách sau khi thanh toán và cập nhật trạng thái thành công
           await fetchConsignments();
           toast.success("Thanh toán thành công!");
-          navigate("/"); // Redirect về trang chủ sau khi thanh toán thành công
+          navigate("/"); 
         }
       }
     } catch (error) {
@@ -105,7 +98,6 @@ const UserConsignment = () => {
     try {
       setIsProcessing(true);
 
-      // Bước 1: Checkout consignment
       const checkoutResponse = await checkoutConsignment(item.itemId);
 
       if (!checkoutResponse?.data || checkoutResponse.statusCode !== 201) {
@@ -115,27 +107,21 @@ const UserConsignment = () => {
       const orderId = checkoutResponse.data.orderId;
 
       if (paymentMethods[item.itemId] === "cod") {
-        // COD payment flow
         try {
           const codResponse = await createPaymentForCOD({ orderId });
           if (codResponse?.data) {
             await updateConsignmentItemStatus(item.itemId, "CheckedOut");
             await fetchConsignments();
-            toast.success(
-              "Đặt hàng thành công! Bạn sẽ thanh toán khi nhận hàng."
-            );
-            navigate("/");
+            toast.success("Đặt hàng thành công! Bạn sẽ thanh toán khi nhận hàng.");
+            navigate("/"); 
           } else {
             throw new Error("COD payment creation failed.");
           }
         } catch (error) {
           console.error("Error creating COD payment:", error);
-          toast.error(
-            "Không thể tạo thanh toán khi nhận hàng. Vui lòng thử lại sau."
-          );
+          toast.error("Không thể tạo thanh toán khi nhận hàng. Vui lòng thử lại sau.");
         }
       } else {
-        // Bước 2: Tạo payment request
         const paymentData = {
           orderDescription:
             paymentMethods[item.itemId] === "bank"
@@ -158,17 +144,13 @@ const UserConsignment = () => {
             throw new Error("No payment URL received");
           }
         } else {
-          toast.success(
-            "Đặt hàng thành công! Bạn sẽ thanh toán khi nhận hàng."
-          );
-          navigate("/");
+          toast.success("Đặt hàng thành công! Bạn sẽ thanh toán khi nhận hàng.");
+          navigate("/"); 
         }
       }
     } catch (error) {
       console.error("Payment error:", error);
-      toast.error(
-        error.message || "Không thể xử lý thanh toán. Vui lòng thử lại sau."
-      );
+      toast.error(error.message || "Không thể xử lý thanh toán. Vui lòng thử lại sau.");
     } finally {
       setIsProcessing(false);
     }
@@ -183,10 +165,7 @@ const UserConsignment = () => {
     if (!itemToCancel) return;
 
     try {
-      const response = await updateConsignmentItemStatus(
-        itemToCancel,
-        "Cancelled"
-      );
+      const response = await updateConsignmentItemStatus(itemToCancel, "Cancelled");
 
       if (response.data) {
         setConsignments((prevConsignments) =>
@@ -222,50 +201,34 @@ const UserConsignment = () => {
   };
 
   const filterConsignmentsByStatus = (status) => {
-    console.log("🚀 ~ filterConsignmentsByStatus ~ status:", status);
-    // if (status === "Paid") {
-    //   return completedOrders;
-    // }
-
     if (!Array.isArray(consignments)) return [];
 
-    // return consignments
-    //   .map((consignment) => ({
-    //     ...consignment,
-    //     items: consignment.items?.filter((item) => {
-    //       switch (status) {
-    //         // case "Pending":
-    //         //   return item.status === "Pending";
-    //         // case "Approved":
-    //         //   return item.status === "Approved" && !item.checkedout;
-    //         // case "Checkedout":
-    //         //   return item.status === "CheckedOut" || item.checkedout === true;
-    //         // case "Cancelled":
-    //         //   return item.status === "Cancelled";
-    //         default:
-    //           return false;
-    //       }
-    //     }),
-    //   }))
-    //   .filter((consignment) => consignment.items?.length > 0);
-
-    const response = consignments.filter((consignment) => {
-      switch (status) {
-        case "Pending":
-          return consignment.consignmentItemStatus == "Pending";
-        case "Approved":
-          return consignment.consignmentItemStatus == "Approved";
-        case "Checkedout":
-          return consignment.consignmentItemStatus == "Checkedout";
-        case "Cancelled":
-          return consignment.consignmentItemStatus == "Cancelled";
-        case "Paid":
-          return consignment.consignmentItemStatus == "Paid";
-        default:
-          return false;
-      }
-    });
-    return response;
+    return consignments
+      .filter((consignment) => {
+        switch (status) {
+          case "Pending":
+            return consignment.consignmentItemStatus === "Pending";
+          case "Approved":
+            return consignment.consignmentItemStatus === "Approved";
+          case "Checkedout":
+            return consignment.consignmentItemStatus === "Checkedout";
+          case "Cancelled":
+            return consignment.consignmentItemStatus === "Cancelled";
+          case "Paid":
+            return consignment.consignmentItemStatus === "Paid";
+          default:
+            return false;
+        }
+      })
+      .map((consignment) => {
+        // Tính giá gốc từ fee (Giả sử fee là giá đã biết)
+        const originalPrice = (consignment.fee / 15) * 100;
+        return {
+          ...consignment,
+          category: consignment.productItemType === 'ShopUser' ? 'Cá Gửi Bán' : 'Cá Gửi Chăm Sóc',
+          originalPrice: originalPrice.toLocaleString("vi-VN") // Thêm giá gốc đã tính
+        };
+      });
   };
 
   if (loading) return <FishSpinner />;
@@ -276,7 +239,7 @@ const UserConsignment = () => {
         <i className="fa-solid fa-arrow-left" onClick={() => navigate(-1)}></i>
       </div>
 
-      <main className="uc-content animated user-select-none">
+      <main className="uc-content animated user-select-none" >
         <div className="uc-header">
           <h1 className="uc-title">Quản lý cá ký gửi</h1>
         </div>
@@ -284,93 +247,50 @@ const UserConsignment = () => {
         <div className="uc-table-container">
           <div className="uc-tabs">
             <button
-              className={`uc-tab-button ${
-                statusTab === "Pending" ? "active" : ""
-              }`}
+              className={`uc-tab-button ${statusTab === "Pending" ? "active" : ""}`}
               onClick={() => setStatusTab("Pending")}
             >
               <i className="fas fa-clock me-2"></i>
-              Chờ duyệt
-              <span className="uc-count">
-                {getConsignmentCountByStatus("Pending")}
-              </span>
+              Đang chờ
+              <span className="uc-count">{getConsignmentCountByStatus("Pending")}</span>
             </button>
             <button
-              className={`uc-tab-button ${
-                statusTab === "Approved" ? "active" : ""
-              }`}
+              className={`uc-tab-button ${statusTab === "Approved" ? "active" : ""}`}
               onClick={() => setStatusTab("Approved")}
             >
-              <i className="fas fa-check-circle me-2"></i>
+              <i className="fas fa-check me-2"></i>
               Đã duyệt
-              <span className="uc-count">
-                {getConsignmentCountByStatus("Approved")}
-              </span>
+              <span className="uc-count">{getConsignmentCountByStatus("Approved")}</span>
             </button>
             <button
-              className={`uc-tab-button ${
-                statusTab === "Checkedout" ? "active" : ""
-              }`}
+              className={`uc-tab-button ${statusTab === "Checkedout" ? "active" : ""}`}
               onClick={() => setStatusTab("Checkedout")}
             >
-              <i className="fas fa-shopping-cart me-2"></i>
-              Check out
-              <span className="uc-count">
-                {getConsignmentCountByStatus("Checkedout")}
-              </span>
+              <i className="fas fa-box-open me-2"></i>
+              Đã thanh toán
+              <span className="uc-count">{getConsignmentCountByStatus("Checkedout")}</span>
             </button>
             <button
-              className={`uc-tab-button ${
-                statusTab === "Cancelled" ? "active" : ""
-              }`}
+              className={`uc-tab-button ${statusTab === "Cancelled" ? "active" : ""}`}
               onClick={() => setStatusTab("Cancelled")}
             >
               <i className="fas fa-ban me-2"></i>
-              Đã hủy
-              <span className="uc-count">
-                {getConsignmentCountByStatus("Cancelled")}
-              </span>
-            </button>
-            <button
-              className={`uc-tab-button ${
-                statusTab === "Paid" ? "active" : ""
-              }`}
-              onClick={() => setStatusTab("Paid")}
-            >
-              <i className="fas fa-check-circle me-2"></i>
-              Đã thanh toán
+              Đã huỷ
+              <span className="uc-count">{getConsignmentCountByStatus("Cancelled")}</span>
             </button>
           </div>
+
           <table className="uc-table">
             <thead>
               <tr>
-                {/* {activeTab === "Paid" ? (
-                  <>
-                    <th>Mã Ký gửi</th>
-                    <th>Ngày tạo đơn</th>
-                    <th>Price</th>
-                    <th>Mã ký gửi</th>
-                    <th>Status</th>
-                  </>
-                ) : (
-                  <>
-                    <th>Hình ảnh</th>
-                    <th>Mã ký gửi</th>
-                    <th>Tên cá</th>
-                    <th>Loại</th>
-                    <th>Trạng thái</th>
-                    <th>Hành động</th>
-                  </>
-                )} */}
-                <>
-                  <th>Mã ký gửi</th>
-                  <th>Tên cá</th>
-                  <th>Price</th>
-                  <th>Ngày tạo đơn</th>
-                  <th>Loại ký gửi</th>
-                  <th>Trạng thái</th>
-                  <th>Hành động</th>
-                </>
+                <th>Mã ký gửi</th>
+                <th>Tên cá</th>
+                <th>Giá Bán/Phí Chăm Sóc</th>
+                
+                <th>Ngày tạo đơn</th>
+                <th>Loại ký gửi</th>
+                <th>Trạng thái</th>
+                
               </tr>
             </thead>
             <tbody>
@@ -378,22 +298,24 @@ const UserConsignment = () => {
                 <tr key={`${consignment.consignmentItemId}`}>
                   <td>{consignment.consignmentItemId}</td>
                   <td>{consignment.productItemName}</td>
-                  <td>{consignment.fee.toLocaleString("vi-VN")} VND</td>
-
                   <td>
-                    {new Date(consignment.createdTime).toLocaleDateString(
-                      "vi-VN",
-                      {
-                        year: "numeric",
-                        month: "numeric",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                        second: "2-digit",
-                      }
-                    )}
+                    {consignment.category === "Cá Gửi Bán"
+                      ? consignment.originalPrice // Hiển thị giá gốc
+                      : consignment.fee.toLocaleString("vi-VN")}{" "}
+                    VND
                   </td>
-                  <td>{consignment.productItemType}</td>
+                  
+                  <td>
+                    {new Date(consignment.createdTime).toLocaleDateString("vi-VN", {
+                      year: "numeric",
+                      month: "numeric",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      second: "2-digit",
+                    })}
+                  </td>
+                  <td>{consignment.category}</td>
                   <td>
                     <span
                       className={`uc-status ${consignment.consignmentItemStatus.toLowerCase()}`}
@@ -402,91 +324,18 @@ const UserConsignment = () => {
                     </span>
                   </td>
                   <td>
-                    {statusTab === "Pending" && (
+                    {consignment.consignmentItemStatus === "Pending" && (
                       <button
-                        className="uc-btn uc-btn-cancel"
-                        onClick={() =>
-                          handleCancelItem(consignment.consignmentId)
-                        }
+                        onClick={() => handlePayment(consignment, consignment.items[0])}
+                        disabled={isProcessing}
                       >
-                        <i className="fas fa-ban me-2"></i>
-                        Huỷ
+                        Thanh toán
                       </button>
                     )}
-                    {statusTab === "Approved" && (
-                      <div>
-                        <div className="payment-methods mb-2">
-                          <label className="me-3">
-                            <input
-                              type="radio"
-                              name={`paymentMethod-${consignment.consignmentId}`}
-                              value="bank"
-                              checked={
-                                paymentMethods[consignment.consignmentId] ===
-                                "bank"
-                              }
-                              onChange={(e) =>
-                                setPaymentMethods({
-                                  ...paymentMethods,
-                                  [consignment.itemId]: e.target.value,
-                                })
-                              }
-                            />{" "}
-                            Thanh toán qua VNPay
-                          </label>
-                          <label>
-                            <input
-                              type="radio"
-                              name={`paymentMethod-${consignment.consignmentId}`}
-                              value="cod"
-                              checked={
-                                paymentMethods[consignment.consignmentId] ===
-                                "cod"
-                              }
-                              onChange={(e) =>
-                                setPaymentMethods({
-                                  ...paymentMethods,
-                                  [consignment.itemId]: e.target.value,
-                                })
-                              }
-                            />{" "}
-                            Thanh toán khi nhận hàng
-                          </label>
-                        </div>
-                        <button
-                          className="uc-btn uc-btn-payment"
-                          //   onClick={() => handlePayment(consignment, item)}
-                          //   disabled={
-                          //     isProcessing || !paymentMethods[item.itemId]
-                          //   }
-                        >
-                          {isProcessing ? (
-                            <>
-                              <i className="fas fa-spinner fa-spin me-2"></i>
-                              Đang xử lý...
-                            </>
-                          ) : (
-                            <>
-                              <i className="fas fa-credit-card me-2"></i>
-                              Thanh toán
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    )}
+                    
                   </td>
                 </tr>
               ))}
-              {!filterConsignmentsByStatus(statusTab).length && (
-                <tr>
-                  <td colSpan="6" className="text-center">
-                    <div className="uc-empty-state">
-                      <i className="fas fa-fish"></i>
-                      <p>Không có cá ký gửi nào trong trạng thái này</p>
-                    </div>
-                  </td>
-                </tr>
-              )}
             </tbody>
           </table>
         </div>
@@ -496,7 +345,6 @@ const UserConsignment = () => {
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}
         onConfirm={confirmCancelItem}
-        message="Bạn có chắc chắn muốn huỷ ký gửi này?"
       />
     </div>
   );
