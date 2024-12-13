@@ -196,7 +196,7 @@ export const Header = () => {
           <div className="nav-logo" onClick={() => navigate("/")}>
             <img src={logo} className="logo-image" alt="#" />
             {/* <img src={logo1} className="logo1-image" alt="#" /> */}
-            <div style={{ fontSize: "50px", color: "#FFFFFF" }}>
+            <div style={{ fontSize: "40px", color: "#FFFFFF" }}>
               KOI SHOWCASE
             </div>
           </div>
