@@ -26,6 +26,7 @@ const AdminConsignment = () => {
   const fetchData = async () => {
     try {
       const response = await fetchAllConsignments();
+      console.log (response)
 
       if (!response.data || !Array.isArray(response.data)) {
         setConsignments([]);
@@ -74,19 +75,29 @@ const AdminConsignment = () => {
 
   const handleStatusChange = async (itemId, newStatus) => {
     try {
-      const response = await updateConsignmentItemStatus(itemId, newStatus);
+      // Xác định trạng thái `type` mới dựa trên trạng thái mới
+      const newType = newStatus === "Approved" ? "Approved" : "Pending";
+  
+      // Gọi API với cả `status` và `type`
+      const response = await updateConsignmentItemStatus(itemId, newStatus, newType);
+      
+  
       if (response.data) {
         setConsignments((prevConsignments) =>
           prevConsignments.map((consignment) => ({
             ...consignment,
             items: consignment.items.map((item) =>
               item.consignmentItemId === itemId
-                ? { ...item, consignmentItemStatus: newStatus }
+                ? {
+                    ...item,
+                    consignmentItemStatus: newStatus,
+                    productItemStatus: newType, 
+                  }
                 : item
             ),
           }))
         );
-
+  
         toast.success("Cập nhật trạng thái thành công!");
       }
     } catch (error) {
@@ -94,6 +105,10 @@ const AdminConsignment = () => {
       toast.error("Cập nhật trạng thái thất bại");
     }
   };
+  
+  
+
+
 
   const filterConsignmentsByStatus = (status) => {
     if (!Array.isArray(consignments) || consignments.length === 0) {
