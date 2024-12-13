@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -195,7 +196,7 @@ export const Header = () => {
           <div className="nav-logo" onClick={() => navigate("/")}>
             <img src={logo} className="logo-image" alt="#" />
             {/* <img src={logo1} className="logo1-image" alt="#" /> */}
-            <div style={{ fontSize: "24px", color: "#FFFFFF" }}>
+            <div style={{ fontSize: "50px", color: "#FFFFFF" }}>
               KOI SHOWCASE
             </div>
           </div>
@@ -235,7 +236,7 @@ export const Header = () => {
                 <div className="nav-info user-select-none">
                   <span>
                     <i className="fa-regular fa-user"></i> :{" "}
-                    <span clbue="fw-bold">{user.email}</span>
+                    <span className="fw-bold">{user.email}</span>
                   </span>
                   <div ref={dropdownRef}>
                     <button
@@ -309,47 +310,51 @@ export const Header = () => {
 
         <div className="dropdown-wrapper">
           <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-            { <button
-              className="dropdown-btn user-select-none"
-              value={"product"}
-              onClick={handleChoose}
-            >
-              <img className="icon user-select-none" src={list} />
-              DANH MỤC KOI
-            </button> }
+            {
+              <button
+                className="dropdown-btn user-select-none"
+                value={"product"}
+                onClick={handleChoose}
+              >
+                <img className="icon user-select-none" src={list} />
+                DANH MỤC KOI
+              </button>
+            }
 
-            { <div className="dropdown-menu">
-              {showDropdown && (
-                <div className="row dropdown-row row-cols-4">
-                  <div className="dropdown-grid">
-                    <li
-                      className="dropdown-item special-item"
-                      onClick={() => navigate("/batches")}
-                    >
-                      Lô Cá
-                    </li>
-                  </div>
-
-                  {listProducts.map((product) => (
-                    <div className="dropdown-grid" key={product.id}>
+            {
+              <div className="dropdown-menu">
+                {showDropdown && (
+                  <div className="row dropdown-row row-cols-4">
+                    <div className="dropdown-grid">
                       <li
-                        className="dropdown-item"
-                        onClick={() => handleProductClick(product)}
+                        className="dropdown-item special-item"
+                        onClick={() => navigate("/batches")}
                       >
-                        {product.name}
+                        Lô Cá
                       </li>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div> }
+
+                    {listProducts.map((product) => (
+                      <div className="dropdown-grid" key={product.id}>
+                        <li
+                          className="dropdown-item"
+                          onClick={() => handleProductClick(product)}
+                        >
+                          {product.name}
+                        </li>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            }
           </div>
 
           <button
             className="d-flex flex-row justify-content-center"
             value={"home"}
             style={{
-              background: location.pathname === "/" ? "#C70025" : "#281713",
+              background: location.pathname === "/" ? "#1b1f9e" : "#1c6197",
               width: 250,
             }}
             onClick={handleChoose}
@@ -362,7 +367,7 @@ export const Header = () => {
             value={"product"}
             style={{
               background:
-                location.pathname === "/product" ? "#C70025" : "#281713",
+                location.pathname === "/product" ? "#1b1f9e" : "#1c6197",
               width: 250,
             }}
             onClick={handleChoose}
@@ -378,7 +383,7 @@ export const Header = () => {
             className="d-flex flex-row justify-content-center"
             value={"info"}
             style={{
-              background: location.pathname === "/info" ? "#C70025" : "#281713",
+              background: location.pathname === "/info" ? "#1b1f9e" : "#1c6197",
               width: 250,
             }}
             onClick={handleChoose}
@@ -389,7 +394,7 @@ export const Header = () => {
             className="d-flex flex-row justify-content-center"
             value={"news"}
             style={{
-              background: location.pathname === "/news" ? "#C70025" : "#281713",
+              background: location.pathname === "/news" ? "#1b1f9e" : "#1c6197",
               width: 250,
             }}
             onClick={handleChoose}
@@ -402,7 +407,7 @@ export const Header = () => {
             value={"consignment"}
             style={{
               background:
-                location.pathname === "/consignment" ? "#C70025" : "#281713",
+                location.pathname === "/consignment" ? "#1b1f9e" : "#1c6197",
               width: 250,
             }}
             onClick={handleChoose}
@@ -415,7 +420,7 @@ export const Header = () => {
             value={"contact"}
             style={{
               background:
-                location.pathname === "/contact" ? "#C70025" : "#281713",
+                location.pathname === "/contact" ? "#1b1f9e" : "#1c6197",
               width: 250,
             }}
             onClick={handleChoose}
