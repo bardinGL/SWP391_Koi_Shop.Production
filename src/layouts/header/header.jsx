@@ -267,7 +267,7 @@ export const Header = () => {
                   </div>
                 </div>
                 <button
-                  className="d-flex flex-row border border-0 rounded align-items-center justify-content-center bg-white "
+                  className="d-flex flex-row border border-0 rounded align-items-center justify-content-center bg-black text-white"
                   style={{ width: 50, height: 50 }}
                   onClick={handleClickCart}
                 >
@@ -301,7 +301,10 @@ export const Header = () => {
                   style={{ width: 50, height: 50 }}
                   onClick={handleClickCart}
                 >
-                  <img src={cart} style={{ width: 20, height: 20 }} />
+                  <img
+                    src={cart}
+                    style={{ width: 20, height: 20, filter: "brightness(0)" }}
+                  />
                 </button>
               </>
             )}
@@ -360,6 +363,19 @@ export const Header = () => {
             onClick={handleChoose}
           >
             TRANG CHỦ
+          </button>
+
+          <button
+            className="d-flex flex-row justify-content-center"
+            value={"product"}
+            style={{
+              background:
+                location.pathname === "/product" ? "#1b1f9e" : "#1c6197",
+              width: 250,
+            }}
+            onClick={handleChoose}
+          >
+            DANH SÁCH CÁ KOI
           </button>
 
           {/* <button className="" value={"product"} onClick={handleChoose}>
