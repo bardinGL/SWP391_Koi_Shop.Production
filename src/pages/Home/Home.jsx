@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 import React from "react";
 import { Header } from "../../layouts/header/header";
 import { Footer } from "../../layouts/footer/footer";
@@ -58,22 +60,36 @@ export const Home = () => {
 
   const handleProductClick = async (productItem) => {
     try {
-      const prodItemResponse = await getProdItemById(productItem.id);
-      const productResponse = await getProductById(
-        prodItemResponse.data.productId
-      );
-      const productName = productResponse.data.name;
+      // Check if product and required properties exist
+      if (!productItem || !productItem.id || !productItem.name) {
+        console.error("Invalid product data:", productItem);
+        toast.error("Không thể xem chi tiết sản phẩm này");
+        return;
+      }
 
-      navigate(
-        `/koi/${productName.toLowerCase().replace(/\s+/g, "")}/${
-          productItem.id
-        }`,
-        {
-          state: { response: prodItemResponse.data, productName },
-        }
-      );
+      const response = await getProdItemById(productItem.id);
+      console.log(response);
+      if (!response || !response.data) {
+        toast.error("Không thể tải thông tin sản phẩm");
+        return;
+      }
+
+      // Check if response.data is an arr ay
+      const items = Array.isArray(response.data)
+        ? response.data
+        : [response.data];
+
+      const approvedItems = items.filter((item) => item.type === "Approved");
+      const baseName = productItem.name
+        .split("-")[0]
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "");
+      // Navigate directly to the product detail page
+      navigate(`/koi/${baseName}/${productItem.id}`);
     } catch (error) {
       console.error("Error fetching product item:", error);
+      toast.error("Không thể xem chi tiết sản phẩm");
     }
   };
 
