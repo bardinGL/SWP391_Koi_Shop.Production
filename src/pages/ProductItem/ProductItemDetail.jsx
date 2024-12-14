@@ -9,7 +9,7 @@ import Reviews from "../../components/ReviewSection";
 import { getUserInfo } from "../../services/UserService";
 import FishSpinner from "../../components/FishSpinner";
 import { getCertificateByProductItem } from "../../services/CertificateService";
-import './ProductItemDetail.css';
+import "./ProductItemDetail.css";
 
 const ProductItemDetail = () => {
   const { id } = useParams();
@@ -18,6 +18,21 @@ const ProductItemDetail = () => {
   const [certificates, setCertificates] = useState([]);
   const [isLoadingCertificates, setIsLoadingCertificates] = useState(false);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
+  console.log("🚀 ~ ProductItemDetail ~ isOwner:", isOwner);
+
+  useEffect(() => {
+    const getCurrentUser = async () => {
+      const userInfo = await getUserInfo();
+      const userId = userInfo.data?.id;
+      console.log("🚀 ~ getCurrentUser ~ userId:", userId);
+      console.log("🚀 ~ getCurrentUser ~ productItem:", productItem.userId);
+      if (userId && productItem?.userId === userId) {
+        setIsOwner(true);
+      }
+    };
+    getCurrentUser();
+  }, [productItem]);
 
   const fetchCertificates = async (productItemId) => {
     try {
@@ -108,10 +123,12 @@ const ProductItemDetail = () => {
   const CertificateModal = ({ certificates, onClose }) => {
     return (
       <div className="certificate-modal" onClick={onClose}>
-        <div className="modal-content" onClick={e => e.stopPropagation()}>
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
           <div className="modal-header">
             <h2>Chứng chỉ sản phẩm</h2>
-            <button className="close-button" onClick={onClose}>&times;</button>
+            <button className="close-button" onClick={onClose}>
+              &times;
+            </button>
           </div>
           {certificates.length > 0 ? (
             <ul className="certificates-list">
@@ -120,7 +137,8 @@ const ProductItemDetail = () => {
                   <strong>Tên chứng chỉ:</strong> {cert.certificateName} <br />
                   <strong>Nhà cung cấp:</strong> {cert.provider} <br />
                   <strong>Ngày phát hành:</strong>{" "}
-                  {new Date(cert.createdTime).toLocaleDateString("vi-VN")} <br />
+                  {new Date(cert.createdTime).toLocaleDateString("vi-VN")}{" "}
+                  <br />
                   <div>
                     <img
                       src={cert.imageUrl}
@@ -182,50 +200,70 @@ const ProductItemDetail = () => {
               {certificates.length > 0 ? (
                 <>
                   Chứng chỉ:{" "}
-                  <button 
+                  <button
                     className="view-certificate-btn"
                     onClick={() => setShowCertificateModal(true)}
                   >
-                    Xem chi tiết {certificates.length > 0 ? `(${certificates.length})` : ''}
+                    Xem chi tiết{" "}
+                    {certificates.length > 0 ? `(${certificates.length})` : ""}
                   </button>
                 </>
               ) : (
                 <>
-                  Chứng chỉ: <span className="no-certificate">Không có chứng chỉ nào được liên kết với sản phẩm này</span>
+                  Chứng chỉ:{" "}
+                  <span className="no-certificate">
+                    Không có chứng chỉ nào được liên kết với sản phẩm này
+                  </span>
                 </>
               )}
             </li>
           </ul>
-          <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
-            <button
-              style={{
-                padding: "10px",
-                backgroundColor: "#C70025",
-                color: "white",
-                border: "none",
-                borderRadius: "5px",
-                cursor: "pointer",
-              }}
-              onClick={handleQuickBuy}
-            >
-              Đặt Mua Nhanh
-            </button>
-            <button
+          {!isOwner ? (
+            <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+              <button
+                style={{
+                  padding: "10px",
+                  backgroundColor: "#C70025",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+                onClick={handleQuickBuy}
+              >
+                Đặt Mua Nhanh
+              </button>
+              <button
+                style={{
+                  padding: "10px",
+                  backgroundColor: "#0056b3",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  handleAddToCart(1, productItem.id);
+                }}
+              >
+                Thêm vào Giỏ
+              </button>
+            </div>
+          ) : (
+            <div
               style={{
                 padding: "10px",
                 backgroundColor: "#0056b3",
                 color: "white",
                 border: "none",
                 borderRadius: "5px",
-                cursor: "pointer",
-              }}
-              onClick={() => {
-                handleAddToCart(1, productItem.id);
+                marginTop: "20px",
+                width: "fit-content",
               }}
             >
-              Thêm vào Giỏ
-            </button>
-          </div>
+              Cá bạn đã ký gửi, chỉ có thể xem
+            </div>
+          )}
         </div>
       </div>
 
@@ -234,9 +272,9 @@ const ProductItemDetail = () => {
       <Footer />
 
       {showCertificateModal && (
-        <CertificateModal 
-          certificates={certificates} 
-          onClose={() => setShowCertificateModal(false)} 
+        <CertificateModal
+          certificates={certificates}
+          onClose={() => setShowCertificateModal(false)}
         />
       )}
     </>

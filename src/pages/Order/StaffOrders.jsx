@@ -405,7 +405,11 @@ const StaffOrders = () => {
     );
 
   return (
-    <>
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
       {/* <AdminHeader /> */}
 
       <div className="container">
@@ -565,7 +569,7 @@ const StaffOrders = () => {
           </table>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
