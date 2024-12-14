@@ -378,7 +378,11 @@ const StaffOrders = () => {
     );
 
   return (
-    <>
+    <div
+      style={{
+        width: "100%",
+      }}
+    >
       {/* <AdminHeader /> */}
 
       <div className="container">
@@ -399,29 +403,33 @@ const StaffOrders = () => {
 
         <div className="order-tabs">
           <button
-            className={`order-tab-button ${activeTab === "Pending" ? "active" : ""
-              }`}
+            className={`order-tab-button ${
+              activeTab === "Pending" ? "active" : ""
+            }`}
             onClick={() => setActiveTab("Pending")}
           >
             Đang xử lý
           </button>
           <button
-            className={`order-tab-button ${activeTab === "Delivering" ? "active" : ""
-              }`}
+            className={`order-tab-button ${
+              activeTab === "Delivering" ? "active" : ""
+            }`}
             onClick={() => setActiveTab("Delivering")}
           >
             Đang giao hàng
           </button>
           <button
-            className={`order-tab-button ${activeTab === "Completed" ? "active" : ""
-              }`}
+            className={`order-tab-button ${
+              activeTab === "Completed" ? "active" : ""
+            }`}
             onClick={() => setActiveTab("Completed")}
           >
             Đã hoàn thành
           </button>
           <button
-            className={`order-tab-button ${activeTab === "Cancelled" ? "active" : ""
-              }`}
+            className={`order-tab-button ${
+              activeTab === "Cancelled" ? "active" : ""
+            }`}
             onClick={() => setActiveTab("Cancelled")}
           >
             Đã hủy
@@ -460,14 +468,15 @@ const StaffOrders = () => {
                       <td>{order.userName}</td>
                       <td>
                         {new Date(order.createdTime).toLocaleDateString(
-                          "vi-VN", {
-                              year: 'numeric',
-                              month: 'numeric',
-                              day: 'numeric',
-                              hour: '2-digit',
-                              minute: '2-digit',
-                              second: '2-digit'
-                            }
+                          "vi-VN",
+                          {
+                            year: "numeric",
+                            month: "numeric",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                          }
                         )}
                       </td>
                       <td>
@@ -533,7 +542,7 @@ const StaffOrders = () => {
           </table>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
