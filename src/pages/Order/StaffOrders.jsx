@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect, useContext } from "react";
 import { UserContext } from "../../contexts/UserContext";
 import {
@@ -11,13 +10,11 @@ import AdminHeader from "../../layouts/header/AdminHeader";
 import { toast } from "react-toastify";
 import FishSpinner from "../../components/FishSpinner";
 import "./StaffOrders.css";
-import {
-  fetchAllPayment,
-  createPaymentForCOD,
-} from "../../services/PaymentService";
+import { fetchAllPayment, createPaymentForCOD } from "../../services/PaymentService";
 import "./AdminOrder.css";
 import { fetchBatchById } from "../../services/BatchService";
 import { getProdItemById } from "../../services/ProductItemService";
+
 
 const StaffOrders = () => {
   const { user } = useContext(UserContext);
@@ -43,14 +40,14 @@ const StaffOrders = () => {
   const fetchData = async () => {
     try {
       const { data: assignedOrders = [] } = await getAssignedOrders();
-
+      
       const detailedOrders = await Promise.all(
         assignedOrders.map(async (order) => {
           const userResponse = await getUserById(order.userId);
           const processedBatchIds = new Set();
-
+          
           const batchGroups = {};
-          order.items.forEach((item) => {
+          order.items.forEach(item => {
             if (item.batchId) {
               if (!batchGroups[item.batchId]) {
                 batchGroups[item.batchId] = [];
@@ -63,56 +60,49 @@ const StaffOrders = () => {
             ...Object.entries(batchGroups).map(async ([batchId, items]) => {
               const batchResponse = await fetchBatchById(batchId);
               if (batchResponse?.data) {
-                setBatchDetails((prev) => ({
+                setBatchDetails(prev => ({
                   ...prev,
-                  [batchId]: batchResponse.data,
+                  [batchId]: batchResponse.data
                 }));
 
-                const totalQuantity = items.reduce(
-                  (sum, item) => sum + item.quantity,
-                  0
-                );
+                const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
                 return {
-                  type: "batch",
+                  type: 'batch',
                   name: batchResponse.data.name,
                   batchId: batchId,
                   quantity: totalQuantity,
-                  price: batchResponse.data.price,
+                  price: batchResponse.data.price
                 };
               }
               return null;
             }),
 
-            ...(await Promise.all(
+            ...await Promise.all(
               order.items
-                .filter((item) => !item.batchId)
+                .filter(item => !item.batchId)
                 .map(async (item) => {
-                  const productResponse = await getProdItemById(
-                    item.productItemId
-                  );
+                  const productResponse = await getProdItemById(item.productItemId);
                   return {
-                    type: "single",
+                    type: 'single',
                     name: productResponse?.data?.name,
                     imageUrl: productResponse?.data?.imageUrl,
                     quantity: item.quantity,
                     price: productResponse?.data?.price,
                     sex: productResponse?.data?.sex,
                     age: productResponse?.data?.age,
-                    size: productResponse?.data?.size,
+                    size: productResponse?.data?.size
                   };
                 })
-            )),
+            )
           ]);
 
-          const filteredProductDetails = productDetails.filter(
-            (item) => item !== null
-          );
+          const filteredProductDetails = productDetails.filter(item => item !== null);
 
           return {
             ...order,
             userName: userResponse?.data?.name || "Không xác định",
-            productDetails: filteredProductDetails,
+            productDetails: filteredProductDetails
           };
         })
       );
@@ -169,10 +159,10 @@ const StaffOrders = () => {
       );
 
       if (newStatus === "Completed") {
-        const orderPayments = Array.isArray(payments)
+        const orderPayments = Array.isArray(payments) 
           ? payments.filter((p) => p.orderId === orderId)
           : [];
-
+        
         if (orderPayments.length === 0) {
           try {
             const response = await createPaymentForCOD({ orderId: orderId });
@@ -180,19 +170,17 @@ const StaffOrders = () => {
               toast.success("Đã hoàn thành đơn hàng và tạo thanh toán!");
               return;
             } else {
-              toast.warn(
-                "Không thể xác nhận thanh toán. Vui lòng kiểm tra lại."
-              );
-              return;
+              console.warn("Payment creation response is empty or invalid");
+              
             }
           } catch (paymentError) {
             console.error("Error creating payment:", paymentError);
             toast.error("Lỗi khi tạo thanh toán. Vui lòng thử lại sau.");
-            return;
           }
+        } else {
+          console.info("Đơn hàng hoàn tất và thanh toán đã tồn tại.");
         }
       }
-
       toast.success("Cập nhật trạng thái đơn hàng thành công!");
     } catch (error) {
       console.error("Error updating order status:", error);
@@ -204,8 +192,9 @@ const StaffOrders = () => {
 
   const filterOrdersByStatus = (status) => {
     return orders
-      .filter(
-        (order) => order.status === status && order.consignmentId === null
+      .filter((order) => 
+        order.status === status && 
+        order.consignmentId === null
       )
       .filter(
         (order) =>
@@ -236,9 +225,9 @@ const StaffOrders = () => {
   };
 
   const toggleBatchExpand = (batchId) => {
-    setExpandedBatches((prev) =>
-      prev.includes(batchId)
-        ? prev.filter((id) => id !== batchId)
+    setExpandedBatches(prev => 
+      prev.includes(batchId) 
+        ? prev.filter(id => id !== batchId)
         : [...prev, batchId]
     );
   };
@@ -272,10 +261,10 @@ const StaffOrders = () => {
 
           <div className="ao-products-section">
             <div className="ao-section-title">Chi tiết sản phẩm</div>
-
+            
             {order.productDetails.map((item, index) => (
               <div key={index} className="ao-product-item">
-                {item.type === "batch" ? (
+                {item.type === 'batch' ? (
                   <>
                     <div className="ao-product-header">
                       <div className="ao-product-type">Lô hàng</div>
@@ -286,67 +275,53 @@ const StaffOrders = () => {
                       <div className="ao-product-price">
                         {item.price?.toLocaleString("vi-VN")} VND
                       </div>
-                      <button
-                        className={`ao-expand-button ${
-                          expandedBatches.includes(item.batchId)
-                            ? "expanded"
-                            : ""
-                        }`}
+                      <button 
+                        className={`ao-expand-button ${expandedBatches.includes(item.batchId) ? 'expanded' : ''}`}
                         onClick={() => toggleBatchExpand(item.batchId)}
                       >
                         <i className="fas fa-chevron-down"></i>
                       </button>
                     </div>
-
-                    {expandedBatches.includes(item.batchId) &&
-                      batchDetails[item.batchId]?.items && (
-                        <div className="ao-batch-items">
-                          {batchDetails[item.batchId].items.map(
-                            (batchItem, idx) => (
-                              <div
-                                key={`${item.batchId}-${idx}`}
-                                className="ao-batch-subitem"
-                              >
-                                <img
-                                  src={
-                                    batchItem.imageUrl || "/default-product.png"
-                                  }
-                                  alt={batchItem.name}
-                                  className="ao-item-image"
-                                />
-                                <div className="ao-item-details">
-                                  <div className="ao-item-name">
-                                    {batchItem.name}
-                                  </div>
-                                  <div className="ao-item-specs">
-                                    <span>Giới tính: {batchItem.sex}</span>
-                                    <span>Tuổi: {batchItem.age}</span>
-                                    <span>Size: {batchItem.size}</span>
-                                  </div>
-                                </div>
+                    
+                    {expandedBatches.includes(item.batchId) && batchDetails[item.batchId]?.items && (
+                      <div className="ao-batch-items">
+                        {batchDetails[item.batchId].items.map((batchItem, idx) => (
+                          <div key={`${item.batchId}-${idx}`} className="ao-batch-subitem">
+                            <img 
+                              src={batchItem.imageUrl || '/default-product.png'} 
+                              alt={batchItem.name}
+                              className="ao-item-image"
+                            />
+                            <div className="ao-item-details">
+                              <div className="ao-item-name">{batchItem.name}</div>
+                              <div className="ao-item-specs">
+                                <span>Giới tính: {batchItem.sex}</span>
+                                <span>Tuổi: {batchItem.age}</span>
+                                <span>Size: {batchItem.size}</span>
                               </div>
-                            )
-                          )}
-                        </div>
-                      )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </>
                 ) : (
                   <div className="ao-single-item">
                     <div className="ao-single-header">
                       <div className="ao-single-badge">Sản phẩm đơn lẻ</div>
                     </div>
-
+                    
                     <div className="ao-single-content">
-                      <img
-                        src={item.imageUrl || "/default-product.png"}
+                      <img 
+                        src={item.imageUrl || '/default-product.png'} 
                         alt={item.name}
                         className="ao-item-image"
                         onError={(e) => {
-                          e.target.src = "/default-product.png";
+                          e.target.src = '/default-product.png';
                           e.target.onerror = null;
                         }}
                       />
-
+                      
                       <div className="ao-item-info">
                         <div className="ao-item-name">{item.name}</div>
                         <div className="ao-item-specs">
@@ -364,11 +339,9 @@ const StaffOrders = () => {
                           </div>
                         </div>
                       </div>
-
+                      
                       <div className="ao-item-purchase">
-                        <span className="ao-purchase-quantity">
-                          Số lượng: {item.quantity}
-                        </span>
+                        <span className="ao-purchase-quantity">Số lượng: {item.quantity}</span>
                         <span className="ao-purchase-price">
                           {item.price?.toLocaleString("vi-VN")} VND
                         </span>

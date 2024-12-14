@@ -3,6 +3,7 @@ import {
   getConsignmentsForUser,
   checkoutConsignment,
   updateConsignmentItemStatus,
+  createOrderConsignment 
 } from "../../services/ConsignmentService";
 import { createPayment, callBackPayment } from "../../services/PaymentService";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -232,6 +233,30 @@ const UserConsignment = () => {
   };
 
   if (loading) return <FishSpinner />;
+  
+  const handleCreateOrder = async (id) => {
+    try {
+      setIsProcessing(true);
+      const response = await createOrderConsignment(id);  
+      if (response.statusCode === 201) {
+        navigate("/")
+        
+  
+        // Tải lại danh sách ký gửi để cập nhật trạng thái
+        await fetchConsignments();
+  
+        toast.success("Tạo đơn hàng thành công!");
+      } else {
+        throw new Error("Tạo đơn hàng thất bại");
+      }
+    } catch (error) {
+      console.error("Create order error:", error);
+      toast.error("Không thể tạo đơn hàng. Vui lòng thử lại sau.");
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+  
 
   return (
     <div className="uc-container">
@@ -324,9 +349,17 @@ const UserConsignment = () => {
                     </span>
                   </td>
                   <td>
-                    
-                    
-                  </td>
+  {consignment.category !== "Cá Gửi Bán" && (
+    <button
+      className="btn btn-primary btn-sm"
+      onClick={() => handleCreateOrder(consignment.productItemId)}
+      disabled={isProcessing}
+    >
+      Thanh Toán
+    </button>
+  )}
+</td>
+
                 </tr>
               ))}
             </tbody>

@@ -18,6 +18,25 @@ const createConsignment = (data, salePrice) => {
   });
 };
 
+const createOrderConsignment = (id) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("No token found! Please log in again.");
+  }
+
+  return axios.post(
+    `controller/checkout-healthcare/${id}`,
+    {}, // Payload body (để trống)
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, // Thêm "Bearer" nếu API yêu cầu
+      },
+    }
+  );
+};
+
+  
+
 const updateConsignmentItemStatus = (id, status, type) => {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -123,4 +142,5 @@ export {
   getConsignmentsForUser,
   checkoutConsignment,
   deleteConsignmentItem,
+  createOrderConsignment
 };
