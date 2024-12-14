@@ -267,7 +267,7 @@ export const Header = () => {
                   </div>
                 </div>
                 <button
-                  className="d-flex flex-row border border-0 rounded align-items-center justify-content-center bg-white "
+                  className="d-flex flex-row border border-0 rounded align-items-center justify-content-center bg-black text-white "
                   style={{ width: 50, height: 50 }}
                   onClick={handleClickCart}
                 >
