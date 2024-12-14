@@ -66,6 +66,7 @@ const AppRoutes = () => {
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/admin-promotion" element={<AdminPromotion />} />
           <Route path="/admin-batch" element={<AdminBatch />} />
+          <Route path="/staff-orders" element={<StaffOrders />} />
         </Route>
         {/* </Route> */}
 
@@ -77,7 +78,6 @@ const AppRoutes = () => {
         <Route path="/batches/:id" element={<BatchDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="order" element={<Order />} />
-        <Route path="/staff-orders" element={<StaffOrders />} />
         <Route path="/test" element={<Cloudinary />} />
         <Route path="payment-success" element={<Payment />} />
         <Route path="payment-failed" element={<PaymentFailed />} />
