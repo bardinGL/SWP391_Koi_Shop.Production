@@ -1,9 +1,10 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "../../layouts/header/header";
 import { Footer } from "../../layouts/footer/footer";
 import { toast } from "react-toastify";
-import { getProdItemByProdId } from "../../services/ProductItemService";
+import { getProdItemById } from "../../services/ProductItemService";
 import "./ProductComparison.css";
 
 const ProductComparison = () => {
@@ -25,17 +26,36 @@ const ProductComparison = () => {
 
   const handleViewProduct = async (product) => {
     try {
-      const response = await getProdItemByProdId(product.productId);
-      const approvedItems = response.data.filter(
-        (item) => item.type === "Approved"
-      );
+      // Check if product and required properties exist
+      if (!product || !product.id || !product.name) {
+        console.error("Invalid product data:", product);
+        toast.error("Không thể xem chi tiết sản phẩm này");
+        return;
+      }
 
-      navigate(
-        `/koi/${product.name.toLowerCase().replace(/\s+/g, "")}/${product.id}`
-      );
+      const response = await getProdItemById(product.id);
+      console.log(response);
+      if (!response || !response.data) {
+        toast.error("Không thể tải thông tin sản phẩm");
+        return;
+      }
+
+      // Check if response.data is an arr ay
+      const items = Array.isArray(response.data)
+        ? response.data
+        : [response.data];
+
+      const approvedItems = items.filter((item) => item.type === "Approved");
+      const baseName = product.name
+        .split("-")[0]
+        .trim()
+        .toLowerCase()
+        .replace(/\s+/g, "");
+      // Navigate directly to the product detail page
+      navigate(`/koi/${baseName}/${product.id}`);
     } catch (error) {
       console.error("Error fetching product item:", error);
-      toast.error("Error navigating to product details");
+      toast.error("Không thể xem chi tiết sản phẩm");
     }
   };
 
