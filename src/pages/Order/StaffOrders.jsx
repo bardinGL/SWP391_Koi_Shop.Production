@@ -171,7 +171,7 @@ const StaffOrders = () => {
               return;
             } else {
               console.warn("Payment creation response is empty or invalid");
-              toast.warn("Không thể xác nhận thanh toán. Vui lòng kiểm tra lại.");
+              
             }
           } catch (paymentError) {
             console.error("Error creating payment:", paymentError);
