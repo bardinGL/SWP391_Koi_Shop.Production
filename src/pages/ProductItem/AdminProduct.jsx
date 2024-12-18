@@ -322,7 +322,7 @@ const AdminProduct = () => {
             <tr>
               <th>Cá Koi</th>
               <th>Giá</th>
-              <th>Loại</th>
+            
               <th>Nguồn gốc</th>
               <th>Giới tính</th>
               <th>Tuổi</th>
@@ -346,7 +346,7 @@ const AdminProduct = () => {
                 <tr key={item.id}>
                   <td>{item.name}</td>
                   <td>{item.price}</td>
-                  <td>{item.category}</td>
+                  
                   <td>{item.origin}</td>
                   <td>{item.sex}</td>
                   <td>{item.age}</td>
