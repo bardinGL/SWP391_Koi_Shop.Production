@@ -19,14 +19,12 @@ const ProductItemDetail = () => {
   const [isLoadingCertificates, setIsLoadingCertificates] = useState(false);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
-  console.log("🚀 ~ ProductItemDetail ~ isOwner:", isOwner);
+  
 
   useEffect(() => {
     const getCurrentUser = async () => {
       const userInfo = await getUserInfo();
       const userId = userInfo.data?.id;
-      console.log("🚀 ~ getCurrentUser ~ userId:", userId);
-      console.log("🚀 ~ getCurrentUser ~ productItem:", productItem.userId);
       if (userId && productItem?.userId === userId) {
         setIsOwner(true);
       }
@@ -53,15 +51,20 @@ const ProductItemDetail = () => {
     const fetchProductItem = async () => {
       try {
         const response = await getProdItemById(id);
+        console.log(response)
+        
         if (response.data.type === "Approved" && response.data.quantity > 0) {
           setProductItem(response.data);
           fetchCertificates(id);
         } else {
+          console.log("Failed condition: ", response.data);
+
           toast.error("Sản phẩm này đã hết hàng");
           navigate(-1);
         }
       } catch (error) {
         console.error("Error fetching product:", error);
+        
         navigate("/");
       }
     };
