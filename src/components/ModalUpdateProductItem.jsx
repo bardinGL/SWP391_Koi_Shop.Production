@@ -104,6 +104,7 @@ const ModalUpdateProductItem = ({ isOpen, onClose, onSubmit, productData, setIsU
     }
   };
 
+
   if (!isOpen) return null;
 
   return (
@@ -125,15 +126,15 @@ const ModalUpdateProductItem = ({ isOpen, onClose, onSubmit, productData, setIsU
                 <label htmlFor="price">Giá:</label>
                 <input id="price" type="number" name="price" value={formData.price} onChange={handleChange} required />
 
-                <label htmlFor="category">Danh Mục:</label>
-                <input id="category" name="category" value={formData.category} onChange={handleChange} required />
+                
 
                 <label htmlFor="quantity">Số Lượng:</label>
                 <input id="quantity" type="number" name="quantity" value={formData.quantity} readOnly />
 
                 <label htmlFor="productId">Sản Phẩm:</label>
                 <select id="productId" name="productId" value={formData.productId} onChange={handleChange} required>
-                  <option value="">-- Select Product --</option>
+                  
+                  
                   {products.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.name}
