@@ -56,6 +56,7 @@ const Batches = () => {
               {batches.map((batch) => {
                 const isSoldOut = batch.items.every(item => item.quantity === 0);
                 
+                
                 return (
                   <div 
                     key={batch.id} 
@@ -77,7 +78,7 @@ const Batches = () => {
                         {batch.price?.toLocaleString('vi-VN')} VND
                       </p>
                       <div className="batch-item-specs">
-                        <p>Số lượng cá: {batch.quantity || 0}</p>
+                        <p>Số lượng cá: {batch.items.length || 0}</p>
                       </div>
                       <div className="batch-item-actions">
                         <button

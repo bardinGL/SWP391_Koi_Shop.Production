@@ -335,7 +335,7 @@ const AdminProduct = () => {
               <th>pH</th>
               <th>Số lượng</th>
               <th>Tình trạng sản phẩm</th>
-              <th>Loại cá</th>
+              
               <th>Ảnh</th>
               <th>Actions</th>
             </tr>
@@ -389,7 +389,7 @@ const AdminProduct = () => {
                       item.type
                     )}
                   </td>
-                  <td>{item.productName}</td>
+                  
                   <td>
                     {item.imageUrl ? (
                       <img
