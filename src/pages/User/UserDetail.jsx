@@ -89,6 +89,7 @@ const UserDetail = () => {
           const paymentsResponse = await fetchAllPayment();
           setPayments(paymentsResponse?.data?.data || paymentsResponse?.data || []);
           const ordersResponse = await getOrderByUser();
+          console.log(ordersResponse.data)
           const allOrders = Array.isArray(ordersResponse.data)
             ? ordersResponse.data
             : [];

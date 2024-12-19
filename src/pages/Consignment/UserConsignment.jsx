@@ -349,16 +349,20 @@ const UserConsignment = () => {
                     </span>
                   </td>
                   <td>
-  {consignment.category !== "Cá Gửi Bán" && (
-    <button
-      className="btn btn-primary btn-sm"
-      onClick={() => handleCreateOrder(consignment.productItemId)}
-      disabled={isProcessing}
-    >
-      Thanh Toán
-    </button>
-  )}
+  {consignment.category !== "Cá Gửi Bán" &&
+    !["Pending", "Checkedout", "Cancelled"].includes(
+      consignment.consignmentItemStatus
+    ) && (
+      <button
+        className="btn btn-primary btn-sm"
+        onClick={() => handleCreateOrder(consignment.productItemId)}
+        disabled={isProcessing}
+      >
+        Thanh Toán
+      </button>
+    )}
 </td>
+
 
                 </tr>
               ))}
