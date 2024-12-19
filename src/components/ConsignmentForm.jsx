@@ -64,11 +64,27 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value || "",
-    }));
+  
+    if (name === "salePrice") {
+      // Chỉ cho phép ký tự số và định dạng số theo dấu "."
+      const numericValue = value.replace(/\D/g, ""); // Loại bỏ ký tự không phải số
+      const formattedValue = new Intl.NumberFormat("de-DE").format(numericValue); // Định dạng hàng nghìn bằng dấu "."
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: numericValue, // Lưu giá trị thô (số)
+      }));
+      // Cập nhật giá trị hiển thị cho trường nhập
+      e.target.value = formattedValue; 
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value || "",
+      }));
+    }
   };
+  
+  
+  
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -390,20 +406,25 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
               </label>
             </div>
             {consignmentType === ConsignmentType.SELL && (
-              <div>
-                <div className="form-group">
-                  <label htmlFor="price">Giá mong muốn bán</label>
-                  <input
-                    type="number"
-                    id="salePrice"
-                    name="salePrice"
-                    value={formData.salePrice || 0}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-            )}
+  <div>
+    <div className="form-group">
+      <label htmlFor="price">Giá mong muốn bán</label>
+      <input
+        type="text"
+        id="salePrice"
+        name="salePrice"
+        value={
+          formData.salePrice
+            ? new Intl.NumberFormat("de-DE").format(formData.salePrice)
+            : ""
+        } // Định dạng giá trị hiển thị
+        onChange={handleChange}
+        required
+      />
+    </div>
+  </div>
+)}
+
           </>
         );
       default:
