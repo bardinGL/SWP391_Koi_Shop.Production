@@ -35,8 +35,6 @@ const createOrderConsignment = (id) => {
   );
 };
 
-  
-
 const updateConsignmentItemStatus = (id, status, type) => {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -50,6 +48,26 @@ const updateConsignmentItemStatus = (id, status, type) => {
       productItemUpdates: {
         type, // Trạng thái productItemStatus
       },
+    },
+    {
+      headers: {
+        Authorization: `${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};
+
+const updateConsignmentStatus = (id, status) => {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    throw new Error("No token found! Please log in again.");
+  }
+
+  return axios.put(
+    `controller/update-consignment-item-status/${id}`,
+    {
+      status,
     },
     {
       headers: {
@@ -142,5 +160,6 @@ export {
   getConsignmentsForUser,
   checkoutConsignment,
   deleteConsignmentItem,
-  createOrderConsignment
+  createOrderConsignment,
+  updateConsignmentStatus,
 };

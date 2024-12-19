@@ -5,6 +5,7 @@ import {
   checkoutConsignment,
   updateConsignmentItemStatus,
   createOrderConsignment,
+  updateConsignmentStatus,
 } from "../../services/ConsignmentService";
 import { createPayment, callBackPayment } from "../../services/PaymentService";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -289,6 +290,20 @@ const UserConsignment = () => {
     }
   };
 
+  const handleChangeStatusToPaid = async (consignmentItemId) => {
+    try {
+      await updateConsignmentStatus(consignmentItemId, "Paid");
+      const consignment = consignments.find(
+        (consignment) => consignment.consignmentItemId === consignmentItemId
+      );
+      if (consignment) {
+        consignment.consignmentItemStatus = "Paid";
+        setConsignments([...consignments]);
+        toast.success("Đã cập nhật trạng thái thành công!");
+      }
+    } catch (error) {}
+  };
+
   const ProductDetailView = ({ product, onClose }) => {
     if (!product) return null;
 
@@ -395,8 +410,9 @@ const UserConsignment = () => {
         <div className="uc-table-container">
           <div className="uc-tabs">
             <button
-              className={`uc-tab-button ${statusTab === "Pending" ? "active" : ""
-                }`}
+              className={`uc-tab-button ${
+                statusTab === "Pending" ? "active" : ""
+              }`}
               onClick={() => setStatusTab("Pending")}
             >
               <i className="fas fa-clock me-2"></i>
@@ -406,8 +422,9 @@ const UserConsignment = () => {
               </span>
             </button>
             <button
-              className={`uc-tab-button ${statusTab === "Approved" ? "active" : ""
-                }`}
+              className={`uc-tab-button ${
+                statusTab === "Approved" ? "active" : ""
+              }`}
               onClick={() => setStatusTab("Approved")}
             >
               <i className="fas fa-check me-2"></i>
@@ -417,8 +434,9 @@ const UserConsignment = () => {
               </span>
             </button>
             <button
-              className={`uc-tab-button ${statusTab === "Checkedout" ? "active" : ""
-                }`}
+              className={`uc-tab-button ${
+                statusTab === "Checkedout" ? "active" : ""
+              }`}
               onClick={() => setStatusTab("Checkedout")}
             >
               <i className="fas fa-box-open me-2"></i>
@@ -428,8 +446,21 @@ const UserConsignment = () => {
               </span>
             </button>
             <button
-              className={`uc-tab-button ${statusTab === "Cancelled" ? "active" : ""
-                }`}
+              className={`uc-tab-button ${
+                statusTab === "Paid" ? "active" : ""
+              }`}
+              onClick={() => setStatusTab("Paid")}
+            >
+              <i className="fas fa-money-bill"></i>
+              Đã nhận được hàng
+              <span className="uc-count">
+                {getConsignmentCountByStatus("Paid")}
+              </span>
+            </button>
+            <button
+              className={`uc-tab-button ${
+                statusTab === "Cancelled" ? "active" : ""
+              }`}
               onClick={() => setStatusTab("Cancelled")}
             >
               <i className="fas fa-ban me-2"></i>
@@ -450,6 +481,8 @@ const UserConsignment = () => {
                 <th>Ngày tạo đơn</th>
                 <th>Loại ký gửi</th>
                 <th>Trạng thái</th>
+
+                {statusTab === "Checkedout" && <th>Hành động</th>}
               </tr>
             </thead>
             <tbody>
@@ -503,20 +536,36 @@ const UserConsignment = () => {
                       {consignment.consignmentItemStatus}
                     </span>
                   </td>
-                  <td>
+                  {/* <td>
                     {consignment.category !== "Cá Gửi Bán" &&
                       !["Pending", "Checkedout", "Cancelled"].includes(
                         consignment.consignmentItemStatus
                       ) && (
                         <button
                           className="btn btn-primary btn-sm"
-                          onClick={() => handleCreateOrder(consignment.productItemId)}
+                          onClick={() =>
+                            handleCreateOrder(consignment.productItemId)
+                          }
                           disabled={isProcessing}
                         >
                           Thanh Toán
                         </button>
                       )}
-                  </td>
+                  </td> */}
+                  {statusTab === "Checkedout" && (
+                    <td>
+                      <button
+                        className="btn btn-primary btn-sm"
+                        onClick={() =>
+                          handleChangeStatusToPaid(
+                            consignment.consignmentItemId
+                          )
+                        }
+                      >
+                        Đã nhận hàng
+                      </button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>
