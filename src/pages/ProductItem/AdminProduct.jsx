@@ -154,7 +154,7 @@ const AdminProduct = () => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPageIndex(newPage);
-      console.log("Changing page to:", newPage);
+      
     }
   };
 
@@ -164,7 +164,7 @@ const AdminProduct = () => {
   };
 
   const filterProductsByStatus = (status) => {
-    console.log(listProductItems);
+    
     return Array.isArray(listProductItems)
       ? listProductItems.filter(
           (item) =>

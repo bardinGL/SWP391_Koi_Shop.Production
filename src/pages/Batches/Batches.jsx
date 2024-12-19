@@ -13,6 +13,7 @@ const Batches = () => {
     const fetchBatches = async () => {
       try {
         const response = await fetchAllBatchs();
+        console.log(response)
         if (response && response.data) {
           setBatches(response.data);
         }
