@@ -87,8 +87,11 @@ const UserDetail = () => {
           setPayments(paymentsResponse.data?.data || []);
         } else {
           const paymentsResponse = await fetchAllPayment();
-          setPayments(paymentsResponse?.data?.data || paymentsResponse?.data || []);
+          setPayments(
+            paymentsResponse?.data?.data || paymentsResponse?.data || []
+          );
           const ordersResponse = await getOrderByUser();
+          console.log(ordersResponse.data)
           const allOrders = Array.isArray(ordersResponse.data)
             ? ordersResponse.data
             : [];
@@ -162,7 +165,6 @@ const UserDetail = () => {
     }
   }, [user, isPaymentPage]);
 
-
   const handleNavigateToPayments = () => {
     navigate(`/${id}/payments`);
   };
@@ -204,16 +206,18 @@ const UserDetail = () => {
         setUpdatedUser((prev) => ({
           ...prev,
           ...response.data?.data,
-          password: ""
+          password: "",
         }));
         setEditMode(false);
         toast.success("Cập nhật thông tin thành công!");
 
         // Redirect to cart if coming from cart page and has address/phone
         const searchParams = new URLSearchParams(window.location.search);
-        if (searchParams.get("fromCart") === "true" &&
+        if (
+          searchParams.get("fromCart") === "true" &&
           updatedUser.address?.trim() &&
-          updatedUser.phone?.trim()) {
+          updatedUser.phone?.trim()
+        ) {
           navigate("/cart");
         }
       }
@@ -304,7 +308,7 @@ const UserDetail = () => {
         orderDescription: "Thanh toán lại đơn hàng thất bại",
         orderType: "billpayment",
         name: "Your Name", // Optionally customize with user name
-        orderId: orderId,  // Use the existing failed order's ID
+        orderId: orderId, // Use the existing failed order's ID
       });
 
       // Redirect to the generated payment URL
@@ -320,7 +324,10 @@ const UserDetail = () => {
   };
 
   const isOrderPaid = (orderId) => {
-    return Array.isArray(payments) && payments.some(payment => payment?.orderId === orderId);
+    return (
+      Array.isArray(payments) &&
+      payments.some((payment) => payment?.orderId === orderId)
+    );
   };
 
   if (!user.auth) {
@@ -466,8 +473,9 @@ const UserDetail = () => {
                     <div className="user-info-item">
                       <strong>Trạng thái:</strong>
                       <div
-                        className={`user-auth-badge ${user.auth ? "verified" : "unverified"
-                          }`}
+                        className={`user-auth-badge ${
+                          user.auth ? "verified" : "unverified"
+                        }`}
                       >
                         {user.auth ? "Đã xác thực" : "Chưa xác thực"}
                       </div>
@@ -538,36 +546,41 @@ const UserDetail = () => {
               <>
                 <div className="order-tabs">
                   <button
-                    className={`order-tab-button ${activeTab === "Pending" ? "active" : ""
-                      }`}
+                    className={`order-tab-button ${
+                      activeTab === "Pending" ? "active" : ""
+                    }`}
                     onClick={() => setActiveTab("Pending")}
                   >
                     Đang xử lý
                   </button>
                   <button
-                    className={`order-tab-button ${activeTab === "Delivering" ? "active" : ""
-                      }`}
+                    className={`order-tab-button ${
+                      activeTab === "Delivering" ? "active" : ""
+                    }`}
                     onClick={() => setActiveTab("Delivering")}
                   >
                     Đang giao hàng
                   </button>
                   <button
-                    className={`order-tab-button ${activeTab === "Completed" ? "active" : ""
-                      }`}
+                    className={`order-tab-button ${
+                      activeTab === "Completed" ? "active" : ""
+                    }`}
                     onClick={() => setActiveTab("Completed")}
                   >
                     Đã hoàn thành
                   </button>
                   <button
-                    className={`order-tab-button ${activeTab === "Cancelled" ? "active" : ""
-                      }`}
+                    className={`order-tab-button ${
+                      activeTab === "Cancelled" ? "active" : ""
+                    }`}
                     onClick={() => setActiveTab("Cancelled")}
                   >
                     Đã hủy
                   </button>
                   <button
-                    className={`order-tab-button ${activeTab === "Failed" ? "active" : ""
-                      }`}
+                    className={`order-tab-button ${
+                      activeTab === "Failed" ? "active" : ""
+                    }`}
                     onClick={() => setActiveTab("Failed")}
                   >
                     Thất bại
@@ -581,57 +594,76 @@ const UserDetail = () => {
                       <th>Sản Phẩm</th>
                       <th>Tổng Tiền</th>
                       <th>Ngày Mua</th>
-                      {["Pending", "Delivering"].includes(activeTab) && <th>Hình thức</th>}
+                      {["Pending", "Delivering"].includes(activeTab) && (
+                        <th>Hình thức</th>
+                      )}
                       <th>Trạng Thái</th>
                       <th>Tình trạng thanh toán</th>
                       {activeTab === "Completed" && <th>Xác Nhận Hàng</th>}
-                      {(activeTab === "Pending" || activeTab === "Failed") && <th>Hủy Đơn Hàng</th>}
+                      {(activeTab === "Pending" || activeTab === "Failed") && (
+                        <th>Hủy Đơn Hàng</th>
+                      )}
                       {activeTab === "Failed" && <th>Mua lại</th>}
-
                     </tr>
                   </thead>
                   <tbody>
                     {filterOrdersByStatus(activeTab).map((order) => (
                       <tr key={order.orderId}>
                         <td>{order.orderId}</td>
-                        
+
                         <td>
                           {(() => {
                             // Group items by batchId
-                            const groupedItems = order.items.reduce((acc, item) => {
-                              if (item.batchId) {
-                                if (!acc[item.batchId]) {
-                                  acc[item.batchId] = { batchId: item.batchId, items: [] };
+                            const groupedItems = order.items.reduce(
+                              (acc, item) => {
+                                if (item.batchId) {
+                                  if (!acc[item.batchId]) {
+                                    acc[item.batchId] = {
+                                      batchId: item.batchId,
+                                      items: [],
+                                    };
+                                  }
+                                  acc[item.batchId].items.push(item);
+                                } else {
+                                  acc[item.productItemId] = {
+                                    ...item,
+                                    isIndividual: true,
+                                  };
                                 }
-                                acc[item.batchId].items.push(item);
-                              } else {
-                                acc[item.productItemId] = { ...item, isIndividual: true };
-                              }
-                              return acc;
-                            }, {});
+                                return acc;
+                              },
+                              {}
+                            );
 
-                            return Object.values(groupedItems).map((group, index) =>
-                              group.isIndividual ? (
-                                // Individual item
-                                <div key={`${group.productItemId}-${index}`}>
-                                  {productNames[group.productItemId] || `Product ${group.productItemId}`}{" "}
-                                  x {group.quantity}
-                                </div>
-                              ) : (
-                                // Batch group
-                                <div key={`batch-${group.batchId}-${index}`}>
-                                  <strong>
-                                    {batchDetails[group.batchId]?.name || `Batch ${group.batchId}`}
-                                  </strong>
-                                  <ul>
-                                    {batchDetails[group.batchId]?.items.map((batchItem, idx) => (
-                                      <li key={`${batchItem.batchItemId}-${idx}`}>
-                                        {batchItem.name}
-                                      </li>
-                                    ))}
-                                  </ul>
-                                </div>
-                              )
+                            return Object.values(groupedItems).map(
+                              (group, index) =>
+                                group.isIndividual ? (
+                                  // Individual item
+                                  <div key={`${group.productItemId}-${index}`}>
+                                    {productNames[group.productItemId] ||
+                                      `Product ${group.productItemId}`}{" "}
+                                    x {group.quantity}
+                                  </div>
+                                ) : (
+                                  // Batch group
+                                  <div key={`batch-${group.batchId}-${index}`}>
+                                    <strong>
+                                      {batchDetails[group.batchId]?.name ||
+                                        `Batch ${group.batchId}`}
+                                    </strong>
+                                    <ul>
+                                      {batchDetails[group.batchId]?.items.map(
+                                        (batchItem, idx) => (
+                                          <li
+                                            key={`${batchItem.batchItemId}-${idx}`}
+                                          >
+                                            {batchItem.name}
+                                          </li>
+                                        )
+                                      )}
+                                    </ul>
+                                  </div>
+                                )
                             );
                           })()}
                         </td>
@@ -693,7 +725,8 @@ const UserDetail = () => {
                             )}
                           </td>
                         )}
-                        {(activeTab === "Pending" || activeTab === "Failed") && (
+                        {(activeTab === "Pending" ||
+                          activeTab === "Failed") && (
                           <td>
                             <button
                               className="btn btn-danger"
