@@ -395,9 +395,8 @@ const UserConsignment = () => {
         <div className="uc-table-container">
           <div className="uc-tabs">
             <button
-              className={`uc-tab-button ${
-                statusTab === "Pending" ? "active" : ""
-              }`}
+              className={`uc-tab-button ${statusTab === "Pending" ? "active" : ""
+                }`}
               onClick={() => setStatusTab("Pending")}
             >
               <i className="fas fa-clock me-2"></i>
@@ -407,9 +406,8 @@ const UserConsignment = () => {
               </span>
             </button>
             <button
-              className={`uc-tab-button ${
-                statusTab === "Approved" ? "active" : ""
-              }`}
+              className={`uc-tab-button ${statusTab === "Approved" ? "active" : ""
+                }`}
               onClick={() => setStatusTab("Approved")}
             >
               <i className="fas fa-check me-2"></i>
@@ -419,9 +417,8 @@ const UserConsignment = () => {
               </span>
             </button>
             <button
-              className={`uc-tab-button ${
-                statusTab === "Checkedout" ? "active" : ""
-              }`}
+              className={`uc-tab-button ${statusTab === "Checkedout" ? "active" : ""
+                }`}
               onClick={() => setStatusTab("Checkedout")}
             >
               <i className="fas fa-box-open me-2"></i>
@@ -431,9 +428,8 @@ const UserConsignment = () => {
               </span>
             </button>
             <button
-              className={`uc-tab-button ${
-                statusTab === "Cancelled" ? "active" : ""
-              }`}
+              className={`uc-tab-button ${statusTab === "Cancelled" ? "active" : ""
+                }`}
               onClick={() => setStatusTab("Cancelled")}
             >
               <i className="fas fa-ban me-2"></i>
@@ -447,7 +443,7 @@ const UserConsignment = () => {
           <table className="uc-table">
             <thead>
               <tr>
-                <th>Mã ký gửi</th>
+                <th>Hình ảnh</th>
                 <th>Tên cá</th>
                 <th>Giá Bán/Phí Chăm Sóc</th>
 
@@ -508,17 +504,18 @@ const UserConsignment = () => {
                     </span>
                   </td>
                   <td>
-                    {consignment.category !== "Cá Gửi Bán" && (
-                      <button
-                        className="btn btn-primary btn-sm"
-                        onClick={() =>
-                          handleCreateOrder(consignment.productItemId)
-                        }
-                        disabled={isProcessing}
-                      >
-                        Thanh Toán
-                      </button>
-                    )}
+                    {consignment.category !== "Cá Gửi Bán" &&
+                      !["Pending", "Checkedout", "Cancelled"].includes(
+                        consignment.consignmentItemStatus
+                      ) && (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={() => handleCreateOrder(consignment.productItemId)}
+                          disabled={isProcessing}
+                        >
+                          Thanh Toán
+                        </button>
+                      )}
                   </td>
                 </tr>
               ))}

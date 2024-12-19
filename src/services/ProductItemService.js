@@ -15,7 +15,7 @@ const getAllProdItem = () => {
 };
 
 const getProdItemById = (id) => {
-  return axios.get(`ProductItem/get-product-item-for-staff/${id}`);
+  return axios.get(`ProductItem/get-product-item-for-user/${id}`);
 };
 
 const getNameOfProdItem = async (id) => {

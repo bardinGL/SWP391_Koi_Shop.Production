@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 import FishSpinner from "../../components/FishSpinner";
 import "./AdminConsignment.css";
 import ConfirmationModal from "../../components/ConfirmationModal";
+import { getProdItemById } from "../../services/ProductItemService";
+import PropTypes from "prop-types";
 
 const AdminConsignment = () => {
   const [consignments, setConsignments] = useState([]);
@@ -18,16 +20,18 @@ const AdminConsignment = () => {
   const [userNames, setUserNames] = useState({});
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [itemToCancel, setItemToCancel] = useState(null);
-
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [showProductDetail, setShowProductDetail] = useState(false);
+  console.log(selectedProduct);
   useEffect(() => {
     fetchData();
+    console.log(consignments);
   }, []);
 
   const fetchData = async () => {
     try {
       const response = await fetchAllConsignments();
-      
-
+      console.log(response);
       if (!response.data || !Array.isArray(response.data)) {
         setConsignments([]);
         setUserNames({});
@@ -77,11 +81,14 @@ const AdminConsignment = () => {
     try {
       // Xác định trạng thái `type` mới dựa trên trạng thái mới
       const newType = newStatus === "Approved" ? "Approved" : "Pending";
-  
+
       // Gọi API với cả `status` và `type`
-      const response = await updateConsignmentItemStatus(itemId, newStatus, newType);
-      
-  
+      const response = await updateConsignmentItemStatus(
+        itemId,
+        newStatus,
+        newType
+      );
+
       if (response.data) {
         setConsignments((prevConsignments) =>
           prevConsignments.map((consignment) => ({
@@ -91,13 +98,13 @@ const AdminConsignment = () => {
                 ? {
                     ...item,
                     consignmentItemStatus: newStatus,
-                    productItemStatus: newType, 
+                    productItemStatus: newType,
                   }
                 : item
             ),
           }))
         );
-  
+
         toast.success("Cập nhật trạng thái thành công!");
       }
     } catch (error) {
@@ -105,10 +112,6 @@ const AdminConsignment = () => {
       toast.error("Cập nhật trạng thái thất bại");
     }
   };
-  
-  
-
-
 
   const filterConsignmentsByStatus = (status) => {
     if (!Array.isArray(consignments) || consignments.length === 0) {
@@ -141,9 +144,7 @@ const AdminConsignment = () => {
 
           const searchMatch =
             searchTerm === "" ||
-            consignment.consignmentId
-              .toLowerCase()
-              .includes(searchTermLower);
+            consignment.consignmentId.toLowerCase().includes(searchTermLower);
 
           return statusMatch && searchMatch;
         }),
@@ -160,7 +161,10 @@ const AdminConsignment = () => {
     if (!itemToCancel) return;
 
     try {
-      const response = await updateConsignmentItemStatus(itemToCancel, "Cancelled");
+      const response = await updateConsignmentItemStatus(
+        itemToCancel,
+        "Cancelled"
+      );
 
       if (response.data) {
         setConsignments((prevConsignments) =>
@@ -181,6 +185,17 @@ const AdminConsignment = () => {
     } finally {
       setIsConfirmModalOpen(false);
       setItemToCancel(null);
+    }
+  };
+
+  const handleViewProductDetail = async (productItemId) => {
+    try {
+      const productResponse = await getProdItemById(productItemId);
+      setSelectedProduct(productResponse.data);
+      setShowProductDetail(true);
+    } catch (error) {
+      console.error("Error fetching product detail:", error);
+      toast.error("Không thể tải chi tiết sản phẩm");
     }
   };
 
@@ -241,7 +256,7 @@ const AdminConsignment = () => {
           <table className="table table-striped text-center">
             <thead>
               <tr>
-                <th>Mã ký gửi</th>
+                <th>Hình ảnh</th>
                 <th>Loại mặt hàng</th>
                 <th>Người ký gửi</th>
                 <th>Ngày ký gửi</th>
@@ -254,8 +269,24 @@ const AdminConsignment = () => {
                 <React.Fragment key={consignment.consignmentId}>
                   {consignment.items.map((item) => (
                     <tr key={item.consignmentItemId}>
-                      <td>{item.consignmentItemId}</td>
-
+                      <td>
+                        <div className="image-with-detail">
+                          <img
+                            src={item.imageUrl}
+                            alt={item.consignmentItemType}
+                            className="consignment-thumbnail"
+                          />
+                          <button
+                            className="btn btn-info btn-sm detail-btn"
+                            onClick={() =>
+                              handleViewProductDetail(item.productItemId)
+                            }
+                            title="Xem chi tiết"
+                          >
+                            <i className="fas fa-info-circle"></i>
+                          </button>
+                        </div>
+                      </td>
                       <td>{item.consignmentItemType || "Unknown"}</td>
                       <td>
                         {userNames[consignment.userId] || consignment.userId}
@@ -288,7 +319,10 @@ const AdminConsignment = () => {
                             title="Xác nhận ký gửi"
                             className="btn btn-success ms-2"
                             onClick={() =>
-                              handleStatusChange(item.consignmentItemId, "Approved")
+                              handleStatusChange(
+                                item.consignmentItemId,
+                                "Approved"
+                              )
                             }
                           >
                             <i className="fa-solid fa-clipboard-check"></i>
@@ -296,7 +330,9 @@ const AdminConsignment = () => {
                           <button
                             title="Huỷ đơn ký gửi"
                             className="btn btn-danger ms-2"
-                            onClick={() => handleCancelItem(item.consignmentItemId)}
+                            onClick={() =>
+                              handleCancelItem(item.consignmentItemId)
+                            }
                           >
                             <i className="fa-solid fa-ban"></i>
                           </button>
@@ -331,8 +367,104 @@ const AdminConsignment = () => {
         onConfirm={confirmCancelItem}
         message="Bạn có chắc chắn muốn huỷ ký gửi này?"
       />
+      {showProductDetail && (
+        <ProductDetailView
+          product={selectedProduct}
+          onClose={() => {
+            setShowProductDetail(false);
+            setSelectedProduct(null);
+          }}
+        />
+      )}
     </>
   );
+};
+
+const ProductDetailView = ({ product, onClose }) => {
+  if (!product) return null;
+
+  return (
+    <div className="product-detail-overlay">
+      <div className="product-detail-container">
+        <div className="detail-header">
+          <h2>Chi tiết sản phẩm</h2>
+          <button className="close-button" onClick={onClose}>
+            ×
+          </button>
+        </div>
+        <div className="product-detail-content">
+          <div className="product-image-section">
+            <img src={product.imageUrl} alt={product.name} />
+          </div>
+          <div className="product-info-section">
+            <h3>{product.name}</h3>
+            <div className="info-grid">
+              <div className="info-item">
+                <span className="label">Giá:</span>
+                <span className="value">
+                  {product.price?.toLocaleString("vi-VN")} VND
+                </span>
+              </div>
+              <div className="info-item">
+                <span className="label">Giới tính:</span>
+                <span className="value">{product.sex}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Tuổi:</span>
+                <span className="value">{product.age} tháng</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Kích thước:</span>
+                <span className="value">{product.size}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Loài:</span>
+                <span className="value">{product.species}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Tính cách:</span>
+                <span className="value">{product.personality}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Lượng thức ăn:</span>
+                <span className="value">{product.foodAmount}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Nhiệt độ nước:</span>
+                <span className="value">{product.waterTemp}°C</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Hàm lượng khoáng chất:</span>
+                <span className="value">{product.mineralContent}</span>
+              </div>
+              <div className="info-item">
+                <span className="label">Độ pH:</span>
+                <span className="value">{product.ph}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+ProductDetailView.propTypes = {
+  product: PropTypes.shape({
+    imageUrl: PropTypes.string,
+    name: PropTypes.string,
+    price: PropTypes.number,
+    sex: PropTypes.string,
+    age: PropTypes.number,
+    size: PropTypes.string,
+    species: PropTypes.string,
+    personality: PropTypes.string,
+    foodAmount: PropTypes.string,
+    waterTemp: PropTypes.string,
+    mineralContent: PropTypes.string,
+    ph: PropTypes.string,
+  }),
+  onClose: PropTypes.func.isRequired,
 };
 
 export default AdminConsignment;
