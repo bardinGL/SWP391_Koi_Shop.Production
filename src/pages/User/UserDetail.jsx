@@ -8,7 +8,10 @@ import {
   cancelOrder,
 } from "../../services/OrderService";
 import { fetchAllPayment, processRefund } from "../../services/PaymentService";
-import { getNameOfProdItem } from "../../services/ProductItemService";
+import {
+  getNameOfProdItem,
+  getProdItemById,
+} from "../../services/ProductItemService";
 import "./UserDetail.css";
 import FishSpinner from "../../components/FishSpinner";
 import { toast } from "react-toastify";
@@ -49,6 +52,84 @@ const UserDetail = () => {
   const [showCheckoutHint, setShowCheckoutHint] = useState(false);
 
   const [batchDetails, setBatchDetails] = useState({});
+  const [expandedRows, setExpandedRows] = useState([]);
+  console.log("🚀 ~ UserDetail ~ expandedRows:", expandedRows);
+
+  const toggleExpandedRow = (orderId) => {
+    setExpandedRows((prev) =>
+      prev.includes(orderId)
+        ? prev.filter((id) => id !== orderId)
+        : [...prev, orderId]
+    );
+  };
+
+  const renderExpandedRow = (order) => (
+    <tr>
+      <td colSpan="8">
+        <div className="ao-expanded-content">
+          {/* Danh sách sản phẩm */}
+          <div className="ao-products-section">
+            <div className="ao-section-title">Chi tiết sản phẩm</div>
+
+            {order.items.map((item, index) => (
+              <div key={index} className="ao-product-item">
+                <div className="ao-single-item">
+                  <div className="ao-single-content">
+                    <img
+                      src={item.data.imageUrl || "/default-product.png"}
+                      alt={item.data.name}
+                      className="ao-item-image"
+                      onError={(e) => {
+                        e.target.src = "/default-product.png";
+                        e.target.onerror = null;
+                      }}
+                    />
+
+                    <div className="ao-item-info">
+                      <div className="ao-item-name">{item.data.name}</div>
+                      <div className="ao-item-specs">
+                        <div className="ao-item-spec">
+                          <span className="ao-spec-label">Giới tính:</span>
+                          <span className="ao-spec-value">{item.data.sex}</span>
+                        </div>
+                        <div className="ao-item-spec">
+                          <span className="ao-spec-label">Tuổi:</span>
+                          <span className="ao-spec-value">{item.data.age}</span>
+                        </div>
+                        <div className="ao-item-spec">
+                          <span className="ao-spec-label">Size:</span>
+                          <span className="ao-spec-value">
+                            {item.data.size}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="ao-item-purchase">
+                      <span className="ao-purchase-quantity">
+                        Số lượng: {item.data.quantity}
+                      </span>
+                      <span className="ao-purchase-price">
+                        {item.data.price?.toLocaleString("vi-VN")} VND
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Tổng cộng */}
+          <div className="ao-order-total">
+            <span className="ao-total-label">Tổng tiền:</span>
+            <span className="ao-total-value">
+              {order.total.toLocaleString("vi-VN")} VND
+            </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+  );
 
   useEffect(() => {
     const searchParams = new URLSearchParams(window.location.search);
@@ -65,6 +146,7 @@ const UserDetail = () => {
   const filterOrdersByStatus = (status) => {
     return orders.filter((order) => order.status === status);
   };
+  console.log("🚀 ~ filterOrdersByStatus ~ orders:", orders);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,7 +173,6 @@ const UserDetail = () => {
             paymentsResponse?.data?.data || paymentsResponse?.data || []
           );
           const ordersResponse = await getOrderByUser();
-          console.log(ordersResponse.data)
           const allOrders = Array.isArray(ordersResponse.data)
             ? ordersResponse.data
             : [];
@@ -103,6 +184,13 @@ const UserDetail = () => {
           const nonConsignmentOrders = sortedOrders.filter(
             (order) => !order.consignmentId
           );
+
+          for (const order of nonConsignmentOrders) {
+            for (const item of order.items) {
+              const data = await getProdItemById(item.productItemId);
+              item.data = data.data;
+            }
+          }
 
           setOrders(nonConsignmentOrders);
 
@@ -507,24 +595,26 @@ const UserDetail = () => {
               </thead>
               <tbody>
                 {payments.map((payment) => (
-                  <tr key={payment.id}>
-                    <td>{payment.id}</td>
-                    <td>{payment.amount.toLocaleString("vi-VN")} VND</td>
-                    <td>{payment.paymentMethod}</td>
-                    <td>
-                      {new Date(payment.paymentDate).toLocaleDateString(
-                        "vi-VN",
-                        {
-                          year: "numeric",
-                          month: "numeric",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        }
-                      )}
-                    </td>
-                    <td>{payment.status}</td>
-                  </tr>
+                  <>
+                    <tr key={payment.id}>
+                      <td>{payment.id}</td>
+                      <td>{payment.amount.toLocaleString("vi-VN")} VND</td>
+                      <td>{payment.paymentMethod}</td>
+                      <td>
+                        {new Date(payment.paymentDate).toLocaleDateString(
+                          "vi-VN",
+                          {
+                            year: "numeric",
+                            month: "numeric",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
+                      </td>
+                      <td>{payment.status}</td>
+                    </tr>
+                  </>
                 ))}
               </tbody>
             </table>
@@ -590,8 +680,9 @@ const UserDetail = () => {
                 <table className="order-table">
                   <thead>
                     <tr>
+                      <th>Chi tiết đơn hàng</th>
                       <th>Mã Đơn Hàng</th>
-                      <th>Sản Phẩm</th>
+                      {/* <th>Sản Phẩm</th> */}
                       <th>Tổng Tiền</th>
                       <th>Ngày Mua</th>
                       {["Pending", "Delivering"].includes(activeTab) && (
@@ -608,10 +699,30 @@ const UserDetail = () => {
                   </thead>
                   <tbody>
                     {filterOrdersByStatus(activeTab).map((order) => (
-                      <tr key={order.orderId}>
-                        <td>{order.orderId}</td>
+                      <>
+                        <tr key={order.orderId}>
+                          <td>
+                            <button
+                              title="Xem chi tiết"
+                              className="btn btn-sm mr-2"
+                              onClick={() => toggleExpandedRow(order.orderId)}
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                  gap: "0.5rem",
+                                }}
+                              >
+                                <span>Chi tiết</span>
+                                <i className="fas fa-info-circle"></i>
+                              </div>
+                            </button>
+                          </td>
+                          <td>{order.orderId.slice(0, 5)}</td>
 
-                        <td>
+                          {/* <td>
                           {(() => {
                             // Group items by batchId
                             const groupedItems = order.items.reduce(
@@ -634,6 +745,8 @@ const UserDetail = () => {
                               },
                               {}
                             );
+
+                            console.log("groupedItems", groupedItems);
 
                             return Object.values(groupedItems).map(
                               (group, index) =>
@@ -666,87 +779,90 @@ const UserDetail = () => {
                                 )
                             );
                           })()}
-                        </td>
+                        </td> */}
 
-                        <td>{order.total.toLocaleString("vi-VN")} VND</td>
-                        <td>
-                          {new Date(order.createdTime).toLocaleDateString(
-                            "vi-VN",
-                            {
-                              year: "numeric",
-                              month: "numeric",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              second: "2-digit",
-                            }
-                          )}
-                        </td>
-                        {["Pending", "Delivering"].includes(activeTab) && (
+                          <td>{order.total.toLocaleString("vi-VN")} VND</td>
                           <td>
-                            {isOrderPaid(order.orderId) ? "VNPAY" : "COD"}
-                          </td>
-                        )}
-                        <td>
-                          <span
-                            className={`user-order-badge ${order.status.toLowerCase()}`}
-                          >
-                            {order.status === "Pending" && "Chờ xử lý"}
-                            {order.status === "Delivering" && "Đang giao"}
-                            {order.status === "Completed" && "Hoàn thành"}
-                            {order.status === "Cancelled" && "Đã hủy"}
-                            {order.status === "Failed" && "Thất bại"}
-                          </span>
-                        </td>
-                        <td>
-                          {isOrderPaid(order.orderId) ? (
-                            <span style={{ color: "green" }}>✓</span>
-                          ) : (
-                            <span style={{ color: "red" }}>✕</span>
-                          )}
-                        </td>
-                        {activeTab === "Completed" && (
-                          <td>
-                            {order.isDelivered === null ? (
-                              <button
-                                className="btn btn-primary"
-                                onClick={() =>
-                                  handleUpdateIsDelivered(order.orderId)
-                                }
-                              >
-                                Xác nhận đã nhận hàng
-                              </button>
-                            ) : (
-                              <span
-                                style={{ color: "green", fontWeight: "bold" }}
-                              >
-                                ✓ Đã nhận hàng
-                              </span>
+                            {new Date(order.createdTime).toLocaleDateString(
+                              "vi-VN",
+                              {
+                                year: "numeric",
+                                month: "numeric",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                              }
                             )}
                           </td>
-                        )}
-                        {(activeTab === "Pending" ||
-                          activeTab === "Failed") && (
+                          {["Pending", "Delivering"].includes(activeTab) && (
+                            <td>
+                              {isOrderPaid(order.orderId) ? "VNPAY" : "COD"}
+                            </td>
+                          )}
                           <td>
-                            <button
-                              className="btn btn-danger"
-                              onClick={() => handleCancelOrder(order.orderId)}
+                            <span
+                              className={`user-order-badge ${order.status.toLowerCase()}`}
                             >
-                              Hủy đơn hàng
-                            </button>
+                              {order.status === "Pending" && "Chờ xử lý"}
+                              {order.status === "Delivering" && "Đang giao"}
+                              {order.status === "Completed" && "Hoàn thành"}
+                              {order.status === "Cancelled" && "Đã hủy"}
+                              {order.status === "Failed" && "Thất bại"}
+                            </span>
                           </td>
-                        )}
-                        {activeTab === "Failed" && (
                           <td>
-                            <button
-                              className="btn btn-success"
-                              onClick={() => handleBuyAgain(order.orderId)}
-                            >
-                              Mua lại
-                            </button>
+                            {isOrderPaid(order.orderId) ? (
+                              <span style={{ color: "green" }}>✓</span>
+                            ) : (
+                              <span style={{ color: "red" }}>✕</span>
+                            )}
                           </td>
-                        )}
-                      </tr>
+                          {activeTab === "Completed" && (
+                            <td>
+                              {order.isDelivered === null ? (
+                                <button
+                                  className="btn btn-primary"
+                                  onClick={() =>
+                                    handleUpdateIsDelivered(order.orderId)
+                                  }
+                                >
+                                  Xác nhận đã nhận hàng
+                                </button>
+                              ) : (
+                                <span
+                                  style={{ color: "green", fontWeight: "bold" }}
+                                >
+                                  ✓ Đã nhận hàng
+                                </span>
+                              )}
+                            </td>
+                          )}
+                          {(activeTab === "Pending" ||
+                            activeTab === "Failed") && (
+                            <td>
+                              <button
+                                className="btn btn-danger"
+                                onClick={() => handleCancelOrder(order.orderId)}
+                              >
+                                Hủy đơn hàng
+                              </button>
+                            </td>
+                          )}
+                          {activeTab === "Failed" && (
+                            <td>
+                              <button
+                                className="btn btn-success"
+                                onClick={() => handleBuyAgain(order.orderId)}
+                              >
+                                Mua lại
+                              </button>
+                            </td>
+                          )}
+                        </tr>
+                        {expandedRows.includes(order.orderId) &&
+                          renderExpandedRow(order)}
+                      </>
                     ))}
                   </tbody>
                 </table>
