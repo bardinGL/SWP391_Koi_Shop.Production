@@ -447,7 +447,7 @@ const UserConsignment = () => {
           <table className="uc-table">
             <thead>
               <tr>
-                <th>Mã ký gửi</th>
+                <th>Hình ảnh</th>
                 <th>Tên cá</th>
                 <th>Giá Bán/Phí Chăm Sóc</th>
 
