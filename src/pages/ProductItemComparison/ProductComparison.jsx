@@ -159,12 +159,12 @@ const ProductComparison = () => {
                     <td key={product.id}>{product.sex}</td>
                   ))}
                 </tr>
-                <tr>
+                {/* <tr>
                   <th>Danh mục</th>
                   {selectedProducts.map((product) => (
                     <td key={product.id}>{product.category}</td>
                   ))}
-                </tr>
+                </tr> */}
 
                 <tr className="section-header">
                   <th colSpan={selectedProducts.length + 1}>Đặc điểm</th>
