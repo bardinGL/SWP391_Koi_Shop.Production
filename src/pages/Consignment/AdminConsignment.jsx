@@ -130,7 +130,7 @@ const AdminConsignment = () => {
               statusMatch = item.consignmentItemStatus === "Approved";
               break;
             case "CheckedOut":
-              statusMatch = item.consignmentItemStatus === "CheckedOut";
+              statusMatch = item.consignmentItemStatus === "Checkedout";
               break;
             case "Cancelled":
               statusMatch = item.consignmentItemStatus === "Cancelled";

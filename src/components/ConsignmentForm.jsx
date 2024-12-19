@@ -64,19 +64,11 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
-    
-    const numericValue = value.replace(/\D/g, ''); 
-    const formattedValue = numericValue.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
-  
     setFormData((prevState) => ({
       ...prevState,
-      [name]: formattedValue,
+      [name]: value || "",
     }));
   };
-  
-  
-  
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -402,14 +394,13 @@ const ConsignmentForm = ({ isOpen, onClose }) => {
                 <div className="form-group">
                   <label htmlFor="price">Giá mong muốn bán</label>
                   <input
-  type="text"
-  id="salePrice"
-  name="salePrice"
-  value={formData.salePrice || ""}
-  onChange={handleChange}
-  required
-/> 
-
+                    type="number"
+                    id="salePrice"
+                    name="salePrice"
+                    value={formData.salePrice || 0}
+                    onChange={handleChange}
+                    required
+                  />
                 </div>
               </div>
             )}
