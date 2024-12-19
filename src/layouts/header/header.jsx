@@ -267,7 +267,7 @@ export const Header = () => {
                   </div>
                 </div>
                 <button
-                  className="d-flex flex-row border border-0 rounded align-items-center justify-content-center bg-black text-white"
+                  className="d-flex flex-row border border-0 rounded align-items-center justify-content-center bg-black text-white "
                   style={{ width: 50, height: 50 }}
                   onClick={handleClickCart}
                 >
@@ -301,10 +301,7 @@ export const Header = () => {
                   style={{ width: 50, height: 50 }}
                   onClick={handleClickCart}
                 >
-                  <img
-                    src={cart}
-                    style={{ width: 20, height: 20, filter: "brightness(0)" }}
-                  />
+                  <img src={cart} style={{ width: 20, height: 20 }} />
                 </button>
               </>
             )}
@@ -327,32 +324,35 @@ export const Header = () => {
             {
               <div className="dropdown-menu">
                 {showDropdown && (
-                  <div className="row dropdown-row row-cols-4">
+                  <div className="dropdown-row">
                     <div className="dropdown-grid">
-                      <li
-                        className="dropdown-item special-item"
-                        onClick={() => navigate("/batches")}
-                      >
-                        Lô Cá
-                      </li>
-                    </div>
-
-                    {listProducts.map((product) => (
-                      <div className="dropdown-grid" key={product.id}>
+                      {listProducts.map((product) => (
                         <li
+                          key={product.id}
                           className="dropdown-item"
                           onClick={() => handleProductClick(product)}
                         >
                           {product.name}
                         </li>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
             }
           </div>
-
+          <button
+            className="d-flex flex-row justify-content-center"
+            value={"batches"}
+            style={{
+              background:
+                location.pathname === "/batches" ? "#1b1f9e" : "#1c6197",
+              width: 250,
+            }}
+            onClick={handleChoose}
+          >
+            Lô Cá
+          </button>
           <button
             className="d-flex flex-row justify-content-center"
             value={"home"}
@@ -365,23 +365,6 @@ export const Header = () => {
             TRANG CHỦ
           </button>
 
-          <button
-            className="d-flex flex-row justify-content-center"
-            value={"product"}
-            style={{
-              background:
-                location.pathname === "/product" ? "#1b1f9e" : "#1c6197",
-              width: 250,
-            }}
-            onClick={handleChoose}
-          >
-            DANH SÁCH CÁ KOI
-          </button>
-
-          {/* <button className="" value={"product"} onClick={handleChoose}>
-            <img className="icon user-select-none" src={list} />
-            DANH MỤC KOI
-          </button> */}
           <button
             className="d-flex flex-row justify-content-center"
             value={"info"}

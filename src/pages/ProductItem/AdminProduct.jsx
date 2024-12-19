@@ -154,7 +154,7 @@ const AdminProduct = () => {
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
       setPageIndex(newPage);
-      console.log("Changing page to:", newPage);
+      
     }
   };
 
@@ -164,7 +164,7 @@ const AdminProduct = () => {
   };
 
   const filterProductsByStatus = (status) => {
-    console.log(listProductItems);
+    
     return Array.isArray(listProductItems)
       ? listProductItems.filter(
           (item) =>
@@ -322,7 +322,7 @@ const AdminProduct = () => {
             <tr>
               <th>Cá Koi</th>
               <th>Giá</th>
-              <th>Loại</th>
+              
               <th>Nguồn gốc</th>
               <th>Giới tính</th>
               <th>Tuổi</th>
@@ -335,7 +335,7 @@ const AdminProduct = () => {
               <th>pH</th>
               <th>Số lượng</th>
               <th>Tình trạng sản phẩm</th>
-              <th>Loại cá</th>
+              
               <th>Ảnh</th>
               <th>Actions</th>
             </tr>
@@ -346,7 +346,7 @@ const AdminProduct = () => {
                 <tr key={item.id}>
                   <td>{item.name}</td>
                   <td>{item.price}</td>
-                  <td>{item.category}</td>
+                  
                   <td>{item.origin}</td>
                   <td>{item.sex}</td>
                   <td>{item.age}</td>
@@ -389,7 +389,7 @@ const AdminProduct = () => {
                       item.type
                     )}
                   </td>
-                  <td>{item.productName}</td>
+                  
                   <td>
                     {item.imageUrl ? (
                       <img

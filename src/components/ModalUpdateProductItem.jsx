@@ -1,20 +1,22 @@
+
+
 import React, { useState, useEffect } from 'react';
 import './ModalAddProductItem.css';
-import { updateProdItem } from '../services/ProductItemService';
 import { toast } from 'react-toastify';
-import { fetchAllProducts } from "../services/ProductService";
+import { fetchAllProducts, fetchAllCategories } from "../services/ProductService";
 import { uploadImageCloudinary } from '../services/CloudinaryService';
 
 const folder = import.meta.env.VITE_FOLDER_PRODUCTS;
 
 const ModalUpdateProductItem = ({ isOpen, onClose, onSubmit, productData, setIsUploading }) => {
   const [formData, setFormData] = useState({
-    name: '', price: 1, category: '', origin: '', sex: '', age: 0,
+    name: '', price: 1, categoryId: '', origin: '', sex: '', age: 0,
     size: '', species: '', personality: '', foodAmount: '', waterTemp: '',
     mineralContent: '', ph: '', imageUrl: '', quantity: 1, type: 'Pending Approval', productId: ''
   });
 
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +40,20 @@ const ModalUpdateProductItem = ({ isOpen, onClose, onSubmit, productData, setIsU
           toast.error("Error fetching products.");
         }
       };
+
+      const fetchCategories = async () => {
+        try {
+          const response = await fetchAllCategories();
+          if (response && response.data) {
+            setCategories(response.data);
+          }
+        } catch (error) {
+          toast.error("Error fetching categories.");
+        }
+      };
+
       fetchProducts();
+      fetchCategories();
     }
   }, [isOpen]);
 
@@ -89,13 +104,10 @@ const ModalUpdateProductItem = ({ isOpen, onClose, onSubmit, productData, setIsU
 
     try {
       const uploadedImageUrl = await uploadImage();
-      
       const updatedData = { ...formData };
-      
       if (uploadedImageUrl) {
         updatedData.imageUrl = uploadedImageUrl;
       }
-      
       await onSubmit(updatedData);
     } catch (error) {
       toast.error('An error occurred. Please try again.');
@@ -114,7 +126,6 @@ const ModalUpdateProductItem = ({ isOpen, onClose, onSubmit, productData, setIsU
           <button className="modal-close-button" onClick={onClose}>&times;</button>
         </div>
         <form onSubmit={handleSubmit}>
-          {/* Same form layout as ModalAddProductItem */}
           <div className="form-layout">
             <div className="form-column">
               <div className="form-group">
@@ -125,21 +136,26 @@ const ModalUpdateProductItem = ({ isOpen, onClose, onSubmit, productData, setIsU
                 <label htmlFor="price">Giá:</label>
                 <input id="price" type="number" name="price" value={formData.price} onChange={handleChange} required />
 
-                <label htmlFor="category">Danh Mục:</label>
-                <input id="category" name="category" value={formData.category} onChange={handleChange} required />
-
-                <label htmlFor="quantity">Số Lượng:</label>
-                <input id="quantity" type="number" name="quantity" value={formData.quantity} readOnly />
-
-                <label htmlFor="productId">Sản Phẩm:</label>
-                <select id="productId" name="productId" value={formData.productId} onChange={handleChange} required>
-                  <option value="">-- Select Product --</option>
+                <label htmlFor="categoryId">Danh Mục:</label>
+                <select
+                  id="categoryId"
+                  name="categoryId"
+                  value={formData.categoryId || ''}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="" disabled>Chọn danh mục</option>
                   {products.map((product) => (
                     <option key={product.id} value={product.id}>
                       {product.name}
                     </option>
                   ))}
                 </select>
+
+                <label htmlFor="quantity">Số Lượng:</label>
+                <input id="quantity" type="number" name="quantity" value={formData.quantity} readOnly />
+
+                
               </div>
 
               <div className="form-group">
@@ -219,4 +235,4 @@ const ModalUpdateProductItem = ({ isOpen, onClose, onSubmit, productData, setIsU
   );
 };
 
-export default ModalUpdateProductItem; 
+export default ModalUpdateProductItem;
