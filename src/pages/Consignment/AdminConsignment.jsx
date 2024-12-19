@@ -26,7 +26,7 @@ const AdminConsignment = () => {
   const fetchData = async () => {
     try {
       const response = await fetchAllConsignments();
-      console.log (response)
+      
 
       if (!response.data || !Array.isArray(response.data)) {
         setConsignments([]);
@@ -130,7 +130,7 @@ const AdminConsignment = () => {
               statusMatch = item.consignmentItemStatus === "Approved";
               break;
             case "CheckedOut":
-              statusMatch = item.consignmentItemStatus === "CheckedOut";
+              statusMatch = item.consignmentItemStatus === "Checkedout";
               break;
             case "Cancelled":
               statusMatch = item.consignmentItemStatus === "Cancelled";
@@ -254,7 +254,8 @@ const AdminConsignment = () => {
                 <React.Fragment key={consignment.consignmentId}>
                   {consignment.items.map((item) => (
                     <tr key={item.consignmentItemId}>
-                      <td>{consignment.consignmentId}</td>
+                      <td>{item.consignmentItemId}</td>
+
                       <td>{item.consignmentItemType || "Unknown"}</td>
                       <td>
                         {userNames[consignment.userId] || consignment.userId}

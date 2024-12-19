@@ -49,8 +49,10 @@ const Order = () => {
                 // Fetch batch details
                 const batchResponse = await fetchBatchById(group[0].batchId);
                 // Fetch product items in batch
-                const batchItemsResponse = await getProdItemByBatch(group[0].batchId);
-                
+                const batchItemsResponse = await getProdItemByBatch(
+                  group[0].batchId
+                );
+
                 // Map batch items with their details
                 const batchItemsWithDetails = await Promise.all(
                   batchItemsResponse.data.map(async (item) => {
@@ -58,23 +60,29 @@ const Order = () => {
                       const productResponse = await getProdItemById(item.id);
                       return {
                         productItemId: item.id,
-                        name: item.name || 'Unknown',
-                        imageUrl: item.imageUrl || productResponse.data?.imageUrl || '/default-product-image.png',
-                        sex: item.sex || 'N/A',
-                        age: item.age || 'N/A',
-                        size: item.size || 'N/A',
-                        quantity: 1
+                        name: item.name || "Unknown",
+                        imageUrl:
+                          item.imageUrl ||
+                          productResponse.data?.imageUrl ||
+                          "/default-product-image.png",
+                        sex: item.sex || "N/A",
+                        age: item.age || "N/A",
+                        size: item.size || "N/A",
+                        quantity: 1,
                       };
                     } catch (error) {
-                      console.error(`Error fetching product details for ${item.id}:`, error);
+                      console.error(
+                        `Error fetching product details for ${item.id}:`,
+                        error
+                      );
                       return {
                         productItemId: item.id,
-                        name: item.name || 'Unknown',
-                        imageUrl: item.imageUrl || '/default-product-image.png',
-                        sex: item.sex || 'N/A',
-                        age: item.age || 'N/A',
-                        size: item.size || 'N/A',
-                        quantity: 1
+                        name: item.name || "Unknown",
+                        imageUrl: item.imageUrl || "/default-product-image.png",
+                        sex: item.sex || "N/A",
+                        age: item.age || "N/A",
+                        size: item.size || "N/A",
+                        quantity: 1,
                       };
                     }
                   })
@@ -82,8 +90,9 @@ const Order = () => {
 
                 return {
                   batchId: group[0].batchId,
-                  batchImage: batchResponse.data.imageUrl || '/default-product-image.png',
-                  batchName: batchResponse.data.name || 'Unknown Batch',
+                  batchImage:
+                    batchResponse.data.imageUrl || "/default-product-image.png",
+                  batchName: batchResponse.data.name || "Unknown Batch",
                   batchPrice: batchResponse.data.price || 0,
                   batchItems: batchItemsWithDetails,
                 };
@@ -94,16 +103,20 @@ const Order = () => {
             } else {
               // Nếu là sản phẩm đơn lẻ
               try {
-                const productResponse = await getProdItemById(group[0].productItemId);
+                const productResponse = await getProdItemById(
+                  group[0].productItemId
+                );
                 return {
                   ...group[0],
-                  imageUrl: productResponse.data?.imageUrl || '/default-product-image.png',
+                  imageUrl:
+                    productResponse.data?.imageUrl ||
+                    "/default-product-image.png",
                 };
               } catch (error) {
                 console.error("Error fetching product details:", error);
                 return {
                   ...group[0],
-                  imageUrl: '/default-product-image.png',
+                  imageUrl: "/default-product-image.png",
                 };
               }
             }
@@ -111,7 +124,7 @@ const Order = () => {
         );
 
         // Lọc bỏ các item null (do lỗi)
-        const filteredItems = updatedItems.filter(item => item !== null);
+        const filteredItems = updatedItems.filter((item) => item !== null);
         setCartItemDetails(filteredItems);
         setCartData(cartResponse.data);
       } catch (error) {
@@ -207,10 +220,16 @@ const Order = () => {
 
   const calculateSubtotal = () => {
     if (!cartData || !cartData.items) return 0;
-    return cartData.items.reduce(
-      (total, item) => total + item.price * item.quantity,
-      0
-    );
+    let totalPrice = 0;
+    for (const item of cartItemDetails) {
+      if (item.batchId) {
+        totalPrice += item.batchPrice;
+      } else {
+        totalPrice += item.price * item.quantity;
+      }
+    }
+
+    return totalPrice;
   };
 
   const calculateTotal = () => {
@@ -219,9 +238,9 @@ const Order = () => {
   };
 
   const toggleBatchExpand = (batchId) => {
-    setExpandedBatches(prev => 
-      prev.includes(batchId) 
-        ? prev.filter(id => id !== batchId)
+    setExpandedBatches((prev) =>
+      prev.includes(batchId)
+        ? prev.filter((id) => id !== batchId)
         : [...prev, batchId]
     );
   };
@@ -252,7 +271,7 @@ const Order = () => {
                 cartItemDetails.map((item, index) =>
                   item.batchId ? (
                     <React.Fragment key={index}>
-                      <div 
+                      <div
                         className="order-item"
                         onClick={() => toggleBatchExpand(item.batchId)}
                       >
@@ -276,9 +295,15 @@ const Order = () => {
                       {expandedBatches.includes(item.batchId) && (
                         <div className="order-batch-items">
                           {item.batchItems.map((batchItem, idx) => (
-                            <div key={`${item.batchId}-${idx}`} className="order-batch-subitem">
-                              <img 
-                                src={batchItem.imageUrl || '/default-product-image.png'} 
+                            <div
+                              key={`${item.batchId}-${idx}`}
+                              className="order-batch-subitem"
+                            >
+                              <img
+                                src={
+                                  batchItem.imageUrl ||
+                                  "/default-product-image.png"
+                                }
                                 alt={batchItem.name}
                                 className="order-product-image"
                                 onError={(e) => {
@@ -287,7 +312,9 @@ const Order = () => {
                                 }}
                               />
                               <div className="order-batch-item-details">
-                                <div className="order-batch-item-name">{batchItem.name}</div>
+                                <div className="order-batch-item-name">
+                                  {batchItem.name}
+                                </div>
                                 <div className="order-batch-item-specs">
                                   <span>Giới tính: {batchItem.sex}</span>
                                   <span>Tuổi: {batchItem.age}</span>
@@ -404,7 +431,9 @@ const Order = () => {
                 </label>
 
                 <div className="promotion-bar">
-                  <label className="promotionCode" htmlFor="promotionCode">Mã giảm giá:</label>
+                  <label className="promotionCode" htmlFor="promotionCode">
+                    Mã giảm giá:
+                  </label>
                   <div className="promotion-input-group">
                     <input
                       className="promotion-input"

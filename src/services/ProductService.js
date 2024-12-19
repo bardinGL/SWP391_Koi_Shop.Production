@@ -3,6 +3,10 @@ import axios from "./Customize-Axios";
 const fetchAllProducts = () => {
   return axios.get("Category/get-all-shop-products");
 };
+const fetchAllCategories = () => {
+  return axios.get("Category/get-all-categories");
+};
+
 
 const getProductById = (id) => {
   return axios.get(`ProductItem/get-product-item/${id}`);
@@ -50,4 +54,5 @@ export {
   createProduct,
   updateProduct,
   deleteProduct,
+  fetchAllCategories
 };

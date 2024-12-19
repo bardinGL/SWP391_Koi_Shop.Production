@@ -44,6 +44,7 @@ const BatchDetail = () => {
               fish.type === "Approved" && fish.quantity > 0
             );
             setFishList(approvedFish);
+      
             if (approvedFish.length > 0) {
               setSelectedFish(approvedFish[0]);
             }
