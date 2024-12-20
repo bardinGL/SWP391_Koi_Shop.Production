@@ -173,7 +173,7 @@ const AdminBatch = () => {
           <thead>
             <tr>
               <th></th>
-              <th>Mã lô</th>
+
               <th>Tên lô</th>
               <th>Số lượng sản phẩm</th>
               <th>Hình ảnh</th>
@@ -196,7 +196,7 @@ const AdminBatch = () => {
                         </button>
                       )}
                     </td>
-                    <td>{batch.id}</td>
+
                     <td>{batch.name}</td>
                     <td>{batch.items?.length || 0}</td>
                     <td>

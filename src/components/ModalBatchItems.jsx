@@ -13,7 +13,7 @@ const ModalBatchItems = ({ isOpen, onClose, batchData, setIsUploading }) => {
   const [isLoadingProducts, setIsLoadingProducts] = useState(false);
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState(false);
   const [itemToRemove, setItemToRemove] = useState(null);
-
+  console.log(batchData);
   useEffect(() => {
     if (isOpen && batchData?.id) {
       fetchProducts();
@@ -118,8 +118,10 @@ const ModalBatchItems = ({ isOpen, onClose, batchData, setIsUploading }) => {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th>ID</th>
                       <th>Tên sản phẩm</th>
+                      <th>Tuổi</th>
+                      <th>Giới tính</th>
+                      <th>Kích thước</th>
                       <th>Thao tác</th>
                     </tr>
                   </thead>
@@ -127,8 +129,10 @@ const ModalBatchItems = ({ isOpen, onClose, batchData, setIsUploading }) => {
                     {batchData?.items?.length > 0 ? (
                       batchData.items.map((item) => (
                         <tr key={item.batchItemId}>
-                          <td>{item.batchItemId}</td>
                           <td>{item.name}</td>
+                          <td>{item.age}</td>
+                          <td>{item.sex}</td>
+                          <td>{item.size}</td>
                           <td>
                             <button
                               className="btn btn-danger btn-sm"
