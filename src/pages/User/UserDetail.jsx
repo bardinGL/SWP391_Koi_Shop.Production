@@ -53,7 +53,6 @@ const UserDetail = () => {
 
   const [batchDetails, setBatchDetails] = useState({});
   const [expandedRows, setExpandedRows] = useState([]);
-  console.log("🚀 ~ UserDetail ~ expandedRows:", expandedRows);
 
   const toggleExpandedRow = (orderId) => {
     setExpandedRows((prev) =>
@@ -62,7 +61,7 @@ const UserDetail = () => {
         : [...prev, orderId]
     );
   };
-
+  console.log("order", orders);
   const renderExpandedRow = (order) => (
     <tr>
       <td colSpan="8">
@@ -102,15 +101,48 @@ const UserDetail = () => {
                             {item.data.size}
                           </span>
                         </div>
+                        <div className="ao-item-spec">
+                          <span className="ao-spec-label">Cá tính:</span>
+                          <span className="ao-spec-value">
+                            {item.data.personality}
+                          </span>
+                        </div>
+                        <div className="ao-item-spec">
+                          <span className="ao-spec-label">Thức ăn:</span>
+                          <span className="ao-spec-value">
+                            {item.data.foodAmount}
+                          </span>
+                        </div>
+                        <div className="ao-item-spec">
+                          <span className="ao-spec-label">Nhiệt độ nước:</span>
+                          <span className="ao-spec-value">
+                            {item.data.waterTemp} độ C
+                          </span>
+                        </div>
+                        <div className="ao-item-spec">
+                          <span className="ao-spec-label">
+                            Hàm lượng chất khoáng:
+                          </span>
+                          <span className="ao-spec-value">
+                            {item.data.mineralContent}
+                          </span>
+                        </div>
+                        <div className="ao-item-spec">
+                          <span className="ao-spec-label">Độ pH:</span>
+                          <span className="ao-spec-value">{item.data.ph}</span>
+                        </div>
+                        <div className="ao-item-spec">
+                          <span className="ao-spec-label">Nguồn gốc:</span>
+                          <span className="ao-spec-value">
+                            {item.data.origin}
+                          </span>
+                        </div>
                       </div>
                     </div>
 
                     <div className="ao-item-purchase">
-                      <span className="ao-purchase-quantity">
-                        Số lượng: {item.data.quantity}
-                      </span>
                       <span className="ao-purchase-price">
-                        {item.data.price?.toLocaleString("vi-VN")} VND
+                        Giá tiền: {item.data.price?.toLocaleString("vi-VN")} VND
                       </span>
                     </div>
                   </div>
@@ -146,7 +178,6 @@ const UserDetail = () => {
   const filterOrdersByStatus = (status) => {
     return orders.filter((order) => order.status === status);
   };
-  console.log("🚀 ~ filterOrdersByStatus ~ orders:", orders);
 
   useEffect(() => {
     const fetchData = async () => {
