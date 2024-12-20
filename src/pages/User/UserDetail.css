@@ -621,8 +621,9 @@
 .ao-single-content {
   padding: 20px;
   display: flex;
-  align-items: center;
-  gap: 25px;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: flex-start;
 }
 
 .ao-item-image {
@@ -631,51 +632,44 @@
   object-fit: cover;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
 }
 
 .ao-item-info {
-  display: flex;
-  align-items: center;
-  gap: 30px;
   flex: 1;
-  min-height: 40px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .ao-item-name {
   font-weight: 600;
   color: #2c3e50;
-  width: 200px;
+  width: 100%;
 }
 
 .ao-item-specs {
   display: flex;
-  gap: 30px;
-  color: #666;
-  flex: 1;
-  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  width: 100%;
 }
 
 .ao-item-spec {
+  flex: 1;
+  min-width: 200px;
   display: flex;
   align-items: center;
   gap: 8px;
-  width: 150px;
-}
-
-.ao-spec-label {
-  color: #999;
-}
-
-.ao-spec-value {
-  font-weight: 500;
-  color: #2c3e50;
 }
 
 .ao-item-purchase {
+  margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 25px;
-  margin-left: auto;
+  gap: 15px;
+  flex-shrink: 0;
 }
 
 .ao-purchase-quantity {
@@ -690,18 +684,18 @@
 }
 
 /* Responsive styles */
-@media (max-width: 992px) {
+@media (max-width: 768px) {
   .ao-single-content {
-    flex-wrap: wrap;
+    padding: 15px;
   }
 
-  .ao-item-info {
-    flex-wrap: wrap;
+  .ao-item-spec {
+    min-width: 150px;
   }
 
   .ao-item-purchase {
     width: 100%;
     justify-content: flex-end;
-    margin-top: 15px;
+    margin-top: 10px;
   }
 }
